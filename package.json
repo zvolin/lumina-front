@@ -1,0 +1,39 @@
+{
+  "name": "Lumina",
+  "author": "Adam Roberts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prettier": "npx prettier --list-different \"./src/**/*.{ts,tsx,md}\" \"./app/**/*.{ts,tsx,md}\"\""
+  },
+  "dependencies": {
+    "@apollo/client": "^3.8.0-rc.2",
+    "@apollo/experimental-nextjs-app-support": "^0.9.0",
+    "@react-three/drei": "^9.80.2",
+    "@react-three/fiber": "^8.9.1",
+    "@studio-freight/lenis": "^1.0.42",
+    "@types/three": "^0.162.0",
+    "color": "^4.2.3",
+    "eslint": "^8.53.0",
+    "eslint-config-next": "^14.0.2",
+    "framer-motion": "^11.0.20",
+    "gsap": "^3.12.5",
+    "lumina-node-wasm": "file:app/packages/lumina-node-wasm",
+    "next": "^14.0.2",
+    "next-image-export-optimizer": "^1.12.3",
+    "next-transpile-modules": "^10.0.1",
+    "prettier": "^3.2.5",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hotkeys-hook": "^4.4.1",
+    "shadergradient": "^1.2.5",
+    "styled-components": "^6.0.4",
+    "three": "^0.150.0",
+    "three-stdlib": "^2.29.6",
+    "tunnel-rat": "^0.1.2"
+  }
+}
