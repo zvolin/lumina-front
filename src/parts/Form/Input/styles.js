@@ -1,14 +1,14 @@
 // Imports
 // ------------
 import styled, { css } from 'styled-components';
-import { bp, Section } from '@tackl';
+import { bp } from '@tackl';
 
 // Exports
 // ------------
-export const Jacket = styled(Section)(
+export const Jacket = styled.input(
     props => css`
         position: relative;
-
-        font-size: 1.6rem;
+        width: 100%;
+        padding: 1.2rem;
     `
 );
