@@ -2,14 +2,15 @@
 
 // Imports
 // ------------
-import React, { useState, useLayoutEffect, useEffect } from 'react';
-import init, { Node, NodeConfig, Network } from '@package/lumina-node-wasm';
+import React, { useState, useEffect } from 'react';
+import init, { Node, NodeConfig } from '@package/lumina-node-wasm';
 import Input from './Input';
+import Button from '@parts/Button';
 import { Grid } from '@waffl';
 
 // Styles
 // ------------
-import { Jacket } from './styles';
+import { Jacket, Container, Title, } from './styles';
 
 // Component
 // ------------
@@ -20,6 +21,12 @@ const Form = () => {
     const [syncInfo, setSyncInfo] = useState('');
     const [connectedPeers, setConnectedPeers] = useState([]);
     const [networkHead, setNetworkHead] = useState(null);
+    const [begin, setBegin] = useState(false);
+    const [go, setGo] = useState(false);
+    const [modalOpen, setModalOpen] = useState({
+        modal1: false,
+        modal2: false,
+    });
 
     // NOTE • Initialisation
     const fetchConfig = async () => {
@@ -46,7 +53,7 @@ const Form = () => {
         const loadConfig = async () => {
             const config = await fetchConfig();
             if (config) {
-                console.log('Setting config to state:', config); // Debugging
+                // console.log('Setting config to state:', config); // Debugging
                 setConfig(config);
             }
         };
@@ -82,19 +89,22 @@ const Form = () => {
     }, [node]);
 
     const startNode = async () => {
-        if(config.genesis_hash === '' || config.bootnodes.length === 0) {
-            alert('Genesis hash and bootnodes are required');
+        setGo(true);
+
+        if (!config.genesis_hash || !config.bootnodes || config.bootnodes.length === 0) {
+            alert('Genesis hash and at least one bootnode are required.');
             return;
-        } else {
-            try {
-                const newNode = await new Node(config);
-                console.log("Node initialized successfully:", newNode);
-                console.log(config);
-                setNode(newNode);
-                setPeerId(await newNode.local_peer_id());
-            } catch (error) {
-                console.error("Error initializing Node:", error);
-            }
+        }
+        try {
+            let anotherConfig = config;
+            setConfig({genesis_hash: config.genesis_hash, bootnodes: config.bootnodes});
+
+            const newNode = await new Node(anotherConfig);
+            // console.log("Node initialized successfully:", newNode);
+            setNode(newNode);
+            setPeerId(await newNode.local_peer_id());
+        } catch (error) {
+            console.error("Error initializing Node:", error);
         }
     };
 
@@ -112,61 +122,81 @@ const Form = () => {
         });
     }
 
-    // useEffect(() => {
-    //     console.log(config);
-    // }, [config]);
+    const handleBegin = () => {
+        setBegin(true);
+        setModalOpen(prev => {
+            return {
+                ...prev,
+                modal1: true,
+            }
+        });
+    }
 
     return (
-        <Grid>
-            <Jacket $small="1/3" $medium="1/7" $large="1/13" $pad>
-                <h3>Network</h3>
-                <select id="network-id">
-                    <option value="0">Mainnet</option>
-                    <option value="1">Arabica</option>
-                    <option value="2">Mocha</option>
-                </select>
-
-                <h3>Genesis Hash</h3>
-                {/* <Input value={config.genesis_hash} onChange={handleGhash} placeholder="Genesis Hash" /> */}
-                {config.genesis_hash ? config.genesis_hash : `Loading...`}
-
-                <h3>Bootnodes</h3>
-
-                <div>
-                    <button onClick={startNode} disabled={node !== null || peerId !== ''}>Start Node</button>
-                </div>
-
-                <h2>Status</h2>
-
-                <div>
-                    <b>PeerId:</b>
-                    <span>{peerId}</span>
-                </div>
-
-                <div>
-                    <b>Synchronizing headers:</b>
-                    <span>{syncInfo}</span>
-                </div>
-
-                <div>
-                    <b>Network Head:</b>
-                    <div>
-                        <span>Height: {networkHead?.height}</span>
-                        <span>Hash: {networkHead?.hash}</span>
-                        <span>Data Square: {networkHead?.dataSquare}</span>
-                    </div>
-                </div>
-
-                <div>
-                    <b>Peers:</b>
-                    <ul>
-                        {connectedPeers?.map((peer, index) => (
-                            <li key={index} className="mono">{peer}</li>
-                        ))}
-                    </ul>
-                </div>
+        <>
+            <Jacket data-lenis-prevent style={{ zIndex: 1}}>
+                <Container $begin>
+                    <Title>Ready to get started?</Title>
+                    <Button label="Start up" onClick={handleBegin} />
+                </Container>
             </Jacket>
-        </Grid>
+
+            <Jacket data-lenis-prevent $modal={2} style={{ zIndex: 2, pointerEvents: modalOpen.modal1 ? 'all' : 'none'}}>
+                <Container $network $activated={begin}>
+                    <h3>Network</h3>
+                    <select id="network-id">
+                        <option value="0">Mainnet</option>
+                        <option value="1">Arabica</option>
+                        <option value="2">Mocha</option>
+                    </select>
+
+                    <h3>Genesis Hash</h3>
+                    <Input value={config.genesis_hash} onChange={handleGhash} placeholder="Genesis Hash..." />
+                    {/* {config?.genesis_hash ? config?.genesis_hash : `Loading...`} */}
+
+                    <h3>Bootnodes</h3>
+                    <Input value={config.bootnodes} onChange={handleBnodes} placeholder="Bootnodes..." />
+
+                    <div>
+                        <Button label="Start up" onClick={startNode} disabled={node !== null || peerId !== ''} />
+                    </div>
+                </Container>
+            </Jacket>
+
+            <Jacket data-lenis-prevent style={{ zIndex: 3, pointerEvents: modalOpen.modal2 ? 'all' : 'none'}}>
+                <Container $go $activated={go}>
+                    <h2>Status</h2>
+
+                    <div>
+                        <b>PeerId:</b>
+                        <span>{peerId}</span>
+                    </div>
+
+                    <div>
+                        <b>Synchronizing headers:</b>
+                        <span>{syncInfo}</span>
+                    </div>
+
+                    <div>
+                        <b>Network Head:</b>
+                        <div>
+                            <span>Height: {networkHead?.height}</span>
+                            <span>Hash: {networkHead?.hash}</span>
+                            <span>Data Square: {networkHead?.dataSquare}</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <b>Peers:</b>
+                        <ul>
+                            {connectedPeers?.map((peer, index) => (
+                                <li key={index} className="mono">{peer}</li>
+                            ))}
+                        </ul>
+                    </div>
+                </Container>
+            </Jacket>
+        </>
     );
 };
 
