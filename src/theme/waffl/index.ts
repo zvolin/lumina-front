@@ -73,6 +73,7 @@ export const Grid = styled.div(
 		align-items: ${props.$isCenter ? 'center' : 'stretch'};
 		justify-content: ${props.$isCenter ? 'center' : 'stretch'};
 		max-width: ${props.$isFixed ? theme.grid.maxSize : '100%'};
+		width: 100%;
 		gap: ${props.$noGutter ? 0 : theme.grid.gutter.small};
 		grid-template-columns: repeat(${mobileColCount}, 1fr);
 		padding: 0 ${noMpad};

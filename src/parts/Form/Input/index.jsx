@@ -6,18 +6,22 @@ import React from 'react';
 
 // Styles
 // ------------
-import { Jacket } from './styles';
+import { Jacket, Field } from './styles';
 
 // Component
 // ------------
 const Input = ({
+    name,
     value,
     onChange,
     placeholder,
     type = 'text',
+    light,
 }) => {
     return (
-        <Jacket type={type} onChange={onChange} value={value ? value : ``} placeholder={placeholder} />
+        <Jacket>
+            <Field $light={light} name={name} type={type} onChange={onChange} value={value ? value : ``} placeholder={placeholder} />
+        </Jacket>
     );
 }
 

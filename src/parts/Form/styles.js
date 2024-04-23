@@ -5,11 +5,18 @@ import { bp, Section, Div, H3 } from '@tackl';
 
 // Exports
 // ------------
+export const Blanket = styled(Div)(props => css`
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+`);
+
 export const Jacket = styled(Section)(
     props => css`
         position: absolute;
         inset: 0 2.4rem;
-        // padding-top: 25vh;
         overflow: hidden;
 
         display: flex;
@@ -17,11 +24,23 @@ export const Jacket = styled(Section)(
 
         ${props.$modal === 3 && css`
             padding-top: 25vh;
-            align-items: flex-start;
             overflow: scroll;
         `}
     `
 );
+
+export const ImageContainer = styled(Div)(props => css`
+    position: absolute;
+    bottom: 15vh;
+    left: 50%;
+    transform: translateX(-50%) scale(1) rotate(0deg);
+
+    transition: all 1.2s ${props.theme.easing.bezzy};
+
+    ${props.$active && css`
+        ${bp.large` transform: translateX(-50%) scale(3) rotate(-15deg); `}
+    `}
+`);
 
 export const Container = styled(Div)(props => css`
     position: relative;
@@ -63,13 +82,159 @@ export const Container = styled(Div)(props => css`
         transform: translateY(${props.$activated ? 0 : `100%`});
 
         color: ${props.theme.colors.global.black};
+        min-height: 80vh;
 
         ${bp.large`
             width: calc(100% - 7.2rem);
+            margin-left: 7.2rem;
         `}
     `}
 `);
 
 export const Title = styled(H3)(props => css`
-    color: ${props.theme.colors.global.white};
+    color: ${props.$dark ? props.theme.colors.global.black : props.theme.colors.global.white};
+
+    ${props.$dark && css` margin-bottom: 3.6rem; `}
 `);
+
+export const NetworkList = styled.ul(props => css`
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: .1rem;
+
+    border-radius: .6rem;
+    border: 1px solid ${props.theme.colors.brand.bc1};
+    padding: .4rem;
+`);
+
+export const NetworkItem = styled.li(props => css`
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    
+    background: ${props.theme.colors.global.white10};
+    overflow: hidden;
+
+    transition: all .4s ${props.theme.easing.bezzy};
+
+    &:hover {
+        background: ${props.theme.colors.global.white20};
+    }
+
+    label {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: .6rem;
+
+        padding: 1.2rem 2.4rem;
+        width: 100%;
+
+        svg {
+            width: 0;
+            fill: ${props.theme.colors.global.white};
+            transform: scale(0);
+            transition: all .2s ${props.theme.easing.bezzy};
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    input {
+        display: none;
+    }
+
+    &:first-child {
+        border-radius: .6rem 0 0 .6rem;
+    }
+
+    &:last-child {
+        border-radius: 0 .6rem .6rem 0;
+    }
+
+    &:before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        
+        background: linear-gradient(180deg, #CDB4DB 0%, #A2D2FF 100%);
+        opacity: 0;
+        
+        transition: all .6s ${props.theme.easing.bezzy};
+    }
+
+    ${props.$selected && css`
+        &:before {
+            opacity: 1;
+        }
+
+        label {
+            svg {
+                width: auto;
+                transform: scale(1);
+            }
+        }
+    `}
+
+    ${props.$disabled && css`
+        opacity: .5;
+        pointer-events: none;
+    `}
+`);
+
+export const StatsItem = styled.div(props => css`
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    ${props.$block && css` margin-bottom: 3.6rem; `}
+
+    label {
+        display: flex;
+        flex-direction: ${props.$block ? `column` : `row`};
+        align-items: ${props.$block ? `flex-start` : `center`};
+        justify-content: flex-start;
+        gap: 2.4rem;
+        width: 100%;
+
+        span {
+            width: max-content;
+            min-width: max-content;
+        }
+    }
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: .3rem;
+        
+        position: relative;
+        width: 100%;
+        padding: .3rem;
+        border-radius: .6rem;
+        border: 1px solid ${props.theme.colors.brand.bc1};
+        
+        li {
+            position: relative;
+            width: 100%;
+            padding: 1.2rem;
+            border-radius: .6rem;
+            background: ${props.theme.colors.global.black05};
+        }
+    }
+`);
+
+export const Col = styled(Div)(props => css``);

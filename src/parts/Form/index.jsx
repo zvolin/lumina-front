@@ -2,30 +2,36 @@
 
 // Imports
 // ------------
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import init, { Node, NodeConfig } from '@package/lumina-node-wasm';
 import Input from './Input';
 import Button from '@parts/Button';
+import Icon from '@icon';
 import { Grid } from '@waffl';
 
 // Styles
 // ------------
-import { Jacket, Container, Title, } from './styles';
+import { Blanket, Jacket, ImageContainer, Container, Title, NetworkList, NetworkItem, StatsItem, Col, } from './styles';
 
 // Component
 // ------------
 const Form = () => {
     const [node, setNode] = useState(null);
     const [config, setConfig] = useState({});
-    const [peerId, setPeerId] = useState('');
-    const [syncInfo, setSyncInfo] = useState('');
-    const [connectedPeers, setConnectedPeers] = useState([]);
-    const [networkHead, setNetworkHead] = useState(null);
     const [begin, setBegin] = useState(false);
     const [go, setGo] = useState(false);
     const [modalOpen, setModalOpen] = useState({
         modal1: false,
         modal2: false,
+    });
+
+    const [stats, setStats] = useState({
+        peerId: '',
+        syncInfo: '',
+        connectedPeers: [],
+        networkHeadHeight: '',
+        networkHeadHash: '',
+        networkHeadDataSquare: '',
     });
 
     // NOTE • Initialisation
@@ -51,10 +57,10 @@ const Form = () => {
 
     useEffect(() => {
         const loadConfig = async () => {
-            const config = await fetchConfig();
-            if (config) {
-                // console.log('Setting config to state:', config); // Debugging
-                setConfig(config);
+            const tempConfig = await fetchConfig();
+            if (tempConfig) {
+                // console.log('Setting config to state:', tempConfig); // Debugging
+                setConfig(tempConfig);
             }
         };
 
@@ -70,43 +76,25 @@ const Form = () => {
         const interval = setInterval(async () => {
             if (node) {
                 const info = await node.syncer_info();
-                setSyncInfo(`${info.local_head}/${info.subjective_head}`);
-
+                
                 const peers = await node.connected_peers();
-                setConnectedPeers(peers);
 
                 const head = node.get_network_head_header();
                 if (head) {
-                    setNetworkHead({
-                        height: head.header.height,
-                        hash: head.commit.block_id.hash,
-                        dataSquare: `${head.dah.row_roots.length}x${head.dah.column_roots.length} shares`,
+
+                    setStats({
+                        ...stats,
+                        syncInfo: `${info.local_head}/${info.subjective_head}`,
+                        connectedPeers: peers,
+                        networkHeadHeight: head.header.height,
+                        networkHeadHash: head.commit.block_id.hash,
+                        networkHeadDataSquare: `${head.dah.row_roots.length}x${head.dah.column_roots.length} shares`,
                     });
                 }
             }
         }, 1000);
         return () => clearInterval(interval);
     }, [node]);
-
-    const startNode = async () => {
-        setGo(true);
-
-        if (!config.genesis_hash || !config.bootnodes || config.bootnodes.length === 0) {
-            alert('Genesis hash and at least one bootnode are required.');
-            return;
-        }
-        try {
-            let anotherConfig = config;
-            setConfig({genesis_hash: config.genesis_hash, bootnodes: config.bootnodes});
-
-            const newNode = await new Node(anotherConfig);
-            // console.log("Node initialized successfully:", newNode);
-            setNode(newNode);
-            setPeerId(await newNode.local_peer_id());
-        } catch (error) {
-            console.error("Error initializing Node:", error);
-        }
-    };
 
     const handleGhash = (e) => {
         setConfig({
@@ -132,8 +120,55 @@ const Form = () => {
         });
     }
 
+    const handleNetwork = (e) => {
+        setConfig({
+            ...config,
+            network: Number(e)
+        });
+    }
+
+    const handleInput = (e) => {
+        setStats({
+            ...stats,
+            [e.target.name]: e.target.value
+        });
+    }
+
+    const startNode = async () => {
+        setGo(true);
+        setModalOpen(prev => {
+            return {
+                ...prev,
+                modal2: true,
+            }
+        });
+
+        if (!config.genesis_hash || !config.bootnodes || config.bootnodes.length === 0) {
+            alert('Genesis hash and at least one bootnode are required.');
+            return;
+        }
+        try {
+            let anotherConfig = config;
+            setConfig({genesis_hash: config.genesis_hash, bootnodes: config.bootnodes});
+
+            const newNode = await new Node(anotherConfig);
+            
+            setNode(newNode);
+            
+            setStats({
+                peerId: await newNode.local_peer_id(),
+            });
+        } catch (error) {
+            console.error("Error initializing Node:", error);
+        }
+    };
+
     return (
-        <>
+        <Blanket>
+            <ImageContainer $active={begin}>
+                <img src="/lumina.svg" alt="Lumina Logo" />
+            </ImageContainer>
+
             <Jacket data-lenis-prevent style={{ zIndex: 1}}>
                 <Container $begin>
                     <Title>Ready to get started?</Title>
@@ -143,60 +178,116 @@ const Form = () => {
 
             <Jacket data-lenis-prevent $modal={2} style={{ zIndex: 2, pointerEvents: modalOpen.modal1 ? 'all' : 'none'}}>
                 <Container $network $activated={begin}>
+                    <Title>Let's go!</Title>
+
                     <h3>Network</h3>
-                    <select id="network-id">
-                        <option value="0">Mainnet</option>
-                        <option value="1">Arabica</option>
-                        <option value="2">Mocha</option>
-                    </select>
+                    <NetworkList>
+                        <NetworkItem $selected={config?.network === 0}>
+                            <label>
+                                <input type="radio" name="network" value="0" onChange={() => handleNetwork('0')} />
+                                <Icon type="check" /><span>Mainnet</span>
+                            </label>
+                        </NetworkItem>
+                        <NetworkItem $selected={config?.network === 1} $disabled>
+                            <label>
+                                <input type="radio" name="network" value="1" onChange={() => handleNetwork('1')} />
+                                <Icon type="check" /><span>Arabica</span>
+                            </label>
+                        </NetworkItem>
+                        <NetworkItem $selected={config?.network === 2} $disabled>
+                            <label>
+                                <input type="radio" name="network" value="2" onChange={() => handleNetwork('2')} />
+                                <Icon type="check" /><span>Mocha</span>
+                            </label>
+                        </NetworkItem>
+                    </NetworkList>
 
                     <h3>Genesis Hash</h3>
-                    <Input value={config.genesis_hash} onChange={handleGhash} placeholder="Genesis Hash..." />
-                    {/* {config?.genesis_hash ? config?.genesis_hash : `Loading...`} */}
+                    <Input value={config?.genesis_hash} onChange={handleGhash} placeholder="Genesis Hash..." />
+                    {/* {config.genesis_hash ? config.genesis_hash : `Loading...`} */}
 
                     <h3>Bootnodes</h3>
-                    <Input value={config.bootnodes} onChange={handleBnodes} placeholder="Bootnodes..." />
+                    <Input value={config?.bootnodes} onChange={handleBnodes} placeholder="Bootnodes..." />
 
                     <div>
-                        <Button label="Start up" onClick={startNode} disabled={node !== null || peerId !== ''} />
+                        <Button label="Start" onClick={startNode} disabled={node !== null || stats.peerId !== ''} />
                     </div>
                 </Container>
             </Jacket>
 
-            <Jacket data-lenis-prevent style={{ zIndex: 3, pointerEvents: modalOpen.modal2 ? 'all' : 'none'}}>
+            <Jacket data-lenis-prevent $modal={3} style={{ zIndex: 3, pointerEvents: modalOpen.modal2 ? 'all' : 'none'}}>
                 <Container $go $activated={go}>
-                    <h2>Status</h2>
+                    <Grid $noPadding>
+                        <Col $small="1/3" $medium="1/7" $large="1/7">
+                            <Title $dark>Status</Title>
 
-                    <div>
-                        <b>PeerId:</b>
-                        <span>{peerId}</span>
-                    </div>
+                            <Grid $noPadding>
+                                <Col $small="1/3" $medium="1/7" $large="1/13">
+                                    <StatsItem>
+                                        <label>
+                                            <span>PeerId:</span>
+                                            <Input name="peerId" value={stats.peerId} onChange={(e) => handleInput(e)} placeholder="..." light />
+                                        </label>
+                                    </StatsItem>
+                                </Col>
+                                <Col $small="1/3" $medium="1/7" $large="1/13">
+                                    <StatsItem>
+                                        <label>
+                                            <span>Synchronizing headers:</span>
+                                            <Input name="syncInfo" value={stats.syncInfo} onChange={(e) => handleInput(e)} placeholder="..." light />
+                                        </label>
+                                    </StatsItem>
+                                </Col>
+                                <Col $small="1/3" $medium="1/7" $large="1/13">
+                                    <StatsItem $block>
+                                        <label>
+                                            <span>Peers:</span>
+                                            <ul>
+                                                {stats.connectedPeers?.map((peer, index) => (
+                                                    <li key={index} className="mono">{peer}</li>
+                                                ))}
+                                            </ul>
+                                        </label>
+                                    </StatsItem>
+                                </Col>
+                            </Grid>
 
-                    <div>
-                        <b>Synchronizing headers:</b>
-                        <span>{syncInfo}</span>
-                    </div>
+                            <Grid $noPadding>
+                                <Col $small="1/3" $medium="1/7" $large="1/7">
+                                    <StatsItem>
+                                        <label>
+                                            <span>Height:</span>
+                                            <Input name="networkHeadHeight" value={stats.networkHeadHeight} onChange={(e) => handleInput(e)} placeholder="..." light />
+                                        </label>
+                                    </StatsItem>
+                                </Col>
+                                <Col $small="1/3" $medium="1/7" $large="7/13">
+                                    <StatsItem>
+                                        <label>
+                                            <span>Data square size:</span>
+                                            <Input name="networkHeadDataSquare" value={stats.networkHeadDataSquare} onChange={(e) => handleInput(e)} placeholder="..." light />
+                                        </label>
+                                    </StatsItem>
+                                </Col>
+                                <Col $small="1/3" $medium="1/7" $large="1/13">
+                                    <StatsItem>
+                                        <label>
+                                            <span>Hash:</span>
+                                            <Input name="networkHeadHash" value={stats.networkHeadHash} onChange={(e) => handleInput(e)} placeholder="..." light />
+                                        </label>
+                                    </StatsItem>
+                                </Col>
+                            </Grid>
+                        </Col>
+                        <Col $small="1/3" $medium="1/7" $large="7/13">
+                            <span>VFX</span>
+                        </Col>
+                    </Grid>
 
-                    <div>
-                        <b>Network Head:</b>
-                        <div>
-                            <span>Height: {networkHead?.height}</span>
-                            <span>Hash: {networkHead?.hash}</span>
-                            <span>Data Square: {networkHead?.dataSquare}</span>
-                        </div>
-                    </div>
-
-                    <div>
-                        <b>Peers:</b>
-                        <ul>
-                            {connectedPeers?.map((peer, index) => (
-                                <li key={index} className="mono">{peer}</li>
-                            ))}
-                        </ul>
-                    </div>
+                    {/* // TODO • Visualisation to be a random square of data in first version */}
                 </Container>
             </Jacket>
-        </>
+        </Blanket>
     );
 };
 
