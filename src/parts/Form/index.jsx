@@ -7,11 +7,12 @@ import init, { Node, NodeConfig } from '@package/lumina-node-wasm';
 import Input from './Input';
 import Button from '@parts/Button';
 import Icon from '@icon';
+import Visualisation from '@parts/Visualisation';
 import { Grid } from '@waffl';
 
 // Styles
 // ------------
-import { Blanket, Jacket, ImageContainer, Container, Title, NetworkList, NetworkItem, StatsItem, Col, } from './styles';
+import { Blanket, Jacket, ImageContainer, Container, Title, NetworkList, NetworkItem, StatsItem, PeerList, Col, } from './styles';
 
 // Component
 // ------------
@@ -156,6 +157,7 @@ const Form = () => {
             setNode(newNode);
             
             setStats({
+                ...stats,
                 peerId: await newNode.local_peer_id(),
             });
         } catch (error) {
@@ -242,11 +244,11 @@ const Form = () => {
                                     <StatsItem $block>
                                         <label>
                                             <span>Peers:</span>
-                                            <ul>
+                                            <PeerList>
                                                 {stats.connectedPeers?.map((peer, index) => (
                                                     <li key={index} className="mono">{peer}</li>
                                                 ))}
-                                            </ul>
+                                            </PeerList>
                                         </label>
                                     </StatsItem>
                                 </Col>
@@ -280,11 +282,9 @@ const Form = () => {
                             </Grid>
                         </Col>
                         <Col $small="1/3" $medium="1/7" $large="7/13">
-                            <span>VFX</span>
+                            <Visualisation data={stats} />
                         </Col>
                     </Grid>
-
-                    {/* // TODO • Visualisation to be a random square of data in first version */}
                 </Container>
             </Jacket>
         </Blanket>

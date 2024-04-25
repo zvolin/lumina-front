@@ -213,27 +213,31 @@ export const StatsItem = styled.div(props => css`
             min-width: max-content;
         }
     }
+`);
 
-    ul {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        gap: .3rem;
-        
+export const PeerList = styled.ul(props => css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: .3rem;
+
+    max-height: 15rem;
+    overflow: hidden;
+    overflow-y: scroll;
+
+    position: relative;
+    width: 100%;
+    padding: .3rem;
+    border-radius: .6rem;
+    border: 1px solid ${props.theme.colors.brand.bc1};
+
+    li {
         position: relative;
         width: 100%;
-        padding: .3rem;
+        padding: 1.2rem;
         border-radius: .6rem;
-        border: 1px solid ${props.theme.colors.brand.bc1};
-        
-        li {
-            position: relative;
-            width: 100%;
-            padding: 1.2rem;
-            border-radius: .6rem;
-            background: ${props.theme.colors.global.black05};
-        }
+        background: ${props.theme.colors.global.black05};
     }
 `);
 
