@@ -11,6 +11,7 @@ export const Jacket = styled.button(
         position: relative;
         display: flex;
         flex-direction: row;
+        align-items: center;
         gap: 1.2rem;
         width: max-content;
         border-radius: 3.6rem;
@@ -21,8 +22,13 @@ export const Jacket = styled.button(
         transition: all .4s ${props.theme.easing.bezzy};
 
         &:hover {
-            cursor: pointer;
+            cursor: pointer !important;
             transform: scale(0.95);
+        }
+
+        svg {
+            width: 1.6rem;
+            height: 1.6rem;
         }
 
         span {

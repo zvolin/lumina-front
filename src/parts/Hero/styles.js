@@ -14,4 +14,7 @@ export const Jacket = styled(Section)(
 
 export const Title = styled(H1)(props => css`
     color: ${props.theme.colors.global.white};
+
+    transition: all 1s ${props.theme.easing.bezzy};
+    opacity: ${props.$isHidden ? 0 : 1};
 `);

@@ -2,24 +2,26 @@
 
 // Imports
 // ------------
-import React, { useState, useEffect, use } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import init, { Node, NodeConfig } from '@package/lumina-node-wasm';
 import Input from './Input';
 import Button from '@parts/Button';
 import Icon from '@icon';
 import Visualisation from '@parts/Visualisation';
 import { Grid } from '@waffl';
+import { GlobalContext } from '@parts/Contexts';
 
 // Styles
 // ------------
-import { Blanket, Jacket, ImageContainer, Container, Title, NetworkList, NetworkItem, StatsItem, PeerList, Col, } from './styles';
+import { Blanket, Jacket, ImageContainer, Container, Header, Title, Progress, NetworkList, NetworkItem, StatsItem, PeerList, Col, FieldGroup, ButtonJacket } from './styles';
 
 // Component
 // ------------
 const Form = () => {
+    const { begin, setBegin } = useContext(GlobalContext);
+
     const [node, setNode] = useState(null);
     const [config, setConfig] = useState({});
-    const [begin, setBegin] = useState(false);
     const [go, setGo] = useState(false);
     const [modalOpen, setModalOpen] = useState({
         modal1: false,
@@ -165,6 +167,10 @@ const Form = () => {
         }
     };
 
+    const handleReload = () => {
+        window.location.reload();
+    };
+
     return (
         <Blanket>
             <ImageContainer $active={begin}>
@@ -221,7 +227,17 @@ const Form = () => {
                 <Container $go $activated={go}>
                     <Grid $noPadding>
                         <Col $small="1/3" $medium="1/7" $large="1/7">
-                            <Title $dark>Status</Title>
+                            <Grid $noPadding>
+                                <Col $small="1/3" $medium="1/7" $large="1/13">
+                                    <Header>
+                                        <Title $dark>Status</Title>
+                                        <Progress>
+                                            <Icon type="logoGrad" />
+                                            <span>in progress&hellip;</span>
+                                        </Progress>
+                                    </Header>
+                                </Col>
+                            </Grid>
 
                             <Grid $noPadding>
                                 <Col $small="1/3" $medium="1/7" $large="1/13">
@@ -231,16 +247,12 @@ const Form = () => {
                                             <Input name="peerId" value={stats.peerId} onChange={(e) => handleInput(e)} placeholder="..." light />
                                         </label>
                                     </StatsItem>
-                                </Col>
-                                <Col $small="1/3" $medium="1/7" $large="1/13">
                                     <StatsItem>
                                         <label>
                                             <span>Synchronizing headers:</span>
                                             <Input name="syncInfo" value={stats.syncInfo} onChange={(e) => handleInput(e)} placeholder="..." light />
                                         </label>
                                     </StatsItem>
-                                </Col>
-                                <Col $small="1/3" $medium="1/7" $large="1/13">
                                     <StatsItem $block>
                                         <label>
                                             <span>Peers:</span>
@@ -255,23 +267,21 @@ const Form = () => {
                             </Grid>
 
                             <Grid $noPadding>
-                                <Col $small="1/3" $medium="1/7" $large="1/7">
-                                    <StatsItem>
-                                        <label>
-                                            <span>Height:</span>
-                                            <Input name="networkHeadHeight" value={stats.networkHeadHeight} onChange={(e) => handleInput(e)} placeholder="..." light />
-                                        </label>
-                                    </StatsItem>
-                                </Col>
-                                <Col $small="1/3" $medium="1/7" $large="7/13">
-                                    <StatsItem>
-                                        <label>
-                                            <span>Data square size:</span>
-                                            <Input name="networkHeadDataSquare" value={stats.networkHeadDataSquare} onChange={(e) => handleInput(e)} placeholder="..." light />
-                                        </label>
-                                    </StatsItem>
-                                </Col>
                                 <Col $small="1/3" $medium="1/7" $large="1/13">
+                                    <FieldGroup>
+                                        <StatsItem>
+                                            <label>
+                                                <span>Height:</span>
+                                                <Input name="networkHeadHeight" value={stats.networkHeadHeight} onChange={(e) => handleInput(e)} placeholder="..." light />
+                                            </label>
+                                        </StatsItem>
+                                        <StatsItem>
+                                            <label>
+                                                <span>Data square size:</span>
+                                                <Input name="networkHeadDataSquare" value={stats.networkHeadDataSquare} onChange={(e) => handleInput(e)} placeholder="..." light />
+                                            </label>
+                                        </StatsItem>
+                                    </FieldGroup>
                                     <StatsItem>
                                         <label>
                                             <span>Hash:</span>
@@ -283,6 +293,13 @@ const Form = () => {
                         </Col>
                         <Col $small="1/3" $medium="1/7" $large="7/13">
                             <Visualisation data={stats} />
+                        </Col>
+                    </Grid>
+                    <Grid $noPadding>
+                        <Col $small="1/3" $medium="1/7" $large="1/13">
+                            <ButtonJacket>
+                                <Button icoL icon="back" label="Restart" onClick={handleReload} />
+                            </ButtonJacket>
                         </Col>
                     </Grid>
                 </Container>

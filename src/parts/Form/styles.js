@@ -91,10 +91,37 @@ export const Container = styled(Div)(props => css`
     `}
 `);
 
+export const Header = styled.div(props => css`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.2rem;
+
+    margin-bottom: 3.6rem;
+`);
+
 export const Title = styled(H3)(props => css`
     color: ${props.$dark ? props.theme.colors.global.black : props.theme.colors.global.white};
+`);
 
-    ${props.$dark && css` margin-bottom: 3.6rem; `}
+export const Progress = styled.div(props => css`
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .6rem;
+
+    svg {
+        width: 1.6rem;
+        height: 1.6rem;
+    }
+
+    span {
+        text-transform: uppercase;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: ${props.theme.colors.brand.bc4};
+    }
 `);
 
 export const NetworkList = styled.ul(props => css`
@@ -187,6 +214,7 @@ export const NetworkItem = styled.li(props => css`
     ${props.$disabled && css`
         opacity: .5;
         pointer-events: none;
+        cursor: not-allowed;
     `}
 `);
 
@@ -197,8 +225,16 @@ export const StatsItem = styled.div(props => css`
     align-items: center;
     justify-content: center;
     width: 100%;
+    margin-bottom: 1.2rem;
 
-    ${props.$block && css` margin-bottom: 3.6rem; `}
+    ${props.$block && css`
+        margin-top: 2.4rem;
+        margin-bottom: 3.6rem;
+
+        label {
+            gap: 1.2rem;
+        }
+    `}
 
     label {
         display: flex;
@@ -222,6 +258,7 @@ export const PeerList = styled.ul(props => css`
     justify-content: flex-start;
     gap: .3rem;
 
+    min-height: 8rem;
     max-height: 15rem;
     overflow: hidden;
     overflow-y: scroll;
@@ -242,3 +279,15 @@ export const PeerList = styled.ul(props => css`
 `);
 
 export const Col = styled(Div)(props => css``);
+
+export const FieldGroup = styled(Div)(props => css`
+    display: flex;
+    flex-direction: row;
+    gap: 2.4rem;
+`);
+
+export const ButtonJacket = styled(Div)(props => css`
+    position: relative;
+    border-top: 1px solid ${props.theme.colors.global.black10};
+    padding-top: 2.4rem;
+`);

@@ -12,9 +12,9 @@ import { Jacket } from './styles';
 const Button = ({ label, onClick, icon, icoL, icoR, disabled }) => {
     return (
         <Jacket onClick={onClick} disabled={disabled}>
-            {icon && icoL && (<span><Icon type={icon} /></span>)}
+            {icon && icoL && (<Icon type={icon} />)}
             <span>{label}</span>
-            {icon && icoR && (<span><Icon type={icon} /></span>)}
+            {icon && icoR && (<Icon type={icon} />)}
         </Jacket>
     );
 }

@@ -13,24 +13,40 @@ export const Container = styled(Div)(
     props => css`
         position: relative;
         pointer-events: none;
-        padding: 1px;
 
         display: grid;
         grid-template-columns: repeat(32, 1fr);
         grid-template-rows: repeat(32, 1fr);
-        grid-gap: 1px;
+        // grid-gap: 1px;
+
+        border-top: 1px solid ${props.theme.colors.global.black10};
+        border-left: 1px solid ${props.theme.colors.global.black10};
 
         width: 42.08vw;
         height: 42.08vw;
 
-        background: ${props.theme.colors.global.black10};
-
         .grid-item {
-            background: white;
-        }
+            position: relative;
+            border-right: 1px solid ${props.theme.colors.global.black10};
+            border-bottom: 1px solid ${props.theme.colors.global.black10};
 
-        .selected {
-            background: ${props.theme.colors.brand.bc4};
+            &:before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: ${props.theme.colors.brand.bc3};
+                opacity: 0;
+
+                transition: opacity .3s ease-in-out;
+                transition-delay: 1s;
+                will-change: opacity;
+            }
+
+            &.selected {
+                &:before {
+                    opacity: 1;
+                }
+            }
         }
     `
 );
@@ -38,4 +54,7 @@ export const Container = styled(Div)(
 export const SplineJacket = styled(Div)(props => css`
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
+    opacity: 1;
+    z-index: -1;
+    pointer-events: none;
 `);
