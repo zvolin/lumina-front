@@ -3,7 +3,7 @@
 // Imports
 // ------------
 import React, { useRef, useEffect } from 'react';
-import Spline from '@splinetool/react-spline';
+// import Spline from '@splinetool/react-spline';
 
 // Styles
 // ------------
@@ -65,9 +65,9 @@ const Visualisation = ({ data }) => {
     return (
         <Jacket>
             <Container ref={containerRef}>{generateSpans()}</Container>
-            <SplineJacket>
+            {/* <SplineJacket>
                 <Spline scene="https://prod.spline.design/vS5y3FkvJJqrWPgq/scene.splinecode" />
-            </SplineJacket>
+            </SplineJacket> */}
         </Jacket>
     );
 }
