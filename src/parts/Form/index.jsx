@@ -6,6 +6,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import init, { Node, NodeConfig } from '@package/lumina-node-wasm';
 import Input from './Input';
 import Button from '@parts/Button';
+import Link from '@parts/Link';
 import Icon from '@icon';
 import Visualisation from '@parts/Visualisation';
 import { Grid } from '@waffl';
@@ -13,7 +14,7 @@ import { GlobalContext } from '@parts/Contexts';
 
 // Styles
 // ------------
-import { Blanket, Jacket, ImageContainer, Container, Header, Title, Progress, NetworkList, NetworkItem, StatsItem, PeerList, Col, FieldGroup, ButtonJacket } from './styles';
+import { Blanket, Jacket, ImageContainer, Container, Header, Title, Progress, NetworkList, NetworkItem, StatsItem, PeerList, Col, FieldGroup, ButtonJacket, LinkGroup, } from './styles';
 
 // Component
 // ------------
@@ -179,8 +180,8 @@ const Form = () => {
 
             <Jacket data-lenis-prevent style={{ zIndex: 1}}>
                 <Container $begin>
-                    <Title>Ready to get started?</Title>
-                    <Button label="Start up" onClick={handleBegin} />
+                    <Title>Start your Celestia light node</Title>
+                    <Button label="Start Sampling" onClick={handleBegin} />
                 </Container>
             </Jacket>
 
@@ -253,7 +254,7 @@ const Form = () => {
                                             <Input name="syncInfo" value={stats.syncInfo} onChange={(e) => handleInput(e)} placeholder="..." light />
                                         </label>
                                     </StatsItem>
-                                    <StatsItem $block>
+                                    {/* <StatsItem $block>
                                         <label>
                                             <span>Peers:</span>
                                             <PeerList>
@@ -262,7 +263,7 @@ const Form = () => {
                                                 ))}
                                             </PeerList>
                                         </label>
-                                    </StatsItem>
+                                    </StatsItem> */}
                                 </Col>
                             </Grid>
 
@@ -271,8 +272,8 @@ const Form = () => {
                                     <FieldGroup>
                                         <StatsItem>
                                             <label>
-                                                <span>Height:</span>
-                                                <Input name="networkHeadHeight" value={stats.networkHeadHeight} onChange={(e) => handleInput(e)} placeholder="..." light />
+                                                <span>Block Height:</span>
+                                                <Input name="networkHeadHeight" value={stats.networkHeadHeight} onChange={(e) => handleInput(e)} placeholder="..." light hasCopy={{ label: 'View in Celenium', link: `https://celenium.io/block/` + stats.networkHeadHeight, }} />
                                             </label>
                                         </StatsItem>
                                         <StatsItem>
@@ -299,6 +300,10 @@ const Form = () => {
                         <Col $small="1/3" $medium="1/7" $large="1/13">
                             <ButtonJacket>
                                 <Button icoL icon="back" label="Restart" onClick={handleReload} />
+                                <LinkGroup>
+                                    <Link icon="mint" label="Mint NFT" link="http://www.google.com" disabled />
+                                    <Link icon="celestia" label="Learn more" link="https://celestia.org/run-a-light-node/" />
+                                </LinkGroup>
                             </ButtonJacket>
                         </Col>
                     </Grid>

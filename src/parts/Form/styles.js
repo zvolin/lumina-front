@@ -225,7 +225,7 @@ export const StatsItem = styled.div(props => css`
     align-items: center;
     justify-content: center;
     width: 100%;
-    margin-bottom: 1.2rem;
+    margin-bottom: 2.4rem;
 
     ${props.$block && css`
         margin-top: 2.4rem;
@@ -290,4 +290,18 @@ export const ButtonJacket = styled(Div)(props => css`
     position: relative;
     border-top: 1px solid ${props.theme.colors.global.black10};
     padding-top: 2.4rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    ${bp.medium` flex-direction: row; `}
+`);
+
+export const LinkGroup = styled(Div)(props => css`
+    display: flex;
+    flex-direction: column;
+    gap: 3.6rem;
+
+    ${bp.medium` flex-direction: row; `}
 `);
