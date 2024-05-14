@@ -17,7 +17,7 @@ const Hero = () => {
     return (
         <Grid>
             <Jacket $small="1/3" $medium="1/7" $large="1/13">
-                <Title $isHidden={begin}>Verify the availability of block data by sampling the Celestia network for shares</Title>
+                <Title $isHidden={begin}>Directly verify Celestia</Title>
             </Jacket>
         </Grid>
     );

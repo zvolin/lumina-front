@@ -6,21 +6,23 @@ import React, { useState, useEffect, useContext } from 'react';
 import init, { Node, NodeConfig } from '@package/lumina-node-wasm';
 import Input from './Input';
 import Button from '@parts/Button';
-import Link from '@parts/Link';
+import Status from './Status';
+import Terminal from './Terminal';
 import Icon from '@icon';
-import Visualisation from '@parts/Visualisation';
-import { Grid } from '@waffl';
+import Typewriter from 'typewriter-effect';
 import { GlobalContext } from '@parts/Contexts';
 
 // Styles
 // ------------
-import { Blanket, Jacket, ImageContainer, Container, Header, Title, Progress, NetworkList, NetworkItem, StatsItem, PeerList, Col, FieldGroup, ButtonJacket, LinkGroup, } from './styles';
+import { Blanket, Jacket, ImageContainer, Container, Title, NetworkList, NetworkItem,  Col, FieldGroup, ButtonJacket, LinkGroup, } from './styles';
 
 // Component
 // ------------
 const Form = () => {
+    // NOTE • Contexts
     const { begin, setBegin } = useContext(GlobalContext);
 
+    // NOTE • States
     const [node, setNode] = useState(null);
     const [config, setConfig] = useState({});
     const [go, setGo] = useState(false);
@@ -28,6 +30,7 @@ const Form = () => {
         modal1: false,
         modal2: false,
     });
+    const [nodeInitiate, setNodeInitiate] = useState(false);
 
     const [stats, setStats] = useState({
         peerId: '',
@@ -139,14 +142,6 @@ const Form = () => {
     }
 
     const startNode = async () => {
-        setGo(true);
-        setModalOpen(prev => {
-            return {
-                ...prev,
-                modal2: true,
-            }
-        });
-
         if (!config.genesis_hash || !config.bootnodes || config.bootnodes.length === 0) {
             alert('Genesis hash and at least one bootnode are required.');
             return;
@@ -168,6 +163,26 @@ const Form = () => {
         }
     };
 
+    const initiateNode = () => {
+        setGo(true);
+        setModalOpen(prev => {
+            return {
+                ...prev,
+                modal2: true,
+            }
+        });
+        setNodeInitiate(true);
+    };
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setNodeInitiate(false);
+            startNode();
+        }, 10500);
+
+        return () => clearTimeout(timer);
+    }, [nodeInitiate]);
+
     const handleReload = () => {
         window.location.reload();
     };
@@ -180,7 +195,21 @@ const Form = () => {
 
             <Jacket data-lenis-prevent style={{ zIndex: 1}}>
                 <Container $begin>
-                    <Title>Start your Celestia light node</Title>
+                    <Title>
+                        <Typewriter
+                            options={{
+                                delay: 25,
+                                deleteSpeed: 25,
+                                changeDelay: 25,
+                            }}
+                            onInit={(typewriter) => {
+                                typewriter.typeString('Start your Celestia light node')
+                                .changeDelay(25)
+                                .changeDeleteSpeed(25)
+                                .start();
+                            }}
+                        />
+                    </Title>
                     <Button label="Start Sampling" onClick={handleBegin} />
                 </Container>
             </Jacket>
@@ -219,94 +248,22 @@ const Form = () => {
                     <Input value={config?.bootnodes} onChange={handleBnodes} placeholder="Bootnodes..." />
 
                     <div>
-                        <Button label="Start" onClick={startNode} disabled={node !== null || stats.peerId !== ''} />
+                        <Button label="Start" onClick={initiateNode} disabled={node !== null || stats.peerId !== ''} />
                     </div>
                 </Container>
             </Jacket>
 
             <Jacket data-lenis-prevent $modal={3} style={{ zIndex: 3, pointerEvents: modalOpen.modal2 ? 'all' : 'none'}}>
                 <Container $go $activated={go}>
-                    <Grid $noPadding>
-                        <Col $small="1/3" $medium="1/7" $large="1/7">
-                            <Grid $noPadding>
-                                <Col $small="1/3" $medium="1/7" $large="1/13">
-                                    <Header>
-                                        <Title $dark>Status</Title>
-                                        <Progress>
-                                            <Icon type="logoGrad" />
-                                            <span>in progress&hellip;</span>
-                                        </Progress>
-                                    </Header>
-                                </Col>
-                            </Grid>
-
-                            <Grid $noPadding>
-                                <Col $small="1/3" $medium="1/7" $large="1/13">
-                                    <StatsItem>
-                                        <label>
-                                            <span>PeerId:</span>
-                                            <Input name="peerId" value={stats.peerId} onChange={(e) => handleInput(e)} placeholder="..." light />
-                                        </label>
-                                    </StatsItem>
-                                    <StatsItem>
-                                        <label>
-                                            <span>Synchronizing headers:</span>
-                                            <Input name="syncInfo" value={stats.syncInfo} onChange={(e) => handleInput(e)} placeholder="..." light />
-                                        </label>
-                                    </StatsItem>
-                                    {/* <StatsItem $block>
-                                        <label>
-                                            <span>Peers:</span>
-                                            <PeerList>
-                                                {stats.connectedPeers?.map((peer, index) => (
-                                                    <li key={index} className="mono">{peer}</li>
-                                                ))}
-                                            </PeerList>
-                                        </label>
-                                    </StatsItem> */}
-                                </Col>
-                            </Grid>
-
-                            <Grid $noPadding>
-                                <Col $small="1/3" $medium="1/7" $large="1/13">
-                                    <FieldGroup>
-                                        <StatsItem>
-                                            <label>
-                                                <span>Block Height:</span>
-                                                <Input name="networkHeadHeight" value={stats.networkHeadHeight} onChange={(e) => handleInput(e)} placeholder="..." light hasCopy={{ label: 'View in Celenium', link: `https://celenium.io/block/` + stats.networkHeadHeight, }} />
-                                            </label>
-                                        </StatsItem>
-                                        <StatsItem>
-                                            <label>
-                                                <span>Data square size:</span>
-                                                <Input name="networkHeadDataSquare" value={stats.networkHeadDataSquare} onChange={(e) => handleInput(e)} placeholder="..." light />
-                                            </label>
-                                        </StatsItem>
-                                    </FieldGroup>
-                                    <StatsItem>
-                                        <label>
-                                            <span>Hash:</span>
-                                            <Input name="networkHeadHash" value={stats.networkHeadHash} onChange={(e) => handleInput(e)} placeholder="..." light />
-                                        </label>
-                                    </StatsItem>
-                                </Col>
-                            </Grid>
-                        </Col>
-                        <Col $small="1/3" $medium="1/7" $large="7/13">
-                            <Visualisation data={stats} />
-                        </Col>
-                    </Grid>
-                    <Grid $noPadding>
-                        <Col $small="1/3" $medium="1/7" $large="1/13">
-                            <ButtonJacket>
-                                <Button icoL icon="back" label="Restart" onClick={handleReload} />
-                                <LinkGroup>
-                                    <Link icon="mint" label="Mint NFT" link="http://www.google.com" disabled />
-                                    <Link icon="celestia" label="Learn more" link="https://celestia.org/run-a-light-node/" />
-                                </LinkGroup>
-                            </ButtonJacket>
-                        </Col>
-                    </Grid>
+                    {nodeInitiate ? (
+                        <Terminal />
+                    ) : (
+                        <Status
+                            stats={stats}
+                            handleInput={handleInput}
+                            handleReload={handleReload}
+                        />
+                    )}
                 </Container>
             </Jacket>
         </Blanket>

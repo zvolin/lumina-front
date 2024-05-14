@@ -1,3 +1,4 @@
+
 // Imports
 // ------------
 import styled, { css } from 'styled-components';
@@ -169,6 +170,10 @@ export const NetworkItem = styled.li(props => css`
             transition: all .2s ${props.theme.easing.bezzy};
         }
 
+        span {
+            position: relative;
+        }
+
         &:hover {
             cursor: pointer;
         }
@@ -212,9 +217,23 @@ export const NetworkItem = styled.li(props => css`
     `}
 
     ${props.$disabled && css`
-        opacity: .5;
+        opacity: 0.4;
         pointer-events: none;
-        cursor: not-allowed;
+        
+        label {
+            span {
+                &:after {
+                    content: '';
+                    position: absolute;
+                    left: 0; right: 0;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    z-index: 2;
+                    height: 1px;
+                    background: ${props.theme.colors.global.white};
+                }
+            }
+        }
     `}
 `);
 
