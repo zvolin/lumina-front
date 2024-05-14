@@ -14,7 +14,7 @@ import { GlobalContext } from '@parts/Contexts';
 
 // Styles
 // ------------
-import { Blanket, Jacket, ImageContainer, Container, Title, NetworkList, NetworkItem,  Col, FieldGroup, ButtonJacket, LinkGroup, } from './styles';
+import { Blanket, Jacket, ImageContainer, Container, Title, NetworkList, NetworkItem } from './styles';
 
 // Component
 // ------------
