@@ -114,8 +114,15 @@ section {
 	display: block;
 }
 
+html {
+	overflow: hidden;
+	height: 100%;
+}
+
 body {
 	line-height: 1;
+	height: 100%;
+	overflow: auto;
 }
 
 ol,
