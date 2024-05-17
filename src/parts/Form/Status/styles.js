@@ -60,11 +60,17 @@ export const StatsItem = styled.div(props => css`
 
     label {
         display: flex;
-        flex-direction: ${props.$block ? `column` : `row`};
-        align-items: ${props.$block ? `flex-start` : `center`};
+        flex-direction: column;
+        align-items: flex-start;
         justify-content: flex-start;
-        gap: 2.4rem;
+        gap: 1.2rem;
         width: 100%;
+
+        ${bp.large`
+            gap: 2.4rem;
+            flex-direction: ${props.$block ? `column` : `row`};
+            align-items: ${props.$block ? `flex-start` : `center`};
+        `}
 
         span {
             width: max-content;
@@ -75,26 +81,49 @@ export const StatsItem = styled.div(props => css`
 
 export const FieldGroup = styled(Div)(props => css`
     display: flex;
-    flex-direction: row;
-    gap: 2.4rem;
+    flex-direction: column;
+
+    ${bp.large`
+        flex-direction: row;
+        gap: 2.4rem;
+    `}
 `);
 
 export const ButtonJacket = styled(Div)(props => css`
     position: relative;
-    border-top: 1px solid ${props.theme.colors.global.black10};
-    padding-top: 2.4rem;
 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: flex-start;
 
     ${bp.medium` flex-direction: row; `}
+
+    ${bp.large`
+        align-items: center;
+        border-top: 1px solid ${props.theme.colors.global.black10};
+        padding-top: 2.4rem;
+    `}
 `);
 
 export const LinkGroup = styled(Div)(props => css`
     display: flex;
-    flex-direction: column;
-    gap: 3.6rem;
+    flex-direction: row;
+    gap: 2.4rem;
 
-    ${bp.medium` flex-direction: row; `}
+    width: 100%;
+    border-top: 1px solid ${props.theme.colors.global.black10};
+    padding-top: 2.4rem;
+    margin-top: 2.4rem;
+
+    ${bp.medium`
+        gap: 3.6rem;
+    `}
+
+    ${bp.large`
+        justify-content: flex-end;
+        margin-top: 0;
+        border: none;
+        padding-top: 0;
+    `}
 `);

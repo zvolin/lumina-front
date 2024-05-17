@@ -16,17 +16,24 @@ export const Field = styled.input(props => css`
 
 export const Link = styled.a(props => css`
     position: absolute;
-    inset: 0;
+    right: 0;
+    top: -3rem;
     z-index: 2;
-    border-radius: .6rem;
-    background: ${props.theme.colors.global.white};
+    
     display: flex;
     gap: .3rem;
     justify-content: center;
     align-items: center;
-    opacity: 0;
+    
 
     transition: all .3s ${props.theme.easing.bezzy};
+
+    ${bp.large`
+        opacity: 0;
+        inset: 0;
+        background: ${props.theme.colors.global.white};
+        border-radius: .6rem;
+    `}
 
     svg {
         width: 1.6rem;

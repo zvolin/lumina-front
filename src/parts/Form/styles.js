@@ -14,40 +14,32 @@ export const Blanket = styled(Div)(props => css`
     height: 100vh;
 `);
 
-export const Jacket = styled(Section)(
-    props => css`
-        position: absolute;
-        inset: 0 2.4rem;
-        overflow: hidden;
-
-        display: flex;
-        align-items: flex-end;
-
-        ${props.$modal === 3 && css`
-            padding-top: 25vh;
-            overflow: scroll;
-        `}
-    `
-);
-
 export const ImageContainer = styled(Div)(props => css`
     position: absolute;
-    bottom: 15vh;
+    bottom: 35vh;
     left: 50%;
-    transform: translateX(-50%) scale(1) rotate(0deg);
+    transform: translateX(-50%) scale(1.3) rotate(-5deg);
 
     transition: all 1.2s ${props.theme.easing.bezzy};
 
+    ${bp.large`
+        bottom: 15vh;
+        transform: translateX(-50%) scale(1) rotate(0deg);
+    `}
+
     ${props.$active && css`
+        bottom: 60vh;
+        transform: translateX(-30%) scale(2) rotate(-15deg);
+
         ${bp.large` transform: translateX(-50%) scale(3) rotate(-15deg); `}
     `}
 `);
 
 export const Container = styled(Div)(props => css`
     position: relative;
-
-    padding: 2.4rem;
     width: 100%;
+
+    padding: 2.4rem 2.4rem;
     border-radius: .8rem .8rem 0 0;
     display: flex;
     flex-direction: column;
@@ -91,6 +83,42 @@ export const Container = styled(Div)(props => css`
         `}
     `}
 `);
+
+export const Jacket = styled(Section)(
+    props => css`
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        overflow: hidden;
+
+        display: flex;
+        align-items: flex-end;
+
+        ${bp.large` bottom: unset; inset: 0 2.4rem; `}
+
+        ${props.$modal === 3 && css`
+            inset: unset;
+            bottom: 0;
+            height: 80vh;
+
+            ${bp.large`
+                inset: 0 2.4rem;
+                bottom: 0;
+                height: auto;
+            `}
+
+            ${Container} {
+                height: 100%;
+                overflow-y: scroll;
+                padding: 2.4rem 0;
+
+                ${bp.large`
+                    height: auto;
+                    padding: 3.6rem;
+                `}
+            }
+        `}
+    `
+);
 
 export const Header = styled.div(props => css`
     display: flex;
@@ -321,6 +349,7 @@ export const LinkGroup = styled(Div)(props => css`
     display: flex;
     flex-direction: column;
     gap: 3.6rem;
+    width: 100%;
 
     ${bp.medium` flex-direction: row; `}
 `);

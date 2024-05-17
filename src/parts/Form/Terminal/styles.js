@@ -7,7 +7,7 @@ import { bp, Section, Div } from '@tackl';
 // ------------
 export const Jacket = styled(Section)(
     props => css`
-      /*  */
+        
     `
 );
 
@@ -25,6 +25,8 @@ export const Panel = styled(Div)(props => css`
     transform: translate(-50%, -50%);
     z-index: 2;
 
+    width: 80%;
+
     border: 1px solid ${props.theme.colors.global.white};
     border-width: 18px 2px 2px 2px;
     border-radius: .3rem;
@@ -36,6 +38,8 @@ export const Panel = styled(Div)(props => css`
     
     background: linear-gradient(180deg, rgba(255, 200, 221, 0.8) 0%, rgba(189, 224, 254, 0.8) 100%);
     box-shadow: 12px 4px 24px rgba(0, 0, 0, 0.12);
+
+    ${bp.large` width: auto; `}
 
     &:before {
         content: '';

@@ -7,6 +7,9 @@ import { bp, Div } from '@tackl';
 // ------------
 export const Jacket = styled(Div)(props => css`
     position: relative;
+    margin-bottom: 3.6rem;
+
+    ${bp.large` margin-bottom: 0; `}
 `);
 
 export const Container = styled(Div)(
@@ -17,13 +20,17 @@ export const Container = styled(Div)(
         display: grid;
         grid-template-columns: repeat(32, 1fr);
         grid-template-rows: repeat(32, 1fr);
-        // grid-gap: 1px;
 
         border-top: 1px solid ${props.theme.colors.global.black10};
         border-left: 1px solid ${props.theme.colors.global.black10};
 
-        width: 42.08vw;
-        height: 42.08vw;
+        width: calc(100vw - 6.2rem);
+        height: calc(100vw - 6.2rem);
+
+        ${bp.large`
+            width: 42.08vw;
+            height: 42.08vw;
+        `}
 
         .grid-item {
             position: relative;

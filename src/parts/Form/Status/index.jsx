@@ -7,6 +7,7 @@ import Link from '@parts/Link';
 import Icon from '@icon';
 import Visualisation from '@parts/Visualisation';
 import { Grid } from '@waffl';
+import { useBreakpoint } from '@parts/Helpers/useBreakpoint';
 
 // Styles
 // ------------
@@ -19,6 +20,9 @@ const StatusBoard = ({
     handleInput,
     handleReload,
 }) => {
+    // NOTE • Breakpoints
+    const bp = useBreakpoint();
+
     return (
         <>
             <Grid $noPadding>
@@ -34,6 +38,14 @@ const StatusBoard = ({
                             </Header>
                         </Col>
                     </Grid>
+
+                    {!bp.large && (
+                        <Grid $noPadding>
+                            <Col $small="1/3" $medium="1/7" $large="7/13">
+                                <Visualisation data={stats} />
+                            </Col>
+                        </Grid>
+                    )}
 
                     <Grid $noPadding>
                         <Col $small="1/3" $medium="1/7" $large="1/13">
@@ -77,19 +89,25 @@ const StatusBoard = ({
                         </Col>
                     </Grid>
                 </Col>
-                <Col $small="1/3" $medium="1/7" $large="7/13">
-                    <Visualisation data={stats} />
-                </Col>
+                {bp.large && (
+                    <Col $small="1/3" $medium="1/7" $large="7/13">
+                        <Visualisation data={stats} />
+                    </Col>
+                )}
             </Grid>
             <Grid $noPadding>
                 <Col $small="1/3" $medium="1/7" $large="1/13">
-                    <ButtonJacket>
-                        <Button icoL icon="back" label="Restart" onClick={handleReload} />
-                        <LinkGroup>
-                            <Link icon="mint" label="Mint NFT" link="http://www.google.com" disabled />
-                            <Link icon="celestia" label="Learn more" link="https://celestia.org/run-a-light-node/" rel="noopener noreferrer" />
-                        </LinkGroup>
-                    </ButtonJacket>
+                    <Grid $noPadding>
+                        <Col $small="1/3" $medium="1/7" $large="1/13">
+                            <ButtonJacket>
+                                <Button icoL icon="back" label="Restart" onClick={handleReload} />
+                                <LinkGroup>
+                                    <Link icon="mint" label="Mint NFT" link="http://www.google.com" disabled />
+                                    <Link icon="celestia" label="Learn more" link="https://celestia.org/run-a-light-node/" rel="noopener noreferrer" />
+                                </LinkGroup>
+                            </ButtonJacket>
+                        </Col>
+                    </Grid>
                 </Col>
             </Grid>
         </>
