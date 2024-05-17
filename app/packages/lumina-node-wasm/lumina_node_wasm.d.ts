@@ -219,6 +219,17 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
+  readonly __wbg_networkinfo_free: (a: number) => void;
+  readonly networkinfo_num_peers: (a: number) => number;
+  readonly networkinfo_connection_counters: (a: number) => number;
+  readonly __wbg_connectioncounters_free: (a: number) => void;
+  readonly connectioncounters_num_connections: (a: number) => number;
+  readonly connectioncounters_num_pending: (a: number) => number;
+  readonly connectioncounters_num_pending_incoming: (a: number) => number;
+  readonly connectioncounters_num_pending_outgoing: (a: number) => number;
+  readonly connectioncounters_num_established_incoming: (a: number) => number;
+  readonly connectioncounters_num_established_outgoing: (a: number) => number;
+  readonly connectioncounters_num_established: (a: number) => number;
   readonly __wbg_node_free: (a: number) => void;
   readonly __wbg_nodeconfig_free: (a: number) => void;
   readonly __wbg_get_nodeconfig_network: (a: number) => number;
@@ -249,29 +260,18 @@ export interface InitOutput {
   readonly node_get_sampling_metadata: (a: number, b: number) => number;
   readonly nodeconfig_default: (a: number) => number;
   readonly setup_logging: () => void;
-  readonly __wbg_networkinfo_free: (a: number) => void;
-  readonly networkinfo_num_peers: (a: number) => number;
-  readonly networkinfo_connection_counters: (a: number) => number;
-  readonly __wbg_connectioncounters_free: (a: number) => void;
-  readonly connectioncounters_num_connections: (a: number) => number;
-  readonly connectioncounters_num_pending: (a: number) => number;
-  readonly connectioncounters_num_pending_incoming: (a: number) => number;
-  readonly connectioncounters_num_pending_outgoing: (a: number) => number;
-  readonly connectioncounters_num_established_incoming: (a: number) => number;
-  readonly connectioncounters_num_established_outgoing: (a: number) => number;
-  readonly connectioncounters_num_established: (a: number) => number;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_export_2: WebAssembly.Table;
-  readonly wasm_bindgen__convert__closures__invoke0_mut__hd16816e64aa8aeff: (a: number, b: number) => void;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hd8d48761b82b22df: (a: number, b: number, c: number) => void;
-  readonly wasm_bindgen__convert__closures__invoke1_mut__ha00665b6b362a2f4: (a: number, b: number, c: number) => void;
-  readonly wasm_bindgen__convert__closures__invoke0_mut__h1a5873da023d73cf: (a: number, b: number) => void;
+  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__he72293ccf925f71b: (a: number, b: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h4573c036346e1b0b: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hbe4057f3fd5bf63a: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h32ac46da532d9454: (a: number, b: number) => void;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h099a58d83543925c: (a: number, b: number, c: number, d: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h6a431131dfcff4a0: (a: number, b: number, c: number, d: number) => void;
   readonly __wbindgen_free: (a: number, b: number, c: number) => void;
   readonly __wbindgen_exn_store: (a: number) => void;
-  readonly wasm_bindgen__convert__closures__invoke2_mut__h093c90068bf8e9a5: (a: number, b: number, c: number, d: number) => void;
+  readonly wasm_bindgen__convert__closures__invoke2_mut__h0b8f5bba9ae8e519: (a: number, b: number, c: number, d: number) => void;
   readonly __wbindgen_start: () => void;
 }
 

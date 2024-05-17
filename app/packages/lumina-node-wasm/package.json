@@ -4,7 +4,7 @@
     "Eiger <hello@eiger.co>"
   ],
   "description": "Browser compatibility layer for the Lumina node",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -12,10 +12,10 @@
   },
   "files": [
     "lumina_node_wasm_bg.wasm",
-    "index.js",
+    "lumina_node_wasm.js",
     "lumina_node_wasm.d.ts"
   ],
-  "module": "index.js",
+  "module": "lumina_node_wasm.js",
   "homepage": "https://www.eiger.co",
   "types": "lumina_node_wasm.d.ts",
   "sideEffects": [
