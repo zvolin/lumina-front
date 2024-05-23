@@ -12,6 +12,7 @@ import localFont from 'next/font/local';
 import { ApolloWrapper } from '@utils/apollo-wrapper';
 import { ThemeProvider } from 'styled-components';
 import { theme } from '@theme';
+import { useHeightFix } from "@utils/useHeightFix";
 
 // Fonts
 // ------------
@@ -55,25 +56,29 @@ import '@/css/global.css';
 
 // Component
 // ------------
-const RootLayout = ({ children }) => (
-	<html lang="en">
-		<body className={`${splineSans.variable} ${inter.variable}`}>
-			<StyledComponentsRegistry>
-				<ApolloWrapper>
-					<ThemeProvider theme={theme} key="themeprovider">
-						<GridExposer />
-						<Contexts>
-							<SmoothScroll>
-								{children}
-							</SmoothScroll>
+const RootLayout = ({ children }) => {
+	useHeightFix();
 
-							<WebglBackground />
-						</Contexts>
-					</ThemeProvider>
-				</ApolloWrapper>
-			</StyledComponentsRegistry>
-		</body>
-	</html>
-);
+	return (
+		<html lang="en">
+			<body className={`${splineSans.variable} ${inter.variable}`}>
+				<StyledComponentsRegistry>
+					<ApolloWrapper>
+						<ThemeProvider theme={theme} key="themeprovider">
+							<GridExposer />
+							<Contexts>
+								<SmoothScroll>
+									{children}
+								</SmoothScroll>
+
+								<WebglBackground />
+							</Contexts>
+						</ThemeProvider>
+					</ApolloWrapper>
+				</StyledComponentsRegistry>
+			</body>
+		</html>
+	)
+}
 
 export default RootLayout;
