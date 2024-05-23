@@ -11,7 +11,7 @@ export const Blanket = styled(Div)(props => css`
     position: absolute;
     top: 0;
     width: 100%;
-    height: 100vh;
+    ${props.theme.vh};
 `);
 
 export const ImageContainer = styled(Div)(props => css`
