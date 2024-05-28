@@ -269,6 +269,7 @@ a:active {
 	overflow-x: hidden;
 	overflow-y: scroll;
 	scrollbar-width: none !important;
+	min-height: 100%;
 	height: calc(var(--vh, 1vh) * 100);
 }
 

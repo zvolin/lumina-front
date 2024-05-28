@@ -7,7 +7,8 @@ import { bp, Section, Div } from '@tackl';
 // ------------
 export const Jacket = styled(Section)(
     props => css`
-        
+        width: 100%;
+        min-width: 100vw;
     `
 );
 
