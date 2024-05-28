@@ -255,8 +255,8 @@ const Form = () => {
 
             <Jacket data-lenis-prevent $modal={3} style={{ zIndex: 3, pointerEvents: modalOpen.modal2 ? 'all' : 'none'}}>
                 <Container $go $activated={go}>
-                    <Terminal />
-                    {/* {nodeInitiate ? (
+                    {/* <Terminal /> */}
+                    {nodeInitiate ? (
                         <Terminal />
                     ) : (
                         <Status
@@ -264,7 +264,7 @@ const Form = () => {
                             handleInput={handleInput}
                             handleReload={handleReload}
                         />
-                    )} */}
+                    )}
                 </Container>
             </Jacket>
         </Blanket>
