@@ -11,7 +11,7 @@ import { useBreakpoint } from '@parts/Helpers/useBreakpoint';
 
 // Styles
 // ------------
-import { Col, Header, Title, Progress, StatsItem, FieldGroup, ButtonJacket, LinkGroup, } from './styles';
+import { Col, Header, Title, Progress, StatsItem, FieldGroup, ButtonJacket, LinkGroup, CelLink } from './styles';
 
 // Component
 // ------------
@@ -69,16 +69,22 @@ const StatusBoard = ({
                             <FieldGroup>
                                 <StatsItem>
                                     <label>
-                                        <span>Block Height:</span>
+                                        <span>
+                                            <em>Block Height:</em>
+                                            <CelLink href={`https://celenium.io/block/` + stats.networkHeadHeight} rel="noopener noreferrer" target="_blank">
+                                                <Icon type="logoCelenium" />
+                                                <span>View in Celenium</span>
+                                            </CelLink>
+                                        </span>
                                         <Input name="networkHeadHeight" value={stats.networkHeadHeight} onChange={(e) => handleInput(e)} placeholder="..." light hasCopy={{ label: 'View in Celenium', link: `https://celenium.io/block/` + stats.networkHeadHeight, }} />
                                     </label>
                                 </StatsItem>
-                                <StatsItem>
+                                {/* <StatsItem>
                                     <label>
                                         <span>Data square size:</span>
                                         <Input name="networkHeadDataSquare" value={stats.networkHeadDataSquare} onChange={(e) => handleInput(e)} placeholder="..." light />
                                     </label>
-                                </StatsItem>
+                                </StatsItem> */}
                             </FieldGroup>
                             <StatsItem>
                                 <label>

@@ -73,8 +73,18 @@ export const StatsItem = styled.div(props => css`
         `}
 
         span {
-            width: max-content;
-            min-width: max-content;
+            display: flex;
+            flex-direction: row;
+            gap: .6rem;
+            justify-content: space-between;
+
+            width: 100%;
+
+            ${bp.large`
+                flex-direction: column;
+                width: max-content;
+                min-width: max-content;
+            `}
         }
     }
 `);
@@ -126,4 +136,36 @@ export const LinkGroup = styled(Div)(props => css`
         border: none;
         padding-top: 0;
     `}
+`);
+
+export const CelLink = styled.a(props => css`
+    position: relative;
+    z-index: 2;
+    
+    display: flex;
+    gap: .3rem;
+    justify-content: center;
+    align-items: center;
+    
+
+    transition: all .3s ${props.theme.easing.bezzy};
+
+    svg {
+        width: 1.6rem;
+        height: 1.6rem;
+    }
+
+    span {
+        color: ${props.theme.colors.global.black};
+        font-size: 1.2rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+
+        background: linear-gradient(180deg, #CDB4DB 0%, #A2D2FF 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+    }
 `);

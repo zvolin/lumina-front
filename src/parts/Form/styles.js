@@ -10,6 +10,7 @@ export const Blanket = styled(Div)(props => css`
     overflow: hidden;
     position: absolute;
     top: 0;
+    z-index: 14;
     width: 100%;
     min-height: 100%;
     ${props.theme.vh};
@@ -77,6 +78,7 @@ export const Container = styled(Div)(props => css`
 
         color: ${props.theme.colors.global.black};
         min-height: 80vh;
+        max-height: 80vh;
 
         ${bp.large`
             width: calc(100% - 7.2rem);
@@ -113,7 +115,7 @@ export const Jacket = styled(Section)(
                 padding: 2.4rem 0;
 
                 ${bp.large`
-                    height: auto;
+                    // height: auto;
                     padding: 3.6rem;
                 `}
             }
