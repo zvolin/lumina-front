@@ -85,6 +85,12 @@ export const Container = styled(Div)(props => css`
             margin-left: 7.2rem;
         `}
     `}
+
+    div.add-gap {
+        display: flex;
+        flex-direction: column;
+        gap: 2.4rem;
+    }
 `);
 
 export const Jacket = styled(Section)(

@@ -11,6 +11,7 @@ import Terminal from './Terminal';
 import Icon from '@icon';
 import Typewriter from 'typewriter-effect';
 import { GlobalContext } from '@parts/Contexts';
+import { browserName, browserVersion } from 'react-device-detect';
 
 // Styles
 // ------------
@@ -23,6 +24,7 @@ const Form = () => {
     const { begin, setBegin } = useContext(GlobalContext);
 
     // NOTE • States
+    const [display, setDisplay] = useState(false);
     const [node, setNode] = useState(null);
     const [config, setConfig] = useState({});
     const [go, setGo] = useState(false);
@@ -40,6 +42,16 @@ const Form = () => {
         networkHeadHash: '',
         networkHeadDataSquare: '',
     });
+
+    // NOTE • Browser detection
+    useEffect(() => {
+        if(browserName === 'Chrome'
+        || browserName === 'Firefox' && browserVersion >= 125) {
+            setDisplay(true)
+        } else (
+            setDisplay(false)
+        )
+    })
 
     // NOTE • Initialisation
     const fetchConfig = async () => {
@@ -88,7 +100,6 @@ const Form = () => {
 
                 const head = node.get_network_head_header();
                 if (head) {
-
                     setStats({
                         ...stats,
                         syncInfo: `${info.local_head}/${info.subjective_head}`,
@@ -99,7 +110,7 @@ const Form = () => {
                     });
                 }
             }
-        }, 1000);
+        }, 2000);
         return () => clearInterval(interval);
     }, [node]);
 
@@ -195,22 +206,47 @@ const Form = () => {
 
             <Jacket data-lenis-prevent style={{ zIndex: 1}}>
                 <Container $begin>
-                    <Title>
-                        <Typewriter
-                            options={{
-                                delay: 25,
-                                deleteSpeed: 25,
-                                changeDelay: 25,
-                            }}
-                            onInit={(typewriter) => {
-                                typewriter.typeString('Start your Celestia light node')
-                                .changeDelay(25)
-                                .changeDeleteSpeed(25)
-                                .start();
-                            }}
-                        />
-                    </Title>
-                    <Button label="Start Sampling" onClick={handleBegin} />
+                    {
+                        display ? (
+                            <>
+                                <Title>
+                                    <Typewriter
+                                        options={{
+                                            delay: 25,
+                                            deleteSpeed: 25,
+                                            changeDelay: 25,
+                                        }}
+                                        onInit={(typewriter) => {
+                                            typewriter.typeString('Start your Celestia light node')
+                                            .changeDelay(25)
+                                            .changeDeleteSpeed(25)
+                                            .start();
+                                        }}
+                                    />
+                                </Title>
+                                <Button label="Start Sampling" onClick={handleBegin} />
+                            </>
+                        ) : (
+                            <>
+                                <Title>
+                                    <Typewriter
+                                        options={{
+                                            delay: 25,
+                                            deleteSpeed: 25,
+                                            changeDelay: 25,
+                                        }}
+                                        onInit={(typewriter) => {
+                                            typewriter.typeString('Please use the latest browser of Chrome or Firefox to start your Celestia light node')
+                                            .changeDelay(25)
+                                            .changeDeleteSpeed(25)
+                                            .start();
+                                        }}
+                                    />
+                                </Title>
+                            </>
+                        )
+                    }
+
                 </Container>
             </Jacket>
 
