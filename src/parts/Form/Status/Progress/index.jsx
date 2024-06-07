@@ -20,7 +20,7 @@ const ProgressBar = ({ data }) => {
         const [current, total] = data.split('/').map(Number);
 
         // Set progress
-        setProgress(Math.round((current / total) * 100);
+        setProgress(Math.round((current / total) * 100));
     }, [data]);
 
     return (
