@@ -33,6 +33,8 @@ const Form = () => {
         modal2: false,
     });
     const [nodeInitiate, setNodeInitiate] = useState(false);
+    const [statusInitiated, setStatusInitiated] = useState(false);
+    const [nodeStatus, setNodeStatus] = useState('Downloading');
 
     const [stats, setStats] = useState({
         peerId: '',
@@ -76,19 +78,32 @@ const Form = () => {
 
     useEffect(() => {
         const loadConfig = async () => {
-            const tempConfig = await fetchConfig();
-            if (tempConfig) {
-                // console.log('Setting config to state:', tempConfig); // Debugging
-                setConfig(tempConfig);
+            try {
+                const tempConfig = await fetchConfig();
+                if (tempConfig) {
+                    console.log('Setting config to state:', tempConfig); // Debugging
+                    setConfig(tempConfig);
+                }
+            } catch (error) {
+                console.error('Failed to fetch config:', error);
             }
         };
 
         const initWASM = async () => {
-            await init();
-            loadConfig();
+            try {
+                await init();
+                loadConfig();
+            } catch (error) {
+                console.error('Failed to initialize WASM:', error);
+            }
         };
 
         initWASM();
+
+        // Cleanup function if necessary
+        return () => {
+            // Perform any cleanup operations if needed
+        };
     }, []);
 
     useEffect(() => {
@@ -108,6 +123,8 @@ const Form = () => {
                         networkHeadHash: head.commit.block_id.hash,
                         networkHeadDataSquare: `${head.dah.row_roots.length}x${head.dah.column_roots.length} shares`,
                     });
+
+                    setNodeStatus('Node running');
                 }
             }
         }, 2000);
@@ -174,7 +191,9 @@ const Form = () => {
         }
     };
 
-    const initiateNode = () => {
+    const initiateNode = (e) => {
+        e.preventDefault();
+
         setGo(true);
         setModalOpen(prev => {
             return {
@@ -183,15 +202,19 @@ const Form = () => {
             }
         });
         setNodeInitiate(true);
+        setNodeStatus('Node Initiated');
     };
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setNodeInitiate(false);
-            startNode();
-        }, 10500);
-
-        return () => clearTimeout(timer);
+        if(nodeInitiate) {
+            const timer = setTimeout(() => {
+                setNodeInitiate(false);
+                setStatusInitiated(true);
+                startNode();
+            }, 10500);
+    
+            return () => clearTimeout(timer);
+        }
     }, [nodeInitiate]);
 
     const handleReload = () => {
@@ -291,11 +314,13 @@ const Form = () => {
 
             <Jacket data-lenis-prevent $modal={3} style={{ zIndex: 3, pointerEvents: modalOpen.modal2 ? 'all' : 'none'}}>
                 <Container $go $activated={go}>
-                    {/* <Terminal /> */}
-                    {nodeInitiate ? (
+                    {nodeInitiate && (
                         <Terminal />
-                    ) : (
+                    )}
+
+                    {statusInitiated && (
                         <Status
+                            status={nodeStatus}
                             stats={stats}
                             handleInput={handleInput}
                             handleReload={handleReload}

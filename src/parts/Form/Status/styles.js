@@ -7,6 +7,11 @@ import { bp, Div, H3 } from '@tackl';
 // ------------
 export const Col = styled(Div)(props => css``);
 
+export const StickyJacket = styled(Div)(props => css`
+    position: sticky;
+    top: 0;
+`);
+
 export const Header = styled.div(props => css`
     display: flex;
     flex-direction: row;
@@ -107,9 +112,8 @@ export const ButtonJacket = styled(Div)(props => css`
     justify-content: space-between;
     align-items: flex-start;
 
-    ${bp.medium` flex-direction: row; `}
-
     ${bp.large`
+        flex-direction: row;
         align-items: center;
         border-top: 1px solid ${props.theme.colors.global.black10};
         padding-top: 2.4rem;

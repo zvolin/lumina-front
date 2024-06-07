@@ -45,6 +45,7 @@ export const Container = styled(Div)(props => css`
     border-radius: .8rem .8rem 0 0;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 2.4rem;
 
     font-family: ${props.theme.font.type.body};
@@ -63,7 +64,7 @@ export const Container = styled(Div)(props => css`
     ${props.$network && css`
         z-index: 2;
         background: #2B2B2B;
-        transform: translateY(${props.$activated ? 0 : `100%`});
+        transform: translateY(${props.$activated ? 0 : `102%`});
 
         ${bp.large`
             width: calc(100% - 3.6rem);
@@ -74,11 +75,11 @@ export const Container = styled(Div)(props => css`
     ${props.$go && css`
         z-index: 3;
         background: ${props.theme.colors.global.white};
-        transform: translateY(${props.$activated ? 0 : `100%`});
+        transform: translateY(${props.$activated ? 0 : `102%`});
 
         color: ${props.theme.colors.global.black};
         min-height: 80vh;
-        max-height: 80vh;
+        max-height: 88vh;
 
         ${bp.large`
             width: calc(100% - 7.2rem);
