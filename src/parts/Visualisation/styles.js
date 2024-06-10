@@ -7,6 +7,9 @@ import { bp, Div } from '@tackl';
 // ------------
 export const Jacket = styled(Div)(props => css`
     position: relative;
+    display: flex;
+    justify-content: flex-end;
+
     margin-bottom: 3.6rem;
 
     ${bp.large` margin-bottom: 0; `}
@@ -28,8 +31,12 @@ export const Container = styled(Div)(
         height: calc(100vw - 6.2rem);
 
         ${bp.large`
-            width: 42.08vw;
-            height: 42.08vw;
+            // width: 42.08vw;
+            // height: 42.08vw;
+
+            width: 60vh;
+            height: auto;
+            aspect-ratio: 1/1;
         `}
 
         .grid-item {

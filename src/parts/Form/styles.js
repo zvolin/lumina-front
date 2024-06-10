@@ -79,7 +79,7 @@ export const Container = styled(Div)(props => css`
 
         color: ${props.theme.colors.global.black};
         min-height: 80vh;
-        max-height: 88vh;
+        // max-height: 88vh;
 
         ${bp.large`
             width: calc(100% - 7.2rem);
@@ -97,28 +97,35 @@ export const Container = styled(Div)(props => css`
 export const Jacket = styled(Section)(
     props => css`
         position: absolute;
-        bottom: 0; left: 0; right: 0;
+        inset: 0;
         overflow: hidden;
 
         display: flex;
         align-items: flex-end;
+        padding-top: 20vh;
 
-        ${bp.large` bottom: unset; inset: 0 2.4rem; `}
+        ${bp.large` inset: 0 2.4rem; `}
 
         ${props.$modal === 3 && css`
-            inset: unset;
-            bottom: 0;
-            height: 80vh;
+            inset: 0;
+            overflow: scroll;
+            align-items: flex-end;
+
+            ${props.$nodeInitiate && css`
+                // align-items: flex-end;
+            `}
+
+            ${props.$statusInitiated && css`
+                align-items: flex-start;
+            `}
 
             ${bp.large`
                 inset: 0 2.4rem;
-                bottom: 0;
-                height: auto;
             `}
 
             ${Container} {
-                height: 100%;
-                overflow-y: scroll;
+                // height: 100%;
+                // overflow-y: scroll;
                 padding: 2.4rem 0;
 
                 ${bp.large`
@@ -129,6 +136,15 @@ export const Jacket = styled(Section)(
         `}
     `
 );
+
+export const ScrollableArea = styled(Div)(props => css`
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    
+    background: blue;
+    min-height: 110%;
+`);
 
 export const Header = styled.div(props => css`
     display: flex;

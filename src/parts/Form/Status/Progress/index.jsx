@@ -21,6 +21,8 @@ const ProgressBar = ({ data }) => {
 
         // Set progress
         setProgress(Math.round((current / total) * 100));
+
+        console.log('Progress:', current / total * 100);
     }, [data]);
 
     return (

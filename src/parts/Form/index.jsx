@@ -15,7 +15,7 @@ import { browserName, browserVersion } from 'react-device-detect';
 
 // Styles
 // ------------
-import { Blanket, Jacket, ImageContainer, Container, Title, NetworkList, NetworkItem } from './styles';
+import { Blanket, Jacket, ScrollableArea, ImageContainer, Container, Title, NetworkList, NetworkItem } from './styles';
 
 // Component
 // ------------
@@ -67,7 +67,7 @@ const Form = () => {
             // Perform validation if necessary
             const config = NodeConfig.default(json.network);
 
-            console.log('Fetched config:', config); // Debugging
+            // console.log('Fetched config:', config); // Debugging
     
             return config;
         } catch (error) {
@@ -81,7 +81,7 @@ const Form = () => {
             try {
                 const tempConfig = await fetchConfig();
                 if (tempConfig) {
-                    console.log('Setting config to state:', tempConfig); // Debugging
+                    // console.log('Setting config to state:', tempConfig); // Debugging
                     setConfig(tempConfig);
                 }
             } catch (error) {
@@ -312,21 +312,32 @@ const Form = () => {
                 </Container>
             </Jacket>
 
-            <Jacket data-lenis-prevent $modal={3} style={{ zIndex: 3, pointerEvents: modalOpen.modal2 ? 'all' : 'none'}}>
-                <Container $go $activated={go}>
-                    {nodeInitiate && (
-                        <Terminal />
-                    )}
+            <Jacket
+                data-lenis-prevent
+                $modal={3}
+                $nodeInitiate={nodeInitiate}
+                $statusInitiated={statusInitiated}
+                style={{
+                    zIndex: 3,
+                    pointerEvents: modalOpen.modal2 ? 'all' : 'none'
+                    }}
+                >
 
-                    {statusInitiated && (
-                        <Status
-                            status={nodeStatus}
-                            stats={stats}
-                            handleInput={handleInput}
-                            handleReload={handleReload}
-                        />
-                    )}
-                </Container>
+                    <Container $go $activated={go}>
+                        {nodeInitiate && (
+                            <Terminal />
+                        )}
+
+                        {statusInitiated && (
+                            <Status
+                                status={nodeStatus}
+                                stats={stats}
+                                handleInput={handleInput}
+                                handleReload={handleReload}
+                            />
+                        )}
+                    </Container>
+                
             </Jacket>
         </Blanket>
     );
