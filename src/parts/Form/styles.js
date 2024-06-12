@@ -79,7 +79,6 @@ export const Container = styled(Div)(props => css`
 
         color: ${props.theme.colors.global.black};
         min-height: 80vh;
-        // max-height: 88vh;
 
         ${bp.large`
             width: calc(100% - 7.2rem);
@@ -111,10 +110,6 @@ export const Jacket = styled(Section)(
             overflow: scroll;
             align-items: flex-end;
 
-            ${props.$nodeInitiate && css`
-                // align-items: flex-end;
-            `}
-
             ${props.$statusInitiated && css`
                 align-items: flex-start;
             `}
@@ -124,12 +119,14 @@ export const Jacket = styled(Section)(
             `}
 
             ${Container} {
-                // height: 100%;
-                // overflow-y: scroll;
                 padding: 2.4rem 0;
+                justify-content: stretch;
+
+                > div {
+                    flex: 1;
+                }
 
                 ${bp.large`
-                    // height: auto;
                     padding: 3.6rem;
                 `}
             }

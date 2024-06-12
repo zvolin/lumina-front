@@ -103,7 +103,7 @@ const StatusBoard = ({
                     </StickyJacket>
                 </Col>
                 {bp.large && (
-                    <Col $small="1/3" $medium="1/7" $large="7/13">
+                    <Col $small="1/3" $medium="1/7" $large="7/13" $isCenter>
                         <Visualisation data={stats} />
                     </Col>
                 )}

@@ -5,7 +5,13 @@ import { bp, Div, H3 } from '@tackl';
 
 // Exports
 // ------------
-export const Col = styled(Div)(props => css``);
+export const Col = styled(Div)(props => css`
+    ${props.$isCenter && css`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    `}
+`);
 
 export const StickyJacket = styled(Div)(props => css`
     position: sticky;

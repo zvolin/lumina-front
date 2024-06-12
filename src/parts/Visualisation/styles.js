@@ -8,7 +8,10 @@ import { bp, Div } from '@tackl';
 export const Jacket = styled(Div)(props => css`
     position: relative;
     display: flex;
-    justify-content: flex-end;
+    flex: 1;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
 
     margin-bottom: 3.6rem;
 
@@ -31,11 +34,11 @@ export const Container = styled(Div)(
         height: calc(100vw - 6.2rem);
 
         ${bp.large`
-            // width: 42.08vw;
-            // height: 42.08vw;
+            width: 42.08vw;
+            height: 42.08vw;
 
-            width: 60vh;
-            height: auto;
+            max-width: 64vh;
+            max-height: 64vh;
             aspect-ratio: 1/1;
         `}
 

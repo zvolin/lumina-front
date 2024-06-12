@@ -315,7 +315,6 @@ const Form = () => {
             <Jacket
                 data-lenis-prevent
                 $modal={3}
-                $nodeInitiate={nodeInitiate}
                 $statusInitiated={statusInitiated}
                 style={{
                     zIndex: 3,
