@@ -1,7 +1,7 @@
 // Imports
 // ------------
 import styled, { css } from 'styled-components';
-import { bp, Section } from '@tackl';
+import { emStyles } from '@tackl/type';
 
 // Exports
 // ------------
@@ -19,9 +19,15 @@ export const Jacket = styled.a(
             span:first-child {
                 transform: scale(0.95);
             }
+
+            span:last-child {
+                color: ${props.theme.colors.global.black};
+            }
         }
 
         span {
+            transition: all .4s ${props.theme.easing.bezzy};
+
             &:first-child {
                 border-radius: 100%;
                 display: flex;
@@ -34,8 +40,11 @@ export const Jacket = styled.a(
                 width: 48px;
                 height: 48px;
                 background: linear-gradient(180deg, #CDB4DB 0%, #A2D2FF 100%);
+            }
 
-                transition: all .4s ${props.theme.easing.bezzy};
+            &:last-child {
+                ${emStyles}
+                color: ${props.theme.colors.global.black60};
             }
         }
 

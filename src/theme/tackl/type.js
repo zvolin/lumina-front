@@ -121,8 +121,10 @@ export const spanStyles = (props) => css`
 export const emStyles = (props) => css`
 	${sharedBodyStyles}
 	display: inline-block;
+	text-transform: uppercase;
 	font-style: normal;
-	font-weight: ${theme.font.weight.medium};
-	font-size: 1.1rem;
+	font-weight: ${theme.font.weight.semi};
+	font-size: 1.3rem;
+	letter-spacing: 1px;
 	line-height: 1.4;
 `;

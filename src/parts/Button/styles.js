@@ -2,7 +2,7 @@
 // ------------
 import styled, { css } from 'styled-components';
 // import { bp } from '@tackl';
-import { pStyles } from '@tackl/type';
+import { emStyles } from '@tackl/type';
 
 // Exports
 // ------------
@@ -32,7 +32,7 @@ export const Jacket = styled.button(
         }
 
         span {
-            ${pStyles}
+            ${emStyles}
             text-transform: uppercase;
             color: ${props.theme.colors.global.white};
         }
