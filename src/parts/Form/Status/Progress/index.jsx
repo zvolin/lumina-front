@@ -19,10 +19,12 @@ const ProgressBar = ({ data }) => {
         // Split data into 2 parts
         const [current, total] = data.split('/').map(Number);
 
-        // Set progress
-        setProgress(Math.round((current / total) * 100));
+        // Calculate progress as a percentage and set the value without rounding it
+        let progress = (current / total) * 100;
+        setProgress(progress);
 
-        console.log('Progress:', current / total * 100);
+        // .toFixed(2) gives it 2 digits of precision after the dot, for example 45.56%
+        console.log('Progress:', progress.toFixed(2) + '%');
     }, [data]);
 
     return (
@@ -31,7 +33,7 @@ const ProgressBar = ({ data }) => {
                 <span></span>
             </Bar>
             <div>
-                {progress ? progress : '--'}/100%
+                {progress ? progress.toFixed(2) : '0'}%
             </div>
         </Jacket>
     );
