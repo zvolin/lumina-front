@@ -124,7 +124,7 @@ const Form = () => {
                         networkHeadDataSquare: `${head.dah.row_roots.length}x${head.dah.column_roots.length} shares`,
                     });
 
-                    setNodeStatus('Node running');
+                    setNodeStatus('Data availablility sampling in progress');
                 }
             }
         }, 2000);

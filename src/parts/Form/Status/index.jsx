@@ -1,6 +1,6 @@
 // Imports
 // ------------
-import React from 'react';
+import React, { useState } from 'react';
 import Input from '../Input';
 import Button from '@parts/Button';
 import Link from '@parts/Link';
@@ -12,7 +12,22 @@ import { useBreakpoint } from '@parts/Helpers/useBreakpoint';
 
 // Styles
 // ------------
-import { Col, StickyJacket, Header, Title, Progress, StatsItem, FieldGroup, ButtonJacket, LinkGroup, CelLink } from './styles';
+import {
+    Col,
+    StickyJacket,
+    Header,
+    Title,
+    Switch,
+    Tab,
+    Basic,
+    Block,
+    StatsItem,
+    FieldGroup,
+    ButtonJacket,
+    LinkGroup,
+    CelLink,
+    Terminal,
+} from './styles';
 
 // Component
 // ------------
@@ -25,6 +40,12 @@ const StatusBoard = ({
     // NOTE • Breakpoints
     const bp = useBreakpoint();
 
+    // NOTE • States
+    const [tab, setTab] = useState(1);
+
+    // NOTE • Handlers
+    const handleTab = (tab) => () => setTab(tab);
+
     return (
         <>
             <Grid $noPadding>
@@ -33,11 +54,11 @@ const StatusBoard = ({
                         <Grid $noPadding>
                             <Col $small="1/3" $medium="1/7" $large="1/13">
                                 <Header>
-                                    <Title $dark>Status</Title>
-                                    <Progress>
-                                        <Icon type="logoGrad" />
-                                        <span>{status}&hellip;</span>
-                                    </Progress>
+                                    <Title $dark>{status}</Title>
+                                    <Switch>
+                                        <Tab isActive={tab === 1} onClick={handleTab(1)} disabled={tab === 1}>Basic</Tab>
+                                        <Tab isActive={tab === 2} onClick={handleTab(2)} disabled={tab === 2}>Advanced</Tab>
+                                    </Switch>
                                 </Header>
                             </Col>
                         </Grid>
@@ -52,7 +73,60 @@ const StatusBoard = ({
 
                         <Grid $noPadding>
                             <Col $small="1/3" $medium="1/7" $large="1/13">
-                                <StatsItem>
+                                {tab === 1 && (
+                                    <Basic>
+                                        <Block>
+                                            <div>
+                                                <em>Synchronizing headers:</em>
+                                                <span>{stats.syncInfo}</span>
+                                            </div>
+                                            <div>
+                                                <ProgressBar data={stats.syncInfo} />
+                                            </div>
+                                        </Block>
+
+                                        <Block>
+                                            Block Height:
+                                            <span>{stats.networkHeadHeight}</span>
+                                            <CelLink href={`https://celenium.io/block/` + stats.networkHeadHeight} rel="noopener noreferrer" target="_blank">
+                                                <Icon type="logoCelenium" />
+                                                <span>View in Celenium</span>
+                                            </CelLink>
+                                        </Block>
+                                    </Basic>
+                                )}
+
+                                {tab === 2 && (
+                                    <Terminal>
+                                        <div>
+                                            PeerId:
+                                            <span>{stats.peerId}</span>
+                                        </div>
+                                        <div>
+                                            Sync headers:
+                                            <span>{stats.syncInfo}</span>
+                                            <ProgressBar data={stats.syncInfo} />
+                                        </div>
+                                        <div>
+                                            Block Height:
+                                            <span>{stats.networkHeadHeight}</span>
+                                            <CelLink href={`https://celenium.io/block/` + stats.networkHeadHeight} rel="noopener noreferrer" target="_blank">
+                                                <Icon type="logoCelenium" />
+                                                <span>View in Celenium</span>
+                                            </CelLink>
+                                        </div>
+                                        <div>
+                                            Hash:
+                                            <span>{stats.networkHeadHash}</span>
+                                        </div>
+                                        <div>
+                                            Data square size:
+                                            <span>{stats.networkHeadDataSquare}</span>
+                                        </div>
+                                    </Terminal>
+                                )}
+
+                                {/* <StatsItem>
                                     <label>
                                         <span>PeerId:</span>
                                         <Input name="peerId" value={stats.peerId} onChange={(e) => handleInput(e)} placeholder="..." light />
@@ -66,38 +140,7 @@ const StatusBoard = ({
                                         </span>
                                         <Input name="syncInfo" value={stats.syncInfo} onChange={(e) => handleInput(e)} placeholder="..." light />
                                     </label>
-                                </StatsItem>
-                            </Col>
-                        </Grid>
-
-                        <Grid $noPadding>
-                            <Col $small="1/3" $medium="1/7" $large="1/13">
-                                <FieldGroup>
-                                    <StatsItem>
-                                        <label>
-                                            <span>
-                                                <em>Block Height:</em>
-                                                <CelLink href={`https://celenium.io/block/` + stats.networkHeadHeight} rel="noopener noreferrer" target="_blank">
-                                                    <Icon type="logoCelenium" />
-                                                    <span>View in Celenium</span>
-                                                </CelLink>
-                                            </span>
-                                            <Input name="networkHeadHeight" value={stats.networkHeadHeight} onChange={(e) => handleInput(e)} placeholder="..." light />
-                                        </label>
-                                    </StatsItem>
-                                    {/* <StatsItem>
-                                        <label>
-                                            <span>Data square size:</span>
-                                            <Input name="networkHeadDataSquare" value={stats.networkHeadDataSquare} onChange={(e) => handleInput(e)} placeholder="..." light />
-                                        </label>
-                                    </StatsItem> */}
-                                </FieldGroup>
-                                <StatsItem>
-                                    <label>
-                                        <span>Hash:</span>
-                                        <Input name="networkHeadHash" value={stats.networkHeadHash} onChange={(e) => handleInput(e)} placeholder="..." light />
-                                    </label>
-                                </StatsItem>
+                                </StatsItem> */}
                             </Col>
                         </Grid>
                     </StickyJacket>
