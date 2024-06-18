@@ -7,6 +7,7 @@ import Link from '@parts/Link';
 import Icon from '@icon';
 import Visualisation from '@parts/Visualisation';
 import ProgressBar from './Progress';
+import Logs from './Logs';
 import { Grid } from '@waffl';
 import { useBreakpoint } from '@parts/Helpers/useBreakpoint';
 
@@ -27,6 +28,7 @@ import {
     LinkGroup,
     CelLink,
     Terminal,
+    LogJacket
 } from './styles';
 
 // Component
@@ -71,7 +73,7 @@ const StatusBoard = ({
                             </Grid>
                         )}
 
-                        <Grid $noPadding>
+                        <Grid $noPadding $isCenter>
                             <Col $small="1/3" $medium="1/7" $large="1/13">
                                 {tab === 1 && (
                                     <Basic>
@@ -81,13 +83,15 @@ const StatusBoard = ({
                                                 <span>{stats.syncInfo}</span>
                                             </div>
                                             <div>
-                                                <ProgressBar data={stats.syncInfo} />
+                                                <ProgressBar data={stats.syncInfo} isBig />
                                             </div>
                                         </Block>
 
                                         <Block>
-                                            Block Height:
-                                            <span>{stats.networkHeadHeight}</span>
+                                            <div>
+                                                <em>Block Height:</em>
+                                                <span class="isbig">{stats.networkHeadHeight}</span>
+                                            </div>
                                             <CelLink href={`https://celenium.io/block/` + stats.networkHeadHeight} rel="noopener noreferrer" target="_blank">
                                                 <Icon type="logoCelenium" />
                                                 <span>View in Celenium</span>
@@ -99,30 +103,45 @@ const StatusBoard = ({
                                 {tab === 2 && (
                                     <Terminal>
                                         <div>
-                                            PeerId:
-                                            <span>{stats.peerId}</span>
+                                            <div>
+                                                <em>PeerId:</em>
+                                                <span>{stats.peerId}</span>
+                                            </div>
                                         </div>
                                         <div>
-                                            Sync headers:
-                                            <span>{stats.syncInfo}</span>
+                                            <div>
+                                                <em>Sync headers:</em>
+                                                <span>{stats.syncInfo}</span>
+                                            </div>
                                             <ProgressBar data={stats.syncInfo} />
                                         </div>
                                         <div>
-                                            Block Height:
-                                            <span>{stats.networkHeadHeight}</span>
-                                            <CelLink href={`https://celenium.io/block/` + stats.networkHeadHeight} rel="noopener noreferrer" target="_blank">
+                                            <div>
+                                                <em>Block Height:</em>
+                                                <span>{stats.networkHeadHeight}</span>
+                                            </div>
+                                            <CelLink href={`https://celenium.io/block/` + stats.networkHeadHeight} rel="noopener noreferrer" target="_blank" $isDark>
                                                 <Icon type="logoCelenium" />
                                                 <span>View in Celenium</span>
                                             </CelLink>
                                         </div>
                                         <div>
-                                            Hash:
-                                            <span>{stats.networkHeadHash}</span>
+                                            <div>
+                                                <em>Hash:</em>
+                                                <span>{stats.networkHeadHash}</span>
+                                            </div>
                                         </div>
                                         <div>
-                                            Data square size:
-                                            <span>{stats.networkHeadDataSquare}</span>
+                                            <div>
+                                                <em>Data square size:</em>
+                                                <span>{stats.networkHeadDataSquare}</span>
+                                            </div>
                                         </div>
+                                        <hr />
+                                        <Title>Event logs</Title>
+                                        <LogJacket>
+                                            <Logs data="" />
+                                        </LogJacket>
                                     </Terminal>
                                 )}
 

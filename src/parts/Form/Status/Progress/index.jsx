@@ -6,11 +6,11 @@ import React, { useState, useEffect } from 'react';
 
 // Styles
 // ------------
-import { Jacket, Bar } from './styles';
+import { Jacket, Bar, Num } from './styles';
 
 // Component
 // ------------
-const ProgressBar = ({ data }) => {
+const ProgressBar = ({ data, isBig }) => {
     // NOTE • State
     const [progress, setProgress] = useState(0);
 
@@ -29,12 +29,12 @@ const ProgressBar = ({ data }) => {
 
     return (
         <Jacket>
-            <Bar $progressNumber={progress}>
+            <Bar $progressNumber={progress} $isBig={isBig}>
                 <span></span>
             </Bar>
-            <div>
+            <Num $isBig={isBig}>
                 {progress ? progress.toFixed(2) : '0'}%
-            </div>
+            </Num>
         </Jacket>
     );
 }

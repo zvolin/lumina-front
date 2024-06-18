@@ -21,6 +21,12 @@ export const splineSans = localFont({
 	variable: '--spline-sans-mono',
 	src: [
 		{
+			path: './fonts/SplineSansMono-Regular.woff2',
+			weight: '400',
+			style: 'normal',
+			subsets: ['latin'],
+		},
+		{
 			path: './fonts/SplineSansMono-Medium.woff2',
 			weight: '500',
 			style: 'normal',
