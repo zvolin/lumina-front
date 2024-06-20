@@ -15,7 +15,7 @@ import { browserName, browserVersion } from 'react-device-detect';
 
 // Styles
 // ------------
-import { Blanket, Jacket, ScrollableArea, ImageContainer, Container, Title, NetworkList, NetworkItem } from './styles';
+import { Blanket, Jacket, ImageContainer, Container, Title, NetworkList, NetworkItem } from './styles';
 
 // Component
 // ------------
@@ -109,21 +109,32 @@ const Form = () => {
     useEffect(() => {
         const interval = setInterval(async () => {
             if (node) {
+                // const info = await node.syncer_info();
                 const info = await node.syncer_info();
                 
                 const peers = await node.connected_peers();
-
+    
                 const head = node.get_network_head_header();
+    
+                const events = node.events_channel();
+    
                 if (head) {
+                    // events.onmessage = (event) => {
+                    //     console.log(event.data)
+                    // }
+
+                    console.log(info)
+    
                     setStats({
                         ...stats,
-                        syncInfo: `${info.local_head}/${info.subjective_head}`,
+                        syncInfo: `${info.stored_headers[0].start}/${info.stored_headers[0].end}`,
+                        // syncInfo: `${info[0].start}/${info[0].end}`,
                         connectedPeers: peers,
                         networkHeadHeight: head.header.height,
                         networkHeadHash: head.commit.block_id.hash,
                         networkHeadDataSquare: `${head.dah.row_roots.length}x${head.dah.column_roots.length} shares`,
                     });
-
+    
                     setNodeStatus('Data availablility sampling in progress');
                 }
             }

@@ -322,6 +322,23 @@ export const Terminal = styled(Div)(props => css`
         background: ${props.theme.colors.brand.bc3};
     }
 
+    hr {
+        width: 100%;
+        border: none;
+        border-top: 1px solid ${props.theme.colors.global.white};
+    }
+    
+    ${Title} {
+        color: ${props.theme.colors.global.black};
+        font-weight: 600;
+    }
+`);
+
+export const DataJacket = styled(Div)(props => css`
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+
     > div {
         display: flex;
         flex-direction: row;
@@ -345,17 +362,6 @@ export const Terminal = styled(Div)(props => css`
             word-break: break-word;
         }
     }
-
-    hr {
-        width: 100%;
-        border: none;
-        border-top: 1px solid ${props.theme.colors.global.white};
-    }
-    
-    ${Title} {
-        color: ${props.theme.colors.global.black};
-        font-weight: 600;
-    }
 `);
 
 export const LogJacket = styled(Div)(props => css`
@@ -366,8 +372,16 @@ export const LogJacket = styled(Div)(props => css`
     flex-direction: column;
     flex: 1;
     gap: 1.2rem;
+`);
+
+export const LogScroller = styled(Div)(props => css`
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 1.2rem;
     height: 100%;
     overflow-y: scroll;
+    min-height: calc(100% - 3.6rem);
     max-height: 20vh !important;
 
     &::-webkit-scrollbar {

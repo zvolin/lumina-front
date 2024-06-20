@@ -28,7 +28,9 @@ import {
     LinkGroup,
     CelLink,
     Terminal,
-    LogJacket
+    DataJacket,
+    LogJacket,
+    LogScroller,
 } from './styles';
 
 // Component
@@ -74,8 +76,8 @@ const StatusBoard = ({
                         )}
 
                         <Grid $noPadding $isCenter>
-                            <Col $small="1/3" $medium="1/7" $large="1/13">
-                                {tab === 1 && (
+                            {tab === 1 && (
+                                <Col $small="1/3" $medium="1/7" $large="1/13" style={{ height: 'auto' }}>
                                     <Basic>
                                         <Block>
                                             <div>
@@ -98,72 +100,63 @@ const StatusBoard = ({
                                             </CelLink>
                                         </Block>
                                     </Basic>
-                                )}
+                                </Col>
+                            )}
 
-                                {tab === 2 && (
+                            {tab === 2 && (
+                                <Col $small="1/3" $medium="1/7" $large="1/13">
                                     <Terminal>
-                                        <div>
+                                        <DataJacket>
                                             <div>
-                                                <em>PeerId:</em>
-                                                <span>{stats.peerId}</span>
+                                                <div>
+                                                    <em>PeerId:</em>
+                                                    <span>{stats.peerId}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div>
                                             <div>
-                                                <em>Sync headers:</em>
-                                                <span>{stats.syncInfo}</span>
+                                                <div>
+                                                    <em>Sync headers:</em>
+                                                    <span>{stats.syncInfo}</span>
+                                                </div>
+                                                <ProgressBar data={stats.syncInfo} />
                                             </div>
-                                            <ProgressBar data={stats.syncInfo} />
-                                        </div>
-                                        <div>
                                             <div>
-                                                <em>Block Height:</em>
-                                                <span>{stats.networkHeadHeight}</span>
+                                                <div>
+                                                    <em>Block Height:</em>
+                                                    <span>{stats.networkHeadHeight}</span>
+                                                </div>
+                                                <CelLink href={`https://celenium.io/block/` + stats.networkHeadHeight} rel="noopener noreferrer" target="_blank" $isDark>
+                                                    <Icon type="logoCelenium" />
+                                                    <span>View in Celenium</span>
+                                                </CelLink>
                                             </div>
-                                            <CelLink href={`https://celenium.io/block/` + stats.networkHeadHeight} rel="noopener noreferrer" target="_blank" $isDark>
-                                                <Icon type="logoCelenium" />
-                                                <span>View in Celenium</span>
-                                            </CelLink>
-                                        </div>
-                                        <div>
                                             <div>
-                                                <em>Hash:</em>
-                                                <span>{stats.networkHeadHash}</span>
+                                                <div>
+                                                    <em>Hash:</em>
+                                                    <span>{stats.networkHeadHash}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div>
                                             <div>
-                                                <em>Data square size:</em>
-                                                <span>{stats.networkHeadDataSquare}</span>
+                                                <div>
+                                                    <em>Data square size:</em>
+                                                    <span>{stats.networkHeadDataSquare}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <hr />
-                                        <Title>Event logs</Title>
+                                            <hr />
+                                        </DataJacket>
                                         <LogJacket>
-                                            <Logs data="" />
+                                            <Title>Event logs</Title>
+                                            <LogScroller>
+                                                <Logs data={stats} />
+                                            </LogScroller>
                                         </LogJacket>
                                     </Terminal>
-                                )}
-
-                                {/* <StatsItem>
-                                    <label>
-                                        <span>PeerId:</span>
-                                        <Input name="peerId" value={stats.peerId} onChange={(e) => handleInput(e)} placeholder="..." light />
-                                    </label>
-                                </StatsItem>
-                                <StatsItem>
-                                    <label>
-                                        <span>
-                                            <em>Synchronizing headers:</em>
-                                            <ProgressBar data={stats.syncInfo} />
-                                        </span>
-                                        <Input name="syncInfo" value={stats.syncInfo} onChange={(e) => handleInput(e)} placeholder="..." light />
-                                    </label>
-                                </StatsItem> */}
-                            </Col>
+                                </Col>
+                            )}
                         </Grid>
                     </StickyJacket>
                 </Col>
+
                 {bp.large && (
                     <Col $small="1/3" $medium="1/7" $large="7/13" $isCenter>
                         <Visualisation data={stats} />

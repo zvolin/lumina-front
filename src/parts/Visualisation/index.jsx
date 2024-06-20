@@ -2,16 +2,19 @@
 
 // Imports
 // ------------
-import React, { useRef, useEffect } from 'react';
-// import Spline from '@splinetool/react-spline';
+import React, { useRef, useEffect, useState } from 'react';
 
 // Styles
 // ------------
-import { Jacket, Container, SplineJacket } from './styles';
+import { Jacket, Container } from './styles';
 
 // Component
 // ------------
 const Visualisation = ({ data }) => {
+    // NOTE • States
+    const [currentHeight, setCurrentHeight] = useState(0);
+    const [newHeight, setNewHeight] = useState(0);
+
     // NOTE • Generate Grid
     const containerRef = useRef(null);
 
@@ -58,16 +61,22 @@ const Visualisation = ({ data }) => {
 
         let number = getNumber(data.networkHeadDataSquare);
 
+        // Set new height
+        setNewHeight(number);
+
+        if(newHeight > currentHeight) {
+            setCurrentHeight(newHeight);
+        }
+
         // Highlight random squares
-        highlightRandomSquares(number);
+        if(newHeight > currentHeight) {
+            highlightRandomSquares(newHeight);
+        }
     }, [data]);
 
     return (
         <Jacket>
             <Container ref={containerRef}>{generateSpans()}</Container>
-            {/* <SplineJacket>
-                <Spline scene="https://prod.spline.design/vS5y3FkvJJqrWPgq/scene.splinecode" />
-            </SplineJacket> */}
         </Jacket>
     );
 }

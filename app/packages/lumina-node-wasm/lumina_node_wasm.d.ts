@@ -157,6 +157,11 @@ export class Node {
 */
   get_local_head_header(): Promise<any>;
 /**
+* Get ranges of headers currently stored.
+* @returns {Promise<Array<any>>}
+*/
+  get_stored_header_ranges(): Promise<Array<any>>;
+/**
 * Get a synced header for the block with a given hash.
 * @param {string} hash
 * @returns {Promise<any>}
@@ -224,7 +229,6 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly setup_logging: () => void;
   readonly __wbg_node_free: (a: number) => void;
   readonly __wbg_nodeconfig_free: (a: number) => void;
   readonly __wbg_get_nodeconfig_network: (a: number) => number;
@@ -249,12 +253,14 @@ export interface InitOutput {
   readonly node_syncer_info: (a: number) => number;
   readonly node_get_network_head_header: (a: number, b: number) => void;
   readonly node_get_local_head_header: (a: number) => number;
+  readonly node_get_stored_header_ranges: (a: number) => number;
   readonly node_get_header_by_hash: (a: number, b: number, c: number) => number;
   readonly node_get_header_by_height: (a: number, b: number) => number;
   readonly node_get_headers: (a: number, b: number, c: number, d: number, e: number) => number;
   readonly node_get_sampling_metadata: (a: number, b: number) => number;
   readonly node_events_channel: (a: number, b: number) => void;
   readonly nodeconfig_default: (a: number) => number;
+  readonly setup_logging: () => void;
   readonly __wbg_networkinfo_free: (a: number) => void;
   readonly networkinfo_num_peers: (a: number) => number;
   readonly networkinfo_connection_counters: (a: number) => number;
@@ -269,15 +275,15 @@ export interface InitOutput {
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_export_2: WebAssembly.Table;
-  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hd729337076372289: (a: number, b: number) => void;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hc48d7f01eb75e078: (a: number, b: number, c: number) => void;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hd15c037651943fee: (a: number, b: number, c: number) => void;
-  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h96cd4f3b47f3944f: (a: number, b: number) => void;
+  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h8e19f4dcf1e757f7: (a: number, b: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__he8d6a64fcf66e334: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__he446120440cef4c6: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__he718af98804a6ec1: (a: number, b: number) => void;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h966003e6c708030b: (a: number, b: number, c: number, d: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__he2655eba5193fb2c: (a: number, b: number, c: number, d: number) => void;
   readonly __wbindgen_free: (a: number, b: number, c: number) => void;
   readonly __wbindgen_exn_store: (a: number) => void;
-  readonly wasm_bindgen__convert__closures__invoke2_mut__h75e6a00b34c272b0: (a: number, b: number, c: number, d: number) => void;
+  readonly wasm_bindgen__convert__closures__invoke2_mut__h4c909b8fcfdd6e97: (a: number, b: number, c: number, d: number) => void;
   readonly __wbindgen_start: () => void;
 }
 
