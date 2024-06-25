@@ -5,6 +5,29 @@
 */
 export function setup_logging(): void;
 /**
+* @param {(MessageEvent)[]} queued_events
+* @returns {Promise<void>}
+*/
+export function run_worker(queued_events: (MessageEvent)[]): Promise<void>;
+/**
+* Type of worker to run lumina in. Allows overriding automatically detected worker kind
+* (which should usually be appropriate).
+*/
+export enum NodeWorkerKind {
+/**
+* Run in [`SharedWorker`]
+*
+* [`SharedWorker`]: https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker
+*/
+  Shared = 0,
+/**
+* Run in [`Worker`]
+*
+* [`Worker`]: https://developer.mozilla.org/en-US/docs/Web/API/Worker
+*/
+  Dedicated = 1,
+}
+/**
 * Supported Celestia networks.
 */
 export enum Network {
@@ -27,62 +50,72 @@ export enum Network {
 }
 /**
 */
-export class ConnectionCounters {
+export class ConnectionCountersSnapshot {
   free(): void;
 /**
 */
-  readonly num_connections: number;
+  num_connections: number;
 /**
 */
-  readonly num_established: number;
+  num_established: number;
 /**
 */
-  readonly num_established_incoming: number;
+  num_established_incoming: number;
 /**
 */
-  readonly num_established_outgoing: number;
+  num_established_outgoing: number;
 /**
 */
-  readonly num_pending: number;
+  num_pending: number;
 /**
 */
-  readonly num_pending_incoming: number;
+  num_pending_incoming: number;
 /**
 */
-  readonly num_pending_outgoing: number;
+  num_pending_outgoing: number;
 }
 /**
 */
-export class NetworkInfo {
+export class NetworkInfoSnapshot {
   free(): void;
 /**
-* @returns {ConnectionCounters}
 */
-  connection_counters(): ConnectionCounters;
-/**
-*/
-  readonly num_peers: number;
+  num_peers: number;
 }
 /**
-* Lumina wasm node.
+* `NodeDriver` represents lumina node running in a dedicated Worker/SharedWorker.
+* It's responsible for sending commands and receiving responses from the node.
 */
-export class Node {
+export class NodeClient {
   free(): void;
 /**
-* Create a new Lumina node.
+* Create a new connection to a Lumina node running in a Shared Worker.
+* Note that single Shared Worker can be accessed from multiple tabs, so Lumina may
+* already have been started. Otherwise it needs to be started with [`NodeDriver::start`].
+* @param {NodeWorkerKind | undefined} [worker_type]
+*/
+  constructor(worker_type?: NodeWorkerKind);
+/**
+* Check whether Lumina is currently running
+* @returns {Promise<boolean>}
+*/
+  is_running(): Promise<boolean>;
+/**
+* Start a node with the provided config, if it's not running
 * @param {NodeConfig} config
+* @returns {Promise<void>}
 */
-  constructor(config: NodeConfig);
+  start(config: NodeConfig): Promise<void>;
 /**
 * Get node's local peer ID.
-* @returns {string}
+* @returns {Promise<string>}
 */
-  local_peer_id(): string;
+  local_peer_id(): Promise<string>;
 /**
-* Get current `PeerTracker` info.
-* @returns {any}
+* Get current [`PeerTracker`] info.
+* @returns {Promise<any>}
 */
-  peer_tracker_info(): any;
+  peer_tracker_info(): Promise<any>;
 /**
 * Wait until the node is connected to at least 1 peer.
 * @returns {Promise<void>}
@@ -95,9 +128,9 @@ export class Node {
   wait_connected_trusted(): Promise<void>;
 /**
 * Get current network info.
-* @returns {Promise<NetworkInfo>}
+* @returns {Promise<NetworkInfoSnapshot>}
 */
-  network_info(): Promise<NetworkInfo>;
+  network_info(): Promise<NetworkInfoSnapshot>;
 /**
 * Get all the multiaddresses on which the node listens.
 * @returns {Promise<Array<any>>}
@@ -136,11 +169,11 @@ export class Node {
 * Request headers in range (from, from + amount] from the network.
 *
 * The headers will be verified with the `from` header.
-* @param {any} from
+* @param {any} from_header
 * @param {bigint} amount
 * @returns {Promise<Array<any>>}
 */
-  request_verified_headers(from: any, amount: bigint): Promise<Array<any>>;
+  request_verified_headers(from_header: any, amount: bigint): Promise<Array<any>>;
 /**
 * Get current header syncing info.
 * @returns {Promise<any>}
@@ -148,19 +181,14 @@ export class Node {
   syncer_info(): Promise<any>;
 /**
 * Get the latest header announced in the network.
-* @returns {any}
+* @returns {Promise<any>}
 */
-  get_network_head_header(): any;
+  get_network_head_header(): Promise<any>;
 /**
 * Get the latest locally synced header.
 * @returns {Promise<any>}
 */
   get_local_head_header(): Promise<any>;
-/**
-* Get ranges of headers currently stored.
-* @returns {Promise<Array<any>>}
-*/
-  get_stored_header_ranges(): Promise<Array<any>>;
 /**
 * Get a synced header for the block with a given hash.
 * @param {string} hash
@@ -185,9 +213,9 @@ export class Node {
 * If range contains a height of a header that is not found in the store.
 * @param {bigint | undefined} [start_height]
 * @param {bigint | undefined} [end_height]
-* @returns {Promise<any>}
+* @returns {Promise<Array<any>>}
 */
-  get_headers(start_height?: bigint, end_height?: bigint): Promise<any>;
+  get_headers(start_height?: bigint, end_height?: bigint): Promise<Array<any>>;
 /**
 * Get data sampling metadata of an already sampled height.
 * @param {bigint} height
@@ -195,10 +223,16 @@ export class Node {
 */
   get_sampling_metadata(height: bigint): Promise<any>;
 /**
-* Returns a [`BroadcastChannel`] for events generated by [`Node`].
-* @returns {BroadcastChannel}
+* Requests SharedWorker running lumina to close. Any events received afterwards wont
+* be processed and new NodeClient needs to be created to restart a node.
+* @returns {Promise<void>}
 */
-  events_channel(): BroadcastChannel;
+  close(): Promise<void>;
+/**
+* Returns a [`BroadcastChannel`] for events generated by [`Node`].
+* @returns {Promise<BroadcastChannel>}
+*/
+  events_channel(): Promise<BroadcastChannel>;
 }
 /**
 * Config for the lumina wasm node.
@@ -229,7 +263,26 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly __wbg_node_free: (a: number) => void;
+  readonly setup_logging: () => void;
+  readonly run_worker: (a: number, b: number) => number;
+  readonly __wbg_networkinfosnapshot_free: (a: number) => void;
+  readonly __wbg_set_networkinfosnapshot_num_peers: (a: number, b: number) => void;
+  readonly __wbg_connectioncounterssnapshot_free: (a: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_connections: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_connections: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_pending: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_pending: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_pending_incoming: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_pending_incoming: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_pending_outgoing: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_pending_outgoing: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_established_incoming: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_established_incoming: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_established_outgoing: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_established_outgoing: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_established: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_established: (a: number, b: number) => void;
+  readonly __wbg_get_networkinfosnapshot_num_peers: (a: number) => number;
   readonly __wbg_nodeconfig_free: (a: number) => void;
   readonly __wbg_get_nodeconfig_network: (a: number) => number;
   readonly __wbg_set_nodeconfig_network: (a: number, b: number) => void;
@@ -237,53 +290,45 @@ export interface InitOutput {
   readonly __wbg_set_nodeconfig_genesis_hash: (a: number, b: number, c: number) => void;
   readonly __wbg_get_nodeconfig_bootnodes: (a: number, b: number) => void;
   readonly __wbg_set_nodeconfig_bootnodes: (a: number, b: number, c: number) => void;
-  readonly node_new: (a: number) => number;
-  readonly node_local_peer_id: (a: number, b: number) => void;
-  readonly node_peer_tracker_info: (a: number, b: number) => void;
-  readonly node_wait_connected: (a: number) => number;
-  readonly node_wait_connected_trusted: (a: number) => number;
-  readonly node_network_info: (a: number) => number;
-  readonly node_listeners: (a: number) => number;
-  readonly node_connected_peers: (a: number) => number;
-  readonly node_set_peer_trust: (a: number, b: number, c: number, d: number) => number;
-  readonly node_request_head_header: (a: number) => number;
-  readonly node_request_header_by_hash: (a: number, b: number, c: number) => number;
-  readonly node_request_header_by_height: (a: number, b: number) => number;
-  readonly node_request_verified_headers: (a: number, b: number, c: number) => number;
-  readonly node_syncer_info: (a: number) => number;
-  readonly node_get_network_head_header: (a: number, b: number) => void;
-  readonly node_get_local_head_header: (a: number) => number;
-  readonly node_get_stored_header_ranges: (a: number) => number;
-  readonly node_get_header_by_hash: (a: number, b: number, c: number) => number;
-  readonly node_get_header_by_height: (a: number, b: number) => number;
-  readonly node_get_headers: (a: number, b: number, c: number, d: number, e: number) => number;
-  readonly node_get_sampling_metadata: (a: number, b: number) => number;
-  readonly node_events_channel: (a: number, b: number) => void;
+  readonly __wbg_nodeclient_free: (a: number) => void;
+  readonly nodeclient_new: (a: number) => number;
+  readonly nodeclient_is_running: (a: number) => number;
+  readonly nodeclient_start: (a: number, b: number) => number;
+  readonly nodeclient_local_peer_id: (a: number) => number;
+  readonly nodeclient_peer_tracker_info: (a: number) => number;
+  readonly nodeclient_wait_connected: (a: number) => number;
+  readonly nodeclient_wait_connected_trusted: (a: number) => number;
+  readonly nodeclient_network_info: (a: number) => number;
+  readonly nodeclient_listeners: (a: number) => number;
+  readonly nodeclient_connected_peers: (a: number) => number;
+  readonly nodeclient_set_peer_trust: (a: number, b: number, c: number, d: number) => number;
+  readonly nodeclient_request_head_header: (a: number) => number;
+  readonly nodeclient_request_header_by_hash: (a: number, b: number, c: number) => number;
+  readonly nodeclient_request_header_by_height: (a: number, b: number) => number;
+  readonly nodeclient_request_verified_headers: (a: number, b: number, c: number) => number;
+  readonly nodeclient_syncer_info: (a: number) => number;
+  readonly nodeclient_get_network_head_header: (a: number) => number;
+  readonly nodeclient_get_local_head_header: (a: number) => number;
+  readonly nodeclient_get_header_by_hash: (a: number, b: number, c: number) => number;
+  readonly nodeclient_get_header_by_height: (a: number, b: number) => number;
+  readonly nodeclient_get_headers: (a: number, b: number, c: number, d: number, e: number) => number;
+  readonly nodeclient_get_sampling_metadata: (a: number, b: number) => number;
+  readonly nodeclient_close: (a: number) => number;
+  readonly nodeclient_events_channel: (a: number) => number;
   readonly nodeconfig_default: (a: number) => number;
-  readonly setup_logging: () => void;
-  readonly __wbg_networkinfo_free: (a: number) => void;
-  readonly networkinfo_num_peers: (a: number) => number;
-  readonly networkinfo_connection_counters: (a: number) => number;
-  readonly __wbg_connectioncounters_free: (a: number) => void;
-  readonly connectioncounters_num_connections: (a: number) => number;
-  readonly connectioncounters_num_pending: (a: number) => number;
-  readonly connectioncounters_num_pending_incoming: (a: number) => number;
-  readonly connectioncounters_num_pending_outgoing: (a: number) => number;
-  readonly connectioncounters_num_established_incoming: (a: number) => number;
-  readonly connectioncounters_num_established_outgoing: (a: number) => number;
-  readonly connectioncounters_num_established: (a: number) => number;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_export_2: WebAssembly.Table;
-  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h8e19f4dcf1e757f7: (a: number, b: number) => void;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__he8d6a64fcf66e334: (a: number, b: number, c: number) => void;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__he446120440cef4c6: (a: number, b: number, c: number) => void;
-  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__he718af98804a6ec1: (a: number, b: number) => void;
+  readonly _dyn_core__ops__function__Fn__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__ha9daeea802f209d6: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hb4fb55cc1ff2ff85: (a: number, b: number) => void;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__he2655eba5193fb2c: (a: number, b: number, c: number, d: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h411f8aabc0865585: (a: number, b: number, c: number, d: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h70b72fe5eddb9752: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hdaf8d57460c5a924: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h7ecd4023565a0e4c: (a: number, b: number) => void;
   readonly __wbindgen_free: (a: number, b: number, c: number) => void;
   readonly __wbindgen_exn_store: (a: number) => void;
-  readonly wasm_bindgen__convert__closures__invoke2_mut__h4c909b8fcfdd6e97: (a: number, b: number, c: number, d: number) => void;
+  readonly wasm_bindgen__convert__closures__invoke2_mut__h498dd8b7da7e4bf1: (a: number, b: number, c: number, d: number) => void;
   readonly __wbindgen_start: () => void;
 }
 

@@ -40,6 +40,7 @@ const StatusBoard = ({
     stats,
     handleInput,
     handleReload,
+    eventData,
 }) => {
     // NOTE • Breakpoints
     const bp = useBreakpoint();
@@ -147,7 +148,7 @@ const StatusBoard = ({
                                         <LogJacket>
                                             <Title>Event logs</Title>
                                             <LogScroller>
-                                                <Logs data={stats} />
+                                                <Logs data={eventData} />
                                             </LogScroller>
                                         </LogJacket>
                                     </Terminal>

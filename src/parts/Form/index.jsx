@@ -3,7 +3,7 @@
 // Imports
 // ------------
 import React, { useState, useEffect, useContext } from 'react';
-import init, { Node, NodeConfig } from '@package/lumina-node-wasm';
+import init, { NodeClient, NodeConfig } from '@package/lumina-node-wasm';
 import Input from './Input';
 import Button from '@parts/Button';
 import Status from './Status';
@@ -35,6 +35,7 @@ const Form = () => {
     const [nodeInitiate, setNodeInitiate] = useState(false);
     const [statusInitiated, setStatusInitiated] = useState(false);
     const [nodeStatus, setNodeStatus] = useState('Downloading');
+    const [eventData, setEventData] = useState([]);
 
     const [stats, setStats] = useState({
         peerId: '',
@@ -119,11 +120,15 @@ const Form = () => {
                 const events = node.events_channel();
     
                 if (head) {
-                    // events.onmessage = (event) => {
-                    //     console.log(event.data)
-                    // }
+                    events.onmessage = (event) => {
+                        // console.log(event.data)
+                        // setEventData([...eventData, event.data]);
 
-                    console.log(info)
+                        // Update the state with the new event data
+                        setEventData((prev) => {
+                            return [...prev, event.data];
+                        });
+                    }
     
                     setStats({
                         ...stats,
@@ -189,7 +194,7 @@ const Form = () => {
             let anotherConfig = config;
             setConfig({genesis_hash: config.genesis_hash, bootnodes: config.bootnodes});
 
-            const newNode = await new Node(anotherConfig);
+            const newNode = await new NodeClient(anotherConfig);
             
             setNode(newNode);
             
@@ -344,6 +349,7 @@ const Form = () => {
                                 stats={stats}
                                 handleInput={handleInput}
                                 handleReload={handleReload}
+                                eventData={eventData}
                             />
                         )}
                     </Container>
