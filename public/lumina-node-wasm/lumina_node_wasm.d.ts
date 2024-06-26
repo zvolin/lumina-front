@@ -92,9 +92,10 @@ export class NodeClient {
 * Create a new connection to a Lumina node running in a Shared Worker.
 * Note that single Shared Worker can be accessed from multiple tabs, so Lumina may
 * already have been started. Otherwise it needs to be started with [`NodeDriver::start`].
+* @param {string} worker_script_url
 * @param {NodeWorkerKind | undefined} [worker_type]
 */
-  constructor(worker_type?: NodeWorkerKind);
+  constructor(worker_script_url: string, worker_type?: NodeWorkerKind);
 /**
 * Check whether Lumina is currently running
 * @returns {Promise<boolean>}
@@ -263,26 +264,6 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly setup_logging: () => void;
-  readonly run_worker: (a: number, b: number) => number;
-  readonly __wbg_networkinfosnapshot_free: (a: number) => void;
-  readonly __wbg_set_networkinfosnapshot_num_peers: (a: number, b: number) => void;
-  readonly __wbg_connectioncounterssnapshot_free: (a: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_connections: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_connections: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_pending: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_pending: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_pending_incoming: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_pending_incoming: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_pending_outgoing: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_pending_outgoing: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_established_incoming: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_established_incoming: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_established_outgoing: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_established_outgoing: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_established: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_established: (a: number, b: number) => void;
-  readonly __wbg_get_networkinfosnapshot_num_peers: (a: number) => number;
   readonly __wbg_nodeconfig_free: (a: number) => void;
   readonly __wbg_get_nodeconfig_network: (a: number) => number;
   readonly __wbg_set_nodeconfig_network: (a: number, b: number) => void;
@@ -291,7 +272,7 @@ export interface InitOutput {
   readonly __wbg_get_nodeconfig_bootnodes: (a: number, b: number) => void;
   readonly __wbg_set_nodeconfig_bootnodes: (a: number, b: number, c: number) => void;
   readonly __wbg_nodeclient_free: (a: number) => void;
-  readonly nodeclient_new: (a: number) => number;
+  readonly nodeclient_new: (a: number, b: number, c: number) => number;
   readonly nodeclient_is_running: (a: number) => number;
   readonly nodeclient_start: (a: number, b: number) => number;
   readonly nodeclient_local_peer_id: (a: number) => number;
@@ -316,19 +297,39 @@ export interface InitOutput {
   readonly nodeclient_close: (a: number) => number;
   readonly nodeclient_events_channel: (a: number) => number;
   readonly nodeconfig_default: (a: number) => number;
+  readonly setup_logging: () => void;
+  readonly run_worker: (a: number, b: number) => number;
+  readonly __wbg_networkinfosnapshot_free: (a: number) => void;
+  readonly __wbg_set_networkinfosnapshot_num_peers: (a: number, b: number) => void;
+  readonly __wbg_connectioncounterssnapshot_free: (a: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_connections: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_connections: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_pending: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_pending: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_pending_incoming: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_pending_incoming: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_pending_outgoing: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_pending_outgoing: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_established_incoming: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_established_incoming: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_established_outgoing: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_established_outgoing: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_established: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_established: (a: number, b: number) => void;
+  readonly __wbg_get_networkinfosnapshot_num_peers: (a: number) => number;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_export_2: WebAssembly.Table;
-  readonly _dyn_core__ops__function__Fn__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__ha9daeea802f209d6: (a: number, b: number, c: number) => void;
-  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hb4fb55cc1ff2ff85: (a: number, b: number) => void;
+  readonly _dyn_core__ops__function__Fn__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hc865c6a4da46fe2a: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hd729337076372289: (a: number, b: number) => void;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h411f8aabc0865585: (a: number, b: number, c: number, d: number) => void;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h70b72fe5eddb9752: (a: number, b: number, c: number) => void;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hdaf8d57460c5a924: (a: number, b: number, c: number) => void;
-  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h7ecd4023565a0e4c: (a: number, b: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hd3ab4c603259d1bc: (a: number, b: number, c: number, d: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h44687e23abc16b06: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hd15c037651943fee: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h96cd4f3b47f3944f: (a: number, b: number) => void;
   readonly __wbindgen_free: (a: number, b: number, c: number) => void;
   readonly __wbindgen_exn_store: (a: number) => void;
-  readonly wasm_bindgen__convert__closures__invoke2_mut__h498dd8b7da7e4bf1: (a: number, b: number, c: number, d: number) => void;
+  readonly wasm_bindgen__convert__closures__invoke2_mut__h75e6a00b34c272b0: (a: number, b: number, c: number, d: number) => void;
   readonly __wbindgen_start: () => void;
 }
 
