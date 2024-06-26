@@ -10,7 +10,7 @@ const nextConfig = {
 		imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
 		deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
 	},
-	transpilePackages: ['next-image-export-optimizer'],
+	transpilePackages: ['next-image-export-optimizer','lumina-node-wasm'],
 	env: {
 		nextImageExportOptimizer_imageFolderPath: 'public/images',
 		nextImageExportOptimizer_exportFolderPath: 'out',
@@ -34,6 +34,18 @@ const nextConfig = {
 		// see https://styled-components.com/docs/tooling#babel-plugin for more info on the options.
 		styledComponents: true,
 	},
+	// webpack(config, options) {
+	// 	config.module.rules.push({
+	// 		test: /\.worker\.js$/,
+	// 		loader: 'worker-loader',
+	// 		// options: { inline: true }, // also works
+	// 		options: {
+	// 			name: 'static/media/worker.[hash].js',
+	// 			publicPath: '/_next/',
+	// 		},
+	// 	});
+	// 	return config
+	// }
 };
 
 module.exports = nextConfig;

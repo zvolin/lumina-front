@@ -72,7 +72,7 @@ export const Tab = styled.button(props => css`
 
     ${props.disabled && css` background: transparent; `}
 
-    ${props.isActive && css`
+    ${props.$isActive && css`
         color: ${props.theme.colors.brand.bc1};
         background: ${props.theme.colors.global.white};
     `}

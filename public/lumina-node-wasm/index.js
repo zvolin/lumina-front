@@ -1,4 +1,29 @@
-import { worker_script_url } from './snippets/lumina-node-wasm-6cdafb3b9519409f/js/worker.js';
+// import { worker_script_url } from './worker.js';
+import { createWorker } from './createWorker.js';
+
+let ws_url;
+
+async function initializeWorker() {
+    try {
+        if (typeof window !== 'undefined') {
+            const worker = await createWorker();
+            worker.onmessage = (event) => {
+                ws_url = event.data;
+            };
+        } else {
+            console.error('initializeWorker can only be called in the main execution context.');
+        }
+    } catch (error) {
+        console.error('Error initializing worker:', error);
+    }
+}
+
+initializeWorker();
+
+function worker_script_url() {
+    return ws_url;
+}
+
 
 let wasm;
 

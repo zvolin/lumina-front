@@ -3,7 +3,7 @@
 // Imports
 // ------------
 import React, { useState, useEffect, useContext } from 'react';
-import init, { NodeClient, NodeConfig } from '@package/lumina-node-wasm';
+import init, { NodeClient, NodeConfig } from '@public/lumina-node-wasm';
 import Input from './Input';
 import Button from '@parts/Button';
 import Status from './Status';

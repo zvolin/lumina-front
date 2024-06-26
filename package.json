@@ -23,7 +23,7 @@
     "eslint-config-next": "^14.0.2",
     "framer-motion": "^11.0.20",
     "gsap": "^3.12.5",
-    "lumina-node-wasm": "file:app/packages/lumina-node-wasm",
+    "lumina-node-wasm": "file:public/lumina-node-wasm",
     "mobx-react-lite": "^4.0.7",
     "next": "^14.0.2",
     "next-image-export-optimizer": "^1.12.3",
@@ -40,5 +40,8 @@
     "three-stdlib": "^2.29.6",
     "tunnel-rat": "^0.1.2",
     "typewriter-effect": "^2.21.0"
+  },
+  "devDependencies": {
+    "worker-loader": "^3.0.8"
   }
 }
