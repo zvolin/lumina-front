@@ -23,7 +23,8 @@ if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScop
     }
   }
 
-  await init();
-  console.log("starting worker, queued messages: ", queued.length);
-  await run_worker(queued);
+  init().then(() => {
+    console.log("starting worker, queued messages: ", queued.length);
+    run_worker(queued);
+  });
 }
