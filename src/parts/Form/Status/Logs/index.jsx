@@ -1,65 +1,32 @@
+'use client';
+
 // Imports
 // ------------
-import React, { useEffect } from 'react';
+import React from 'react';
+
+// Styles
+// ------------
+import { Item } from './styles';
 
 // Component
 // ------------
 const TerminalLogs = ({ data }) => {
-    // useEffect(() => {
-    //     console.log('data', data);
-    // }, []);
+    // console.dir(data);
 
     return (
         <>
-            {!data && (
-                <>
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                    logs list scroll test<br />
-                </>
-            )}
+            {
+                data.map((log, index) => {
+                    let res = log[0][1].split(':');
+
+                    return (
+                        <Item key={index}>
+                            <span>{res[0]}:</span>
+                            <span>{res[1]}</span>
+                        </Item>
+                    )
+                })
+            }
         </>
     );
 }

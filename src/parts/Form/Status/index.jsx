@@ -40,6 +40,7 @@ const StatusBoard = ({
     stats,
     handleInput,
     handleReload,
+    eventData,
 }) => {
     // NOTE • Breakpoints
     const bp = useBreakpoint();
@@ -60,8 +61,8 @@ const StatusBoard = ({
                                 <Header>
                                     <Title $dark>{status}</Title>
                                     <Switch>
-                                        <Tab isActive={tab === 1} onClick={handleTab(1)} disabled={tab === 1}>Basic</Tab>
-                                        <Tab isActive={tab === 2} onClick={handleTab(2)} disabled={tab === 2}>Advanced</Tab>
+                                        <Tab $isActive={tab === 1} onClick={handleTab(1)} disabled={tab === 1}>Basic</Tab>
+                                        <Tab $isActive={tab === 2} onClick={handleTab(2)} disabled={tab === 2}>Advanced</Tab>
                                     </Switch>
                                 </Header>
                             </Col>
@@ -92,7 +93,7 @@ const StatusBoard = ({
                                         <Block>
                                             <div>
                                                 <em>Block Height:</em>
-                                                <span class="isbig">{stats.networkHeadHeight}</span>
+                                                <span className="isbig">{stats.networkHeadHeight}</span>
                                             </div>
                                             <CelLink href={`https://celenium.io/block/` + stats.networkHeadHeight} rel="noopener noreferrer" target="_blank">
                                                 <Icon type="logoCelenium" />
@@ -147,7 +148,7 @@ const StatusBoard = ({
                                         <LogJacket>
                                             <Title>Event logs</Title>
                                             <LogScroller>
-                                                <Logs data={stats} />
+                                                <Logs data={eventData} />
                                             </LogScroller>
                                         </LogJacket>
                                     </Terminal>

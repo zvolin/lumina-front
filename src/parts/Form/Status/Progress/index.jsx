@@ -24,7 +24,7 @@ const ProgressBar = ({ data, isBig }) => {
         setProgress(progress);
 
         // .toFixed(2) gives it 2 digits of precision after the dot, for example 45.56%
-        console.log('Progress:', progress.toFixed(2) + '%');
+        // console.log('Progress:', progress.toFixed(2) + '%');
     }, [data]);
 
     return (

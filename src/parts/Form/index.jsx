@@ -3,7 +3,7 @@
 // Imports
 // ------------
 import React, { useState, useEffect, useContext } from 'react';
-import init, { Node, NodeConfig } from '@package/lumina-node-wasm';
+import init, { NodeClient, NodeConfig } from '@public/lumina-node-wasm';
 import Input from './Input';
 import Button from '@parts/Button';
 import Status from './Status';
@@ -35,6 +35,7 @@ const Form = () => {
     const [nodeInitiate, setNodeInitiate] = useState(false);
     const [statusInitiated, setStatusInitiated] = useState(false);
     const [nodeStatus, setNodeStatus] = useState('Downloading');
+    const [eventData, setEventData] = useState([]);
 
     const [stats, setStats] = useState({
         peerId: '',
@@ -114,16 +115,25 @@ const Form = () => {
                 
                 const peers = await node.connected_peers();
     
-                const head = node.get_network_head_header();
+                const head = await node.get_network_head_header();
     
-                const events = node.events_channel();
+                const events = await node.events_channel();
     
                 if (head) {
-                    // events.onmessage = (event) => {
-                    //     console.log(event.data)
-                    // }
+                    events.onmessage = (event) => {
+                        
+                        const array = [];
+                        event.data.forEach((value, key) => {
+                            array.push([key, value])
+                        })
 
-                    console.log(info)
+                        // console.dir(array);
+
+                        // Update the state with the new event data
+                        setEventData((prev) => {
+                            return [array, ...prev];
+                        });
+                    }
     
                     setStats({
                         ...stats,
@@ -189,7 +199,9 @@ const Form = () => {
             let anotherConfig = config;
             setConfig({genesis_hash: config.genesis_hash, bootnodes: config.bootnodes});
 
-            const newNode = await new Node(anotherConfig);
+            const workerUrl = new URL('/worker.js', window.location.origin);
+            const newNode = await new NodeClient(workerUrl.toJSON());
+            await newNode.start(anotherConfig);
             
             setNode(newNode);
             
@@ -344,6 +356,7 @@ const Form = () => {
                                 stats={stats}
                                 handleInput={handleInput}
                                 handleReload={handleReload}
+                                eventData={eventData}
                             />
                         )}
                     </Container>
