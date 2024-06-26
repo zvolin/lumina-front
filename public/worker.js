@@ -1,4 +1,4 @@
-import init, { run_worker } from './index.js';
+import init, { run_worker } from './lumina-node-wasm/index.js';
 
 async function worker_main() {
   let queued = [];

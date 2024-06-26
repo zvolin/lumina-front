@@ -115,7 +115,7 @@ const Form = () => {
                 
                 const peers = await node.connected_peers();
     
-                const head = node.get_network_head_header();
+                const head = await node.get_network_head_header();
     
                 const events = node.events_channel();
     
@@ -194,7 +194,9 @@ const Form = () => {
             let anotherConfig = config;
             setConfig({genesis_hash: config.genesis_hash, bootnodes: config.bootnodes});
 
-            const newNode = await new NodeClient(anotherConfig);
+            const workerUrl = new URL('/worker.js', window.location.origin);
+            const newNode = await new NodeClient(workerUrl.toJSON());
+            await newNode.start(anotherConfig);
             
             setNode(newNode);
             
