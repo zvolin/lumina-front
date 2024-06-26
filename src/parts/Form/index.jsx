@@ -122,7 +122,6 @@ const Form = () => {
                 if (head) {
                     events.onmessage = (event) => {
                         
-
                         const array = [];
                         event.data.forEach((value, key) => {
                             array.push([key, value])
@@ -132,7 +131,7 @@ const Form = () => {
 
                         // Update the state with the new event data
                         setEventData((prev) => {
-                            return [...prev, array];
+                            return [array, ...prev];
                         });
                     }
     

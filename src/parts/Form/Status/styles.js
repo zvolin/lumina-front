@@ -377,7 +377,7 @@ export const LogJacket = styled(Div)(props => css`
 export const LogScroller = styled(Div)(props => css`
     display: flex;
     flex-direction: column;
-    flex: 1;
+    // flex: 1;
     gap: 1.2rem;
     height: 100%;
     overflow-y: scroll;

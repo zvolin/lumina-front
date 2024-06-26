@@ -11,7 +11,7 @@ import { Item } from './styles';
 // Component
 // ------------
 const TerminalLogs = ({ data }) => {
-    console.dir(data);
+    // console.dir(data);
 
     return (
         <>
