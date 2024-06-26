@@ -117,16 +117,22 @@ const Form = () => {
     
                 const head = await node.get_network_head_header();
     
-                const events = node.events_channel();
+                const events = await node.events_channel();
     
                 if (head) {
                     events.onmessage = (event) => {
-                        // console.log(event.data)
-                        // setEventData([...eventData, event.data]);
+                        
+
+                        const array = [];
+                        event.data.forEach((value, key) => {
+                            array.push([key, value])
+                        })
+
+                        // console.dir(array);
 
                         // Update the state with the new event data
                         setEventData((prev) => {
-                            return [...prev, event.data];
+                            return [...prev, array];
                         });
                     }
     

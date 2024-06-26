@@ -16,11 +16,11 @@ export default function Scene({ ...props }) {
     </ShaderGradientCanvas>
   )
 
-  return (
-    <Canvas {...props}>
-      {/* @ts-ignore */}
-      <r3f.Out />
-      <Preload all />
-    </Canvas>
-  )
+  // return (
+  //   <Canvas {...props}>
+  //     {/* @ts-ignore */}
+  //     <r3f.Out />
+  //     <Preload all />
+  //   </Canvas>
+  // )
 }
