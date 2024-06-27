@@ -23,20 +23,23 @@ export const Bar = styled.div(props => css`
     max-height: .8rem !important;
     border-radius: .6rem;
     background: ${props.theme.colors.brand.bc4o30};
+    ${props.ranges.map((range) => css`
+        span {
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            left: ${range.start} !important;
+            height: 100%;
+            width: ${range.end - range.start}% !important;
+            border-radius: .6rem;
+            background: linear-gradient(180deg, #CDB4DB 0%, #A2D2FF 100%);
+            transition: width .3s ease;
+        }
+        `
+    )}
 
-    span {
-        position: absolute;
-        z-index: 1;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: ${props.$progressNumber}% !important;
-        border-radius: .6rem;
-        background: linear-gradient(180deg, #CDB4DB 0%, #A2D2FF 100%);
-        transition: width .3s ease;
-    }
 
-    ${props.$isBig && css`
+    /*${props.$isBig && css`
         min-height: 3.6rem !important;
         max-height: 3.6rem !important;
         min-width: 120%;
@@ -46,7 +49,7 @@ export const Bar = styled.div(props => css`
         span {
             border-radius: 6rem;
         }
-    `}
+    `}*/
 `);
 
 export const Num = styled.span(props => css`

@@ -8,6 +8,9 @@ import React, { useState, useEffect } from 'react';
 // ------------
 import { Jacket, Bar, Num } from './styles';
 
+import styled, { css } from 'styled-components';
+
+
 // Component
 // ------------
 const ProgressBar = ({ data, isBig }) => {
@@ -19,12 +22,12 @@ const ProgressBar = ({ data, isBig }) => {
     useEffect(() => {
         const progress = data.reduce((acc, range) => acc + (range.end - range.start), 0);
         setProgress(progress.toFixed(1));
+        
     }, [data]);
 
     return (
         <Jacket>
-
-            <Bar $presentRanges={presentRanges} $isBig={isBig}>
+            <Bar $ranges={presentRanges} $isBig={isBig}>
                 <span></span>
             </Bar>
             <Num $isBig={isBig}>
