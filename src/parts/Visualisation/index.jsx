@@ -54,7 +54,7 @@ const Visualisation = ({ data }) => {
     // NOTE • Interval highlight when data changes
     useEffect(() => {
         function getNumber(num) {
-            const numberBeforeX = num.substring(0, num.indexOf('x'));
+            const numberBeforeX = num && num.substring(0, num.indexOf('x'));
 
             return parseInt(numberBeforeX, 10);
         }

@@ -19,11 +19,13 @@ export const StickyJacket = styled(Div)(props => css`
     height: 100%;
 
     div + div {
-        height: calc(100% - 10rem);
+        ${bp.large`
+            height: calc(100% - 10rem);
 
-        > div {
-            height: 100%;
-        }
+            > div {
+                height: 100%;
+            }
+        `}
     }
 `);
 
@@ -89,6 +91,7 @@ export const Basic = styled(Div)(props => css`
 export const Block = styled(Div)(props => css`
     position: relative;
     min-width: 60%;
+    width: 100%;
 
     display: flex;
     flex-direction: column;
@@ -101,6 +104,7 @@ export const Block = styled(Div)(props => css`
 
     ${bp.large`
         padding: 3.6rem;
+        width: auto;
     `}
 
     div {
@@ -347,6 +351,24 @@ export const DataJacket = styled(Div)(props => css`
 
         width: 100%;
 
+        &.break-small {
+            flex-direction: column;
+            gap: .6rem;
+
+            a {
+                justify-content: flex-start;
+            }
+
+            ${bp.large`
+                flex-direction: row;
+                gap: none;
+
+                a {
+                    justify-content: center;
+                }
+            `}
+        }
+
         em {
             font-family: ${props.theme.font.type.heading};
             font-size: 1.4rem;
@@ -383,6 +405,7 @@ export const LogScroller = styled(Div)(props => css`
     overflow-y: scroll;
     min-height: calc(100% - 3.6rem);
     max-height: 20vh !important;
+    padding-right: 1.2rem;
 
     &::-webkit-scrollbar {
         display: block;

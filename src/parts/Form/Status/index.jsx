@@ -113,13 +113,13 @@ const StatusBoard = ({
                                                     <span>{stats.peerId}</span>
                                                 </div>
                                             </div>
-                                            <div>
+                                            <div className="break-small">
                                                 <div>
                                                     <em>Sync headers:</em>
                                                 </div>
                                                 <ProgressBar ranges={stats.storedRanges} />
                                             </div>
-                                            <div>
+                                            <div className="break-small">
                                                 <div>
                                                     <em>Block Height:</em>
                                                     <span>{stats.networkHeadHeight}</span>

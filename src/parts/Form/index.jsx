@@ -45,6 +45,7 @@ const Form = () => {
         networkHeadHeight: '',
         networkHeadHash: '',
         networkHeadDataSquare: '',
+        events: null,
     });
 
     // NOTE • Browser detection
@@ -78,6 +79,8 @@ const Form = () => {
         }
     };
 
+
+    // NOTE • Load the config and initialize the WASM module when the page loads
     useEffect(() => {
         const loadConfig = async () => {
             try {
@@ -108,18 +111,15 @@ const Form = () => {
         };
     }, []);
 
+    // NOTE • Run node status checks and data fetching
     useEffect(() => {
-        const interval = setInterval(async () => {
-            if (node) {
-                // const info = await node.syncer_info();
+        if(node) {
+            const timer = setInterval(async () => {
                 const info = await node.syncer_info();
-                
                 const peers = await node.connected_peers();
-    
                 const head = await node.get_network_head_header();
-    
                 const events = await node.events_channel();
-    
+
                 if (head) {
                     events.onmessage = (event) => {
                         
@@ -142,31 +142,49 @@ const Form = () => {
                     const syncingWindowTail = networkHead - syncingWindowHeight;
                     // Normalize stored ranges wrt their position in syncing window
                     let storedRanges = info.stored_headers.map((range) => {
-                        const adjustedStart = Math.max(range.start-syncingWindowTail, 0);
-                        const adjustedEnd = Math.max(range.end-syncingWindowTail, 0);
+                        const adjustedStart = Math.max(range.start, syncingWindowTail);
+                        const adjustedEnd = Math.max(range.end, syncingWindowTail);
                         return { 
-                            start: adjustedStart/syncingWindowHeight,
-                            end: adjustedEnd/syncingWindowHeight
+                            start: adjustedStart,
+                            end: adjustedEnd
                         };
                     }).filter((range) => (range.end-range.start) > 0.01); // skip small <1% ranges
-                    //console.log("normalised filtered:", storedRanges);
 
                     setStats({
                         ...stats,
                         storedRanges: storedRanges,
-                        //syncInfo: `${head_range.start}/${head_range.end}`,
+                        approxSyncerWindowSize: approxSyncerWindowSize,
                         connectedPeers: peers,
                         networkHeadHeight: networkHead,
                         networkHeadHash: head.commit.block_id.hash,
                         networkHeadDataSquare: `${head.dah.row_roots.length}x${head.dah.column_roots.length} shares`,
+                        events: events,
                     });
-    
+        
                     setNodeStatus('Data availablility sampling in progress');
                 }
-            }
-        }, 2000);
-        return () => clearInterval(interval);
+            }, 2000);
+    
+            return () => clearInterval(timer);
+        }
     }, [node]);
+
+    useEffect(() => {
+        if(stats.events) {
+            stats.events.onmessage = (event) => {
+                const array = [];
+                event.data.forEach((value, key) => {
+                    array.push([key, value])
+                });
+    
+                // Update the state with the new event data
+                setEventData((prev) => {
+                    return [array, ...prev];
+                });
+            };
+        }
+    }, [stats.events]);
+
 
     const handleGhash = (e) => {
         setConfig({
@@ -230,6 +248,8 @@ const Form = () => {
         }
     };
 
+
+    // NOTE • Node initiation (the terminal panel)
     const initiateNode = (e) => {
         e.preventDefault();
 
@@ -246,10 +266,11 @@ const Form = () => {
 
     useEffect(() => {
         if(nodeInitiate) {
+            startNode();
+            
             const timer = setTimeout(() => {
                 setNodeInitiate(false);
                 setStatusInitiated(true);
-                startNode();
             }, 10500);
     
             return () => clearTimeout(timer);

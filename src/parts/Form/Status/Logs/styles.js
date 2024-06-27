@@ -11,6 +11,8 @@ export const Item = styled(Div)(
 
         font-family: ${props.theme.font.type.heading};
         font-size: 1.2rem;
+        line-height: 1.4rem;
+        word-break: break-word;
 
         span {
             &:first-child {
