@@ -39,7 +39,7 @@ const Form = () => {
 
     const [stats, setStats] = useState({
         peerId: '',
-        syncInfo: '',
+        storedRanges: [],
         connectedPeers: [],
         networkHeadHeight: '',
         networkHeadHash: '',
@@ -134,14 +134,21 @@ const Form = () => {
                             return [array, ...prev];
                         });
                     }
-
-                    let head_range = info.stored_headers[info.stored_headers.length - 1];
     
+                    let networkHead = head.header.height;
+                    let storedRanges = info.stored_headers.map((range) => {
+                        return { 
+                            start: range.start/networkHead,
+                            end: range.end/networkHead
+                        };
+                    }).filter((range) => (range.end-range.start) > 0.01); // skip small <1% ranges
+
                     setStats({
                         ...stats,
-                        syncInfo: `${head_range.start}/${head_range.end}`,
+                        storedRanges: storedRanges,
+                        //syncInfo: `${head_range.start}/${head_range.end}`,
                         connectedPeers: peers,
-                        networkHeadHeight: head.header.height,
+                        networkHeadHeight: networkHead,
                         networkHeadHash: head.commit.block_id.hash,
                         networkHeadDataSquare: `${head.dah.row_roots.length}x${head.dah.column_roots.length} shares`,
                     });
