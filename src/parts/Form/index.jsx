@@ -16,6 +16,7 @@ import { browserName, browserVersion } from 'react-device-detect';
 // Styles
 // ------------
 import { Blanket, Jacket, ImageContainer, Container, Title, NetworkList, NetworkItem } from './styles';
+import { MaxEquation } from 'three';
 
 // Component
 // ------------
@@ -135,13 +136,19 @@ const Form = () => {
                         });
                     }
     
-                    let networkHead = head.header.height;
+                    const networkHead = head.header.height;
+                    const syncingWindowHeight = (30 * 24 * 60 * 60)/12;
+                    const syncingWindowTail = networkHead - syncingWindowHeight;
+                    //console.log("stored:", info.stored_headers);
                     let storedRanges = info.stored_headers.map((range) => {
+                        const adjustedStart = Math.max(range.start-syncingWindowTail, 0);
+                        const adjustedEnd = Math.max(range.end-syncingWindowTail, 0);
                         return { 
-                            start: range.start/networkHead,
-                            end: range.end/networkHead
+                            start: adjustedStart/syncingWindowHeight,
+                            end: adjustedEnd/syncingWindowHeight
                         };
                     }).filter((range) => (range.end-range.start) > 0.01); // skip small <1% ranges
+                    //console.log("normalised filtered:", storedRanges);
 
                     setStats({
                         ...stats,

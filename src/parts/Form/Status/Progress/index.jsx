@@ -13,21 +13,22 @@ import styled, { css } from 'styled-components';
 
 // Component
 // ------------
-const ProgressBar = ({ data, isBig }) => {
+const ProgressBar = ({ ranges, isBig }) => {
     // NOTE • State
-    const [presentRanges, setPresentRanges] = useState(0);
-    const [progress, setProgress] = useState(1);
+    //const [presentRanges, setPresentRanges] = useState([]);
+    const [progress, setProgress] = useState(0);
 
     // NOTE • Effect
     useEffect(() => {
-        const progress = data.reduce((acc, range) => acc + (range.end - range.start), 0);
-        setProgress(progress.toFixed(1));
+        console.log("ranges:", ranges);
+        const progress = ranges.reduce((acc, range) => acc + (range.end - range.start), 0);
+        setProgress(progress.toFixed(3) * 100);
         
-    }, [data]);
+    }, [ranges]);
 
     return (
         <Jacket>
-            <Bar $ranges={presentRanges} $isBig={isBig}>
+            <Bar $ranges={ranges} $isBig={isBig}>
                 <span></span>
             </Bar>
             <Num $isBig={isBig}>

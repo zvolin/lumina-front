@@ -83,10 +83,9 @@ const StatusBoard = ({
                                         <Block>
                                             <div>
                                                 <em>Synchronizing headers:</em>
-                                                <span>{stats.syncInfo}</span>
                                             </div>
                                             <div>
-                                                <ProgressBar data={stats.syncInfo} isBig />
+                                                <ProgressBar ranges={stats.storedRanges} isBig />
                                             </div>
                                         </Block>
 
@@ -117,9 +116,8 @@ const StatusBoard = ({
                                             <div>
                                                 <div>
                                                     <em>Sync headers:</em>
-                                                    <span>{stats.syncInfo}</span>
                                                 </div>
-                                                <ProgressBar data={stats.syncInfo} />
+                                                <ProgressBar ranges={stats.storedRanges} />
                                             </div>
                                             <div>
                                                 <div>

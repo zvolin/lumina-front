@@ -23,21 +23,30 @@ export const Bar = styled.div(props => css`
     max-height: .8rem !important;
     border-radius: .6rem;
     background: ${props.theme.colors.brand.bc4o30};
-    ${props.ranges.map((range) => css`
+${console.log("proooop", props)}
+    ${props.$ranges.map((range) => css`
         span {
             position: absolute;
             z-index: 1;
             top: 0;
-            left: ${range.start} !important;
+            left: ${range.start * 100}% !important;
             height: 100%;
-            width: ${range.end - range.start}% !important;
+            width: ${(range.end - range.start) * 100}% !important;
             border-radius: .6rem;
             background: linear-gradient(180deg, #CDB4DB 0%, #A2D2FF 100%);
             transition: width .3s ease;
+            
         }
         `
-    )}
+    )};
 
+    // TODO: somehow get those aligned
+    ${props.$ranges.map((range) => css`
+        p {
+            text: ${range.start}-${range.end}
+        }
+        `
+    )};
 
     /*${props.$isBig && css`
         min-height: 3.6rem !important;
