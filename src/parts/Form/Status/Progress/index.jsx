@@ -16,12 +16,14 @@ const ProgressBar = ({ data, isBig }) => {
 
     // NOTE • Effect
     useEffect(() => {
-        // Split data into 2 parts
-        const [current, total] = data.split('/').map(Number);
+        if(data) {
+            // Split data into 2 parts
+            const [current, total] = data.split('/').map(Number);
 
-        // Calculate progress as a percentage and set the value without rounding it
-        let progress = (current / total) * 100;
-        setProgress(progress);
+            // Calculate progress as a percentage and set the value without rounding it
+            let progress = (current / total) * 100;
+            setProgress(progress);
+        }
 
         // .toFixed(2) gives it 2 digits of precision after the dot, for example 45.56%
         // console.log('Progress:', progress.toFixed(2) + '%');
