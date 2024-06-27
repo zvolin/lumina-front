@@ -134,11 +134,12 @@ const Form = () => {
                             return [array, ...prev];
                         });
                     }
+
+                    let head_range = info.stored_headers[info.stored_headers.length - 1];
     
                     setStats({
                         ...stats,
-                        syncInfo: `${info.stored_headers[0].start}/${info.stored_headers[0].end}`,
-                        // syncInfo: `${info[0].start}/${info[0].end}`,
+                        syncInfo: `${head_range.start}/${head_range.end}`,
                         connectedPeers: peers,
                         networkHeadHeight: head.header.height,
                         networkHeadHash: head.commit.block_id.hash,
