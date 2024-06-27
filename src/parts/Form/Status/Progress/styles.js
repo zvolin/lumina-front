@@ -23,7 +23,6 @@ export const Bar = styled.div(props => css`
     max-height: .8rem !important;
     border-radius: .6rem;
     background: ${props.theme.colors.brand.bc4o30};
-${console.log("proooop", props)}
     ${props.$ranges.map((range) => css`
         span {
             position: absolute;

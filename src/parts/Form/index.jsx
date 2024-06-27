@@ -137,9 +137,10 @@ const Form = () => {
                     }
     
                     const networkHead = head.header.height;
-                    const syncingWindowHeight = (30 * 24 * 60 * 60)/12;
+                    // Predicted amount of headers in syncing window (last 30 days / ~12s block time)
+                    const approxHeadersToSync = (30 * 24 * 60 * 60)/12;
                     const syncingWindowTail = networkHead - syncingWindowHeight;
-                    //console.log("stored:", info.stored_headers);
+                    // Normalize stored ranges wrt their position in syncing window
                     let storedRanges = info.stored_headers.map((range) => {
                         const adjustedStart = Math.max(range.start-syncingWindowTail, 0);
                         const adjustedEnd = Math.max(range.end-syncingWindowTail, 0);
