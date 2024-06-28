@@ -129,8 +129,6 @@ const Form = () => {
                             array.push([key, value])
                         })
 
-                        // console.dir(array);
-
                         // Update the state with the new event data
                         setEventData((prev) => {
                             return [array, ...prev];

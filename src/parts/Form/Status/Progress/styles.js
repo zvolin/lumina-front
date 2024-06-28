@@ -24,7 +24,6 @@ export const Bar = styled.div(props => css`
     border-radius: .6rem;
     background: ${props.theme.colors.brand.bc4o30};
     ${props.$ranges.map((range) => css`
-        ${console.log("vv", (range.start / props.$max) * 100, ((range.end - range.start) / props.$max) * 100)}
         span {
             position: absolute;
             z-index: 1;

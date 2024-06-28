@@ -123,9 +123,8 @@ const StatusBoard = ({
                                                 <div>
                                                     <em>Sync window:</em>
                                                 </div>
-                                                <span>{stats.networkNeadHeight && css`
-                                                    {stats.networkHeadHeight}-{stats.networkHeadHeight - stats.approxSyncingWindowSize}
-                                                `}
+                                                <span>
+                                                    {Math.max(stats.networkHeadHeight, 0)}-{Math.max(stats.networkHeadHeight - stats.approxSyncingWindowSize, 0)}
                                                 </span>
                                             </div>
                                             <div className="break-small">

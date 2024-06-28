@@ -22,7 +22,7 @@ const ProgressBar = ({ ranges, max, window, isBig }) => {
     useEffect(() => {
         console.log("ranges:", ranges);
         const progress = ranges.reduce((acc, range) => acc + (range.end - range.start), 0);
-        setProgress((progress/max).toFixed(4) * 100);
+        setProgress((progress/window).toFixed(4) * 100);
         
     }, [ranges]);
 
