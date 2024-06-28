@@ -28,9 +28,9 @@ export const Bar = styled.div(props => css`
             position: absolute;
             z-index: 1;
             top: 0;
-            left: ${range.start * 100}% !important;
+            left: ${(range.start / range.max) * 100}% !important;
             height: 100%;
-            width: ${(range.end - range.start) * 100}% !important;
+            width: ${((range.end - range.start) / range.max) * 100}% !important;
             border-radius: .6rem;
             background: linear-gradient(180deg, #CDB4DB 0%, #A2D2FF 100%);
             transition: width .3s ease;

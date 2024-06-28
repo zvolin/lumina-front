@@ -13,7 +13,7 @@ import styled, { css } from 'styled-components';
 
 // Component
 // ------------
-const ProgressBar = ({ ranges, isBig }) => {
+const ProgressBar = ({ ranges, max, isBig }) => {
     // NOTE • State
     //const [presentRanges, setPresentRanges] = useState([]);
     const [progress, setProgress] = useState(0);
@@ -28,7 +28,7 @@ const ProgressBar = ({ ranges, isBig }) => {
 
     return (
         <Jacket>
-            <Bar $ranges={ranges} $isBig={isBig}>
+            <Bar $ranges={ranges} $max={max} $isBig={isBig}>
                 <span></span>
             </Bar>
             <Num $isBig={isBig}>
