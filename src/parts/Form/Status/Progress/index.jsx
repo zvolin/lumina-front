@@ -12,16 +12,13 @@ import { Jacket, Bar, Num, Tooltip, } from './styles';
 // ------------
 const ProgressBar = ({ ranges, max, window, isBig }) => {
     // NOTE • State
-    //const [presentRanges, setPresentRanges] = useState([]);
     const [progress, setProgress] = useState(0);
     const [tooltipActive, setTooltipActive] = useState(false);
 
     // NOTE • Effect
     useEffect(() => {
-        // console.log("ranges:", ranges);
         const progress = ranges.reduce((acc, range) => acc + (range.end - range.start), 0);
         setProgress((progress/window).toFixed(4) * 100);
-        
     }, [ranges]);
 
     // NOTE • Tooltip

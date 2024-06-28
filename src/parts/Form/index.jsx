@@ -16,7 +16,6 @@ import { browserName, browserVersion } from 'react-device-detect';
 // Styles
 // ------------
 import { Blanket, Jacket, ImageContainer, Container, Title, NetworkList, NetworkItem } from './styles';
-import { MaxEquation } from 'three';
 
 // Component
 // ------------
@@ -136,15 +135,17 @@ const Form = () => {
                         };
                     }).filter((range) => (range.end-range.start) > 10); // skip short < 10 header ranges
 
-                    setStats({
-                        ...stats,
-                        storedRanges: storedRanges,
-                        approxSyncingWindowSize: approxHeadersToSync,
-                        connectedPeers: peers,
-                        networkHeadHeight: networkHead,
-                        networkHeadHash: head.commit.block_id.hash,
-                        networkHeadDataSquare: `${head.dah.row_roots.length}x${head.dah.column_roots.length} shares`,
-                        events: events,
+                    setStats((stats) => {
+                        return {
+                            ...stats,
+                            storedRanges: storedRanges,
+                            approxSyncingWindowSize: approxHeadersToSync,
+                            connectedPeers: peers,
+                            networkHeadHeight: networkHead,
+                            networkHeadHash: head.commit.block_id.hash,
+                            networkHeadDataSquare: `${head.dah.row_roots.length}x${head.dah.column_roots.length} shares`,
+                            events: events,
+                        }
                     });
         
                     setNodeStatus('Data availablility sampling in progress');
@@ -210,6 +211,7 @@ const Form = () => {
         });
     }
 
+    // NOTE • Start the node
     const startNode = async () => {
         if (!config.genesis_hash || !config.bootnodes || config.bootnodes.length === 0) {
             alert('Genesis hash and at least one bootnode are required.');
@@ -221,19 +223,23 @@ const Form = () => {
 
             const workerUrl = new URL('/worker.js', window.location.origin);
             const newNode = await new NodeClient(workerUrl.toJSON());
+
             await newNode.start(anotherConfig);
             
             setNode(newNode);
+
+            const lpid = await newNode.local_peer_id();
             
-            setStats({
-                ...stats,
-                peerId: await newNode.local_peer_id(),
+            setStats((stats) => {
+                return {
+                    ...stats,
+                    peerId: lpid,
+                }
             });
         } catch (error) {
             console.error("Error initializing Node:", error);
         }
     };
-
 
     // NOTE • Node initiation (the terminal panel)
     const initiateNode = (e) => {
@@ -263,6 +269,7 @@ const Form = () => {
         }
     }, [nodeInitiate]);
 
+    // NOTE • Reload the page
     const handleReload = () => {
         window.location.reload();
     };
@@ -347,13 +354,12 @@ const Form = () => {
 
                     <h3>Genesis Hash</h3>
                     <Input value={config?.genesis_hash} onChange={handleGhash} placeholder="Genesis Hash..." />
-                    {/* {config.genesis_hash ? config.genesis_hash : `Loading...`} */}
 
                     <h3>Bootnodes</h3>
                     <Input value={config?.bootnodes} onChange={handleBnodes} placeholder="Bootnodes..." />
 
                     <div>
-                        <Button label="Start" onClick={initiateNode} disabled={node !== null || stats.peerId !== ''} />
+                        <Button label="Start" onClick={initiateNode} />
                     </div>
                 </Container>
             </Jacket>
