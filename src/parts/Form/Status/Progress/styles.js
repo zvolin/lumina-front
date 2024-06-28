@@ -23,6 +23,7 @@ export const Bar = styled.div(props => css`
     max-height: .8rem !important;
     border-radius: .6rem;
     background: ${props.theme.colors.brand.bc4o30};
+
     ${props.$ranges.map((range) => css`
         span {
             position: absolute;
@@ -37,11 +38,6 @@ export const Bar = styled.div(props => css`
         }
         `
     )};
-
-    // TODO: somehow get those aligned
-    ${props.$ranges.map((range) => (
-        <p>${range.start}-${range.end}</p>
-    ))}
 `);
 
 export const Num = styled.span(props => css`
@@ -53,5 +49,32 @@ export const Num = styled.span(props => css`
         font-size: 3.6rem !important;
         font-weight: 500;
         opacity: 1 !important;
+    `}
+`);
+
+export const Tooltip = styled.div(props => css`
+    position: absolute;
+    top: -1.2rem;
+    opacity: 0;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: row;
+    width: max-content;
+    height: auto !important;
+    gap: .6rem;
+
+    padding: 1.2rem;
+    border-radius: .6rem;
+    background: ${props.theme.colors.global.black};
+    color: ${props.theme.colors.global.white};
+    font-family: ${props.theme.font.type.heading};
+    font-size: 1.2rem;
+
+    transition: all .3s ${props.theme.easing.bezzy};
+
+    ${props.$isActive && css`
+        opacity: 1;
+        top: -3.6rem;
     `}
 `);

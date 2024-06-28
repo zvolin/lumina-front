@@ -122,19 +122,6 @@ const Form = () => {
                 const events = await node.events_channel();
 
                 if (head) {
-                    events.onmessage = (event) => {
-                        
-                        const array = [];
-                        event.data.forEach((value, key) => {
-                            array.push([key, value])
-                        })
-
-                        // Update the state with the new event data
-                        setEventData((prev) => {
-                            return [array, ...prev];
-                        });
-                    }
-    
                     const networkHead = head.header.height;
                     // Predicted amount of headers in syncing window (last 30 days / ~12s block time)
                     const approxHeadersToSync = (30 * 24 * 60 * 60)/12;
