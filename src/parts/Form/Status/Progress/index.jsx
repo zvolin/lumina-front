@@ -30,8 +30,8 @@ const ProgressBar = ({ ranges, max, window, isBig }) => {
     return (
         <Jacket onMouseEnter={handleTooltip} onMouseLeave={handleTooltip}>
             <Tooltip $isActive={tooltipActive}>
-                {ranges && ranges.map((range) => (
-                    <p>{range.start}-{range.end}</p>
+                {ranges && ranges.map((range, i) => (
+                    <p key={i}>{range.start}-{range.end}</p>
                 ))}
             </Tooltip>
             <Bar $ranges={ranges} $min={max - window} $window={window} $isBig={isBig}>

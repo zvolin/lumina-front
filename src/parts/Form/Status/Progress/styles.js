@@ -22,7 +22,7 @@ export const Bar = styled.div(props => css`
     min-height: .8rem !important;
     max-height: .8rem !important;
     border-radius: .6rem;
-    background: ${props.theme.colors.brand.bc4o30};
+    background: ${props.$isBig ? props.theme.colors.global.black05 : props.theme.colors.global.white};
 
     ${props.$ranges.map((range) => css`
         span {
