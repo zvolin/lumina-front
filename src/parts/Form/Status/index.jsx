@@ -83,10 +83,9 @@ const StatusBoard = ({
                                         <Block>
                                             <div>
                                                 <em>Synchronizing headers:</em>
-                                                <span>{stats.syncInfo}</span>
                                             </div>
                                             <div>
-                                                <ProgressBar data={stats.syncInfo} isBig />
+                                                <ProgressBar ranges={stats.storedRanges} max={stats.networkHeadHeight} window={stats.approxSyncingWindowSize} isBig />
                                             </div>
                                         </Block>
 
@@ -117,9 +116,16 @@ const StatusBoard = ({
                                             <div className="break-small">
                                                 <div>
                                                     <em>Sync headers:</em>
-                                                    <span>{stats.syncInfo}</span>
                                                 </div>
-                                                <ProgressBar data={stats.syncInfo} />
+                                                <ProgressBar ranges={stats.storedRanges} max={stats.networkHeadHeight} window={stats.approxSyncingWindowSize} isBig />
+                                            </div>
+                                            <div className="break-small">
+                                                <div>
+                                                    <em>Sync window:</em>
+                                                </div>
+                                                <span>
+                                                    {Math.max(stats.networkHeadHeight, 0)}-{Math.max(stats.networkHeadHeight - stats.approxSyncingWindowSize, 0)}
+                                                </span>
                                             </div>
                                             <div className="break-small">
                                                 <div>

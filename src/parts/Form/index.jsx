@@ -16,6 +16,7 @@ import { browserName, browserVersion } from 'react-device-detect';
 // Styles
 // ------------
 import { Blanket, Jacket, ImageContainer, Container, Title, NetworkList, NetworkItem } from './styles';
+import { MaxEquation } from 'three';
 
 // Component
 // ------------
@@ -39,7 +40,8 @@ const Form = () => {
 
     const [stats, setStats] = useState({
         peerId: '',
-        syncInfo: '',
+        storedRanges: [],
+        approxSyncingWindowSize: (30 * 24 * 60 * 60)/12,
         connectedPeers: [],
         networkHeadHeight: '',
         networkHeadHash: '',
@@ -120,11 +122,39 @@ const Form = () => {
                 const events = await node.events_channel();
 
                 if (head) {
+                    events.onmessage = (event) => {
+                        
+                        const array = [];
+                        event.data.forEach((value, key) => {
+                            array.push([key, value])
+                        })
+
+                        // Update the state with the new event data
+                        setEventData((prev) => {
+                            return [array, ...prev];
+                        });
+                    }
+    
+                    const networkHead = head.header.height;
+                    // Predicted amount of headers in syncing window (last 30 days / ~12s block time)
+                    const approxHeadersToSync = (30 * 24 * 60 * 60)/12;
+                    const syncingWindowTail = networkHead - approxHeadersToSync;
+                    // Normalize stored ranges wrt their position in syncing window
+                    let storedRanges = info.stored_headers.map((range) => {
+                        const adjustedStart = Math.max(range.start, syncingWindowTail);
+                        const adjustedEnd = Math.max(range.end, syncingWindowTail);
+                        return { 
+                            start: adjustedStart,
+                            end: adjustedEnd
+                        };
+                    }).filter((range) => (range.end-range.start) > 10); // skip short < 10 header ranges
+
                     setStats({
                         ...stats,
-                        syncInfo: `${info.stored_headers[0].start}/${info.stored_headers[0].end}`,
+                        storedRanges: storedRanges,
+                        approxSyncingWindowSize: approxHeadersToSync,
                         connectedPeers: peers,
-                        networkHeadHeight: head.header.height,
+                        networkHeadHeight: networkHead,
                         networkHeadHash: head.commit.block_id.hash,
                         networkHeadDataSquare: `${head.dah.row_roots.length}x${head.dah.column_roots.length} shares`,
                         events: events,

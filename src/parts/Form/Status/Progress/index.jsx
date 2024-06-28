@@ -8,34 +8,31 @@ import React, { useState, useEffect } from 'react';
 // ------------
 import { Jacket, Bar, Num } from './styles';
 
+import styled, { css } from 'styled-components';
+
+
 // Component
 // ------------
-const ProgressBar = ({ data, isBig }) => {
+const ProgressBar = ({ ranges, max, window, isBig }) => {
     // NOTE • State
+    //const [presentRanges, setPresentRanges] = useState([]);
     const [progress, setProgress] = useState(0);
 
     // NOTE • Effect
     useEffect(() => {
-        if(data) {
-            // Split data into 2 parts
-            const [current, total] = data.split('/').map(Number);
-
-            // Calculate progress as a percentage and set the value without rounding it
-            let progress = (current / total) * 100;
-            setProgress(progress);
-        }
-
-        // .toFixed(2) gives it 2 digits of precision after the dot, for example 45.56%
-        // console.log('Progress:', progress.toFixed(2) + '%');
-    }, [data]);
+        console.log("ranges:", ranges);
+        const progress = ranges.reduce((acc, range) => acc + (range.end - range.start), 0);
+        setProgress((progress/window).toFixed(4) * 100);
+        
+    }, [ranges]);
 
     return (
         <Jacket>
-            <Bar $progressNumber={progress} $isBig={isBig}>
+            <Bar $ranges={ranges} $min={max - window} $window={window} $isBig={isBig}>
                 <span></span>
             </Bar>
             <Num $isBig={isBig}>
-                {progress ? progress.toFixed(2) : '0'}%
+                {progress ? progress.toLocaleString(undefined, {maximumFractionDigits:2}) : '0'}%
             </Num>
         </Jacket>
     );
