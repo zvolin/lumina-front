@@ -24,40 +24,25 @@ export const Bar = styled.div(props => css`
     border-radius: .6rem;
     background: ${props.theme.colors.brand.bc4o30};
     ${props.$ranges.map((range) => css`
+        ${console.log("vv", (range.start / props.$max) * 100, ((range.end - range.start) / props.$max) * 100)}
         span {
             position: absolute;
             z-index: 1;
             top: 0;
-            left: ${(range.start / range.max) * 100}% !important;
+            left: ${((range.start - props.$min) / props.$window) * 100}% !important;
             height: 100%;
-            width: ${((range.end - range.start) / range.max) * 100}% !important;
+            width: ${((range.end - range.start) / props.$window) * 100}% !important;
             border-radius: .6rem;
             background: linear-gradient(180deg, #CDB4DB 0%, #A2D2FF 100%);
-            transition: width .3s ease;
-            
+            transition: width .3s ease; 
         }
         `
     )};
 
     // TODO: somehow get those aligned
-    ${props.$ranges.map((range) => css`
-        p {
-            text: ${range.start}-${range.end}
-        }
-        `
-    )};
-
-    /*${props.$isBig && css`
-        min-height: 3.6rem !important;
-        max-height: 3.6rem !important;
-        min-width: 120%;
-        max-width: auto;
-        border-radius: 6rem;
-
-        span {
-            border-radius: 6rem;
-        }
-    `}*/
+    ${props.$ranges.map((range) => (
+        <p>${range.start}-${range.end}</p>
+    ))}
 `);
 
 export const Num = styled.span(props => css`

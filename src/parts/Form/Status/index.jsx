@@ -85,7 +85,7 @@ const StatusBoard = ({
                                                 <em>Synchronizing headers:</em>
                                             </div>
                                             <div>
-                                                <ProgressBar ranges={stats.storedRanges} isBig />
+                                                <ProgressBar ranges={stats.storedRanges} max={stats.networkHeadHeight} window={stats.approxSyncingWindowSize} isBig />
                                             </div>
                                         </Block>
 
@@ -117,7 +117,16 @@ const StatusBoard = ({
                                                 <div>
                                                     <em>Sync headers:</em>
                                                 </div>
-                                                <ProgressBar ranges={stats.storedRanges} max={stats.approxSyncingWindowSize}/>
+                                                <ProgressBar ranges={stats.storedRanges} max={stats.networkHeadHeight} window={stats.approxSyncingWindowSize} isBig />
+                                            </div>
+                                            <div className="break-small">
+                                                <div>
+                                                    <em>Sync window:</em>
+                                                </div>
+                                                <span>{stats.networkNeadHeight && css`
+                                                    {stats.networkHeadHeight}-{stats.networkHeadHeight - stats.approxSyncingWindowSize}
+                                                `}
+                                                </span>
                                             </div>
                                             <div className="break-small">
                                                 <div>
