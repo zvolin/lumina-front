@@ -178,7 +178,7 @@ const StatusBoard = ({
                                 <Button icoL icon="back" label="Restart" onClick={handleReload} />
                                 <LinkGroup>
                                     <Link icon="mint" label="Mint NFT" link="http://www.google.com" disabled />
-                                    <Link icon="celestia" label="Learn more" link="https://celestia.org/run-a-light-node/" rel="noopener noreferrer" />
+                                    <Link icon="celestia" label="Github" link="https://github.com/eigerco/lumina" rel="noopener noreferrer" />
                                 </LinkGroup>
                             </ButtonJacket>
                         </Col>
