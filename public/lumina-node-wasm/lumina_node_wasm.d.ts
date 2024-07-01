@@ -10,24 +10,6 @@ export function setup_logging(): void;
 */
 export function run_worker(queued_events: (MessageEvent)[]): Promise<void>;
 /**
-* Type of worker to run lumina in. Allows overriding automatically detected worker kind
-* (which should usually be appropriate).
-*/
-export enum NodeWorkerKind {
-/**
-* Run in [`SharedWorker`]
-*
-* [`SharedWorker`]: https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker
-*/
-  Shared = 0,
-/**
-* Run in [`Worker`]
-*
-* [`Worker`]: https://developer.mozilla.org/en-US/docs/Web/API/Worker
-*/
-  Dedicated = 1,
-}
-/**
 * Supported Celestia networks.
 */
 export enum Network {
@@ -47,6 +29,24 @@ export enum Network {
 * Private local network.
 */
   Private = 3,
+}
+/**
+* Type of worker to run lumina in. Allows overriding automatically detected worker kind
+* (which should usually be appropriate).
+*/
+export enum NodeWorkerKind {
+/**
+* Run in [`SharedWorker`]
+*
+* [`SharedWorker`]: https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker
+*/
+  Shared = 0,
+/**
+* Run in [`Worker`]
+*
+* [`Worker`]: https://developer.mozilla.org/en-US/docs/Web/API/Worker
+*/
+  Dedicated = 1,
 }
 /**
 */
@@ -92,6 +92,32 @@ export class NodeClient {
 * Create a new connection to a Lumina node running in a Shared Worker.
 * Note that single Shared Worker can be accessed from multiple tabs, so Lumina may
 * already have been started. Otherwise it needs to be started with [`NodeDriver::start`].
+*
+* Requires serving a worker script and providing an url to it. The script should look like
+* so (the import statement may vary depending on your js-bundler):
+* ```js
+* import init, { run_worker } from 'lumina_node_wasm.js';
+*
+* Error.stackTraceLimit = 99;
+*
+* // for SharedWorker we queue incoming connections
+* // for dedicated Worker we queue incoming messages (coming from the single client)
+* let queued = [];
+* if (typeof SharedWorkerGlobalScope !== 'undefined' && self instanceof SharedWorkerGlobalScope) {
+*   onconnect = (event) => {
+*     queued.push(event)
+*   }
+* } else {
+*   onmessage = (event) => {
+*     queued.push(event);
+*   }
+* }
+*
+* init().then(() => {
+*   console.log("starting worker, queued messages: ", queued.length);
+*   run_worker(queued);
+* })
+* ```
 * @param {string} worker_script_url
 * @param {NodeWorkerKind | undefined} [worker_type]
 */
@@ -264,6 +290,24 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
+  readonly __wbg_networkinfosnapshot_free: (a: number) => void;
+  readonly __wbg_set_networkinfosnapshot_num_peers: (a: number, b: number) => void;
+  readonly __wbg_connectioncounterssnapshot_free: (a: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_connections: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_connections: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_pending: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_pending: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_pending_incoming: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_pending_incoming: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_pending_outgoing: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_pending_outgoing: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_established_incoming: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_established_incoming: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_established_outgoing: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_established_outgoing: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_established: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_established: (a: number, b: number) => void;
+  readonly __wbg_get_networkinfosnapshot_num_peers: (a: number) => number;
   readonly __wbg_nodeconfig_free: (a: number) => void;
   readonly __wbg_get_nodeconfig_network: (a: number) => number;
   readonly __wbg_set_nodeconfig_network: (a: number, b: number) => void;
@@ -299,24 +343,6 @@ export interface InitOutput {
   readonly nodeconfig_default: (a: number) => number;
   readonly setup_logging: () => void;
   readonly run_worker: (a: number, b: number) => number;
-  readonly __wbg_networkinfosnapshot_free: (a: number) => void;
-  readonly __wbg_set_networkinfosnapshot_num_peers: (a: number, b: number) => void;
-  readonly __wbg_connectioncounterssnapshot_free: (a: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_connections: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_connections: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_pending: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_pending: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_pending_incoming: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_pending_incoming: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_pending_outgoing: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_pending_outgoing: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_established_incoming: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_established_incoming: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_established_outgoing: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_established_outgoing: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_established: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_established: (a: number, b: number) => void;
-  readonly __wbg_get_networkinfosnapshot_num_peers: (a: number) => number;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_export_2: WebAssembly.Table;
