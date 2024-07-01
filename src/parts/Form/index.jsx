@@ -38,12 +38,6 @@ const Form = () => {
     const [nodeStatus, setNodeStatus] = useState('Downloading');
     const [eventData, setEventData] = useState([]);
 
-    const [nodeInfo, setNodeInfo] = useState({
-        info: null,
-        peers: null,
-        head: null,
-    });
-
     const [stats, setStats] = useState({
         peerId: '',
         storedRanges: [],
@@ -125,31 +119,13 @@ const Form = () => {
                 const peers = await node.connected_peers();
                 const head = await node.get_network_head_header();
 
-                setNodeInfo({
-                    info: info,
-                    peers: peers,
-                    head: head,
-                });
-            }, 2000);
-
-            return () => clearInterval(timer);
-        }
-    }, [node]);
-
-    useEffect(() => {
-        if(node) {
-            const timer = setInterval(async () => {
-                // const info = await node.syncer_info();
-                // const peers = await node.connected_peers();
-                // const head = await node.get_network_head_header();
-
-                if (nodeInfo.head) {
-                    const networkHead = nodeInfo.head.header.height;
+                if (head) {
+                    const networkHead = head.header.height;
                     // Predicted amount of headers in syncing window (last 30 days / ~12s block time)
                     const approxHeadersToSync = (30 * 24 * 60 * 60)/12;
                     const syncingWindowTail = networkHead - approxHeadersToSync;
                     // Normalize stored ranges wrt their position in syncing window
-                    let storedRanges = nodeInfo.info.stored_headers.map((range) => {
+                    let storedRanges = info.stored_headers.map((range) => {
                         const adjustedStart = Math.max(range.start, syncingWindowTail);
                         const adjustedEnd = Math.max(range.end, syncingWindowTail);
                         return { 
@@ -163,10 +139,10 @@ const Form = () => {
                             ...stats,
                             storedRanges: storedRanges,
                             approxSyncingWindowSize: approxHeadersToSync,
-                            connectedPeers: nodeInfo.peers,
+                            connectedPeers: peers,
                             networkHeadHeight: networkHead,
-                            networkHeadHash: nodeInfo.head.commit.block_id.hash,
-                            networkHeadDataSquare: `${nodeInfo.head.dah.row_roots.length}x${nodeInfo.head.dah.column_roots.length} shares`,
+                            networkHeadHash: head.commit.block_id.hash,
+                            networkHeadDataSquare: `${head.dah.row_roots.length}x${head.dah.column_roots.length} shares`,
                         }
                     });
         
@@ -176,7 +152,7 @@ const Form = () => {
     
             return () => clearInterval(timer);
         }
-    }, [node, nodeInfo]);
+    }, [node]);
 
 
     const handleGhash = (e) => {
