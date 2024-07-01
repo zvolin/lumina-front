@@ -82,7 +82,7 @@ const StatusBoard = ({
                                     <Basic>
                                         <Block>
                                             <div>
-                                                <em>Synchronizing headers:</em>
+                                                <em>Backwards syncing:</em>
                                             </div>
                                             <div>
                                                 <ProgressBar ranges={stats.storedRanges} max={stats.networkHeadHeight} window={stats.approxSyncingWindowSize} isBig />
