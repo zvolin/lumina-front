@@ -205,11 +205,6 @@ const Form = () => {
 
             const workerUrl = new URL('/worker.js', window.location.origin);
             const newNode = await new NodeClient(workerUrl.toJSON());
-
-            await newNode.start(anotherConfig);
-            
-            setNode(newNode);
-
             const events = await newNode.events_channel();
             events.onmessage = (event) => {
                 const array = [];
@@ -222,7 +217,12 @@ const Form = () => {
                     return [array, ...prev];
                 });
             };
+
+            await newNode.start(anotherConfig);
+
+            setNode(newNode);
             setEvents(events);
+
 
             const lpid = await newNode.local_peer_id();
             
