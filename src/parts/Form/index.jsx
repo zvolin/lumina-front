@@ -26,6 +26,7 @@ const Form = () => {
     // NOTE • States
     const [display, setDisplay] = useState(false);
     const [node, setNode] = useState(null);
+    const [_events, setEvents] = useState(null);
     const [config, setConfig] = useState({});
     const [go, setGo] = useState(false);
     const [modalOpen, setModalOpen] = useState({
@@ -51,7 +52,6 @@ const Form = () => {
         networkHeadHeight: '',
         networkHeadHash: '',
         networkHeadDataSquare: '',
-        events: null,
     });
 
     // NOTE • Browser detection
@@ -142,7 +142,6 @@ const Form = () => {
                 // const info = await node.syncer_info();
                 // const peers = await node.connected_peers();
                 // const head = await node.get_network_head_header();
-                const events = await node.events_channel();
 
                 if (nodeInfo.head) {
                     const networkHead = nodeInfo.head.header.height;
@@ -168,7 +167,6 @@ const Form = () => {
                             networkHeadHeight: networkHead,
                             networkHeadHash: nodeInfo.head.commit.block_id.hash,
                             networkHeadDataSquare: `${nodeInfo.head.dah.row_roots.length}x${nodeInfo.head.dah.column_roots.length} shares`,
-                            events: events,
                         }
                     });
         
@@ -179,22 +177,6 @@ const Form = () => {
             return () => clearInterval(timer);
         }
     }, [node, nodeInfo]);
-
-    useEffect(() => {
-        if(stats.events) {
-            stats.events.onmessage = (event) => {
-                const array = [];
-                event.data.forEach((value, key) => {
-                    array.push([key, value])
-                });
-    
-                // Update the state with the new event data
-                setEventData((prev) => {
-                    return [array, ...prev];
-                });
-            };
-        }
-    }, [stats.events]);
 
 
     const handleGhash = (e) => {
@@ -251,6 +233,20 @@ const Form = () => {
             await newNode.start(anotherConfig);
             
             setNode(newNode);
+
+            const events = await newNode.events_channel();
+            events.onmessage = (event) => {
+                const array = [];
+                event.data.forEach((value, key) => {
+                    array.push([key, value])
+                });
+
+                // Update the state with the new event data
+                setEventData((prev) => {
+                    return [array, ...prev];
+                });
+            };
+            setEvents(events);
 
             const lpid = await newNode.local_peer_id();
             
