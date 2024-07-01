@@ -277,7 +277,7 @@ const Form = () => {
             }
         });
         setNodeInitiate(true);
-        setNodeStatus('Node Initiated');
+        setNodeStatus('Node Initializing');
     };
 
     useEffect(() => {
