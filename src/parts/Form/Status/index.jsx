@@ -82,7 +82,7 @@ const StatusBoard = ({
                                     <Basic>
                                         <Block>
                                             <div>
-                                                <em>Backwards syncing:</em>
+                                                <em>Backwards syncing</em>
                                             </div>
                                             <div>
                                                 <ProgressBar ranges={stats.storedRanges} max={stats.networkHeadHeight} window={stats.approxSyncingWindowSize} isBig />
@@ -91,7 +91,7 @@ const StatusBoard = ({
 
                                         <Block>
                                             <div>
-                                                <em>Block Height:</em>
+                                                <em>Latest Celestia Block</em>
                                                 <span className="isbig">{stats.networkHeadHeight}</span>
                                             </div>
                                             <CelLink href={`https://celenium.io/block/` + stats.networkHeadHeight} rel="noopener noreferrer" target="_blank">
