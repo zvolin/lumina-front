@@ -350,6 +350,23 @@ function __wbg_adapter_431(arg0, arg1, arg2, arg3) {
 }
 
 /**
+* Type of worker to run lumina in. Allows overriding automatically detected worker kind
+* (which should usually be appropriate).
+*/
+export const NodeWorkerKind = Object.freeze({
+/**
+* Run in [`SharedWorker`]
+*
+* [`SharedWorker`]: https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker
+*/
+Shared:0,"0":"Shared",
+/**
+* Run in [`Worker`]
+*
+* [`Worker`]: https://developer.mozilla.org/en-US/docs/Web/API/Worker
+*/
+Dedicated:1,"1":"Dedicated", });
+/**
 * Supported Celestia networks.
 */
 export const Network = Object.freeze({
@@ -369,23 +386,6 @@ Mocha:2,"2":"Mocha",
 * Private local network.
 */
 Private:3,"3":"Private", });
-/**
-* Type of worker to run lumina in. Allows overriding automatically detected worker kind
-* (which should usually be appropriate).
-*/
-export const NodeWorkerKind = Object.freeze({
-/**
-* Run in [`SharedWorker`]
-*
-* [`SharedWorker`]: https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker
-*/
-Shared:0,"0":"Shared",
-/**
-* Run in [`Worker`]
-*
-* [`Worker`]: https://developer.mozilla.org/en-US/docs/Web/API/Worker
-*/
-Dedicated:1,"1":"Dedicated", });
 
 const ConnectionCountersSnapshotFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
