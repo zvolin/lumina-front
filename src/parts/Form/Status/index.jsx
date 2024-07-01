@@ -1,6 +1,6 @@
 // Imports
 // ------------
-import React, { useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Input from '../Input';
 import Button from '@parts/Button';
 import Link from '@parts/Link';
@@ -50,6 +50,16 @@ const StatusBoard = ({
 
     // NOTE • Handlers
     const handleTab = (tab) => () => setTab(tab);
+
+    // NOTE • Refs
+    const logWindow = useRef();
+
+    // NOTE • Render
+    useEffect(() => {
+        if (logWindow.current) {
+            logWindow.current.scrollTop = logWindow.current.scrollHeight;
+        }
+    }, [eventData])
 
     return (
         <>
@@ -153,7 +163,7 @@ const StatusBoard = ({
                                         </DataJacket>
                                         <LogJacket>
                                             <Title>Event logs</Title>
-                                            <LogScroller>
+                                            <LogScroller ref={logWindow}>
                                                 <Logs data={eventData} />
                                             </LogScroller>
                                         </LogJacket>

@@ -221,7 +221,7 @@ const Form = () => {
                     + ": " + event.data.get("message");
 
                 setEventData((prev) => {
-                    return [log, ...prev];
+                    return [...prev, log];
                 });
             }
 
