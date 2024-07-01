@@ -172,7 +172,7 @@ const Form = () => {
                         }
                     });
         
-                    setNodeStatus('Data availablility sampling in progress');
+                    setNodeStatus('Data availability sampling in progress');
                 }
             }, 2000);
     
