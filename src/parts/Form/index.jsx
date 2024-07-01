@@ -205,24 +205,35 @@ const Form = () => {
 
             const workerUrl = new URL('/worker.js', window.location.origin);
             const newNode = await new NodeClient(workerUrl.toJSON());
+
+            const logEvent = (event) => {
+                // Skip noisy events
+                if (event.data.get("event").type == "share_sampling_result") {
+                    return;
+                }
+
+                const time = new Date(event.data.get("time"));
+
+                const log = time.getHours().toString().padStart(2, '0')
+                    + ":" + time.getMinutes().toString().padStart(2, '0')
+                    + ":" + time.getSeconds().toString().padStart(2, '0')
+                    + "." + time.getMilliseconds().toString().padStart(3, '0')
+                    + ": " + event.data.get("message");
+
+                setEventData((prev) => {
+                    return [log, ...prev];
+                });
+            }
+
             const events = await newNode.events_channel();
             events.onmessage = (event) => {
-                const array = [];
-                event.data.forEach((value, key) => {
-                    array.push([key, value])
-                });
-
-                // Update the state with the new event data
-                setEventData((prev) => {
-                    return [array, ...prev];
-                });
+                logEvent(event);
             };
 
             await newNode.start(anotherConfig);
 
             setNode(newNode);
             setEvents(events);
-
 
             const lpid = await newNode.local_peer_id();
             
