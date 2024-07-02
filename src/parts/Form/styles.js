@@ -56,6 +56,13 @@ export const Container = styled(Div)(props => css`
 
     ${bp.large` padding: 3.6rem; `}
 
+    h3 {
+        small {
+            font-size: 1.3rem;
+            opacity: 0.6;
+        }
+    }
+
     ${props.$begin && css`
         z-index: 1;
         background: ${props.theme.colors.global.black};
