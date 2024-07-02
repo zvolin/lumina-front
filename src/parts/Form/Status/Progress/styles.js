@@ -24,8 +24,8 @@ export const Bar = styled.div(props => css`
     border-radius: .6rem;
     background: ${props.$isBig ? props.theme.colors.global.black05 : props.theme.colors.global.white};
 
-    ${props.$ranges.map((range) => css`
-        span {
+    ${props.$ranges.map((range, index) => css`
+        span:nth-of-type(${index + 1}) {
             position: absolute;
             z-index: 1;
             top: 0;
