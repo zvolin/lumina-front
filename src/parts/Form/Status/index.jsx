@@ -191,7 +191,7 @@ const StatusBoard = ({
                             <ButtonJacket>
                                 <Button icoL icon="back" label="Restart" onClick={handleReload} />
                                 <LinkGroup>
-                                    <Link icon="mint" label="Mint NFT" link="http://www.google.com" disabled />
+                                    <Link icon="mint" label="Mint NFT" link="http://www.google.com" disabled={stats.syncedPercentage < 15} />
                                     <Link icon="github" link="https://github.com/eigerco/lumina" rel="noopener noreferrer" />
                                     <Link icon="eiger" link="https://www.eiger.co/" rel="noopener noreferrer" />
                                 </LinkGroup>
