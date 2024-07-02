@@ -5,6 +5,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import init, { NodeClient, NodeConfig } from '@public/lumina-node-wasm';
 import Input from './Input';
+import Textarea from './Textarea';
 import Button from '@parts/Button';
 import Status from './Status';
 import Terminal from './Terminal';
@@ -25,9 +26,17 @@ const Form = () => {
 
     // NOTE • States
     const [display, setDisplay] = useState(false);
-    const [node, setNode] = useState(null);
-    const [_events, setEvents] = useState(null);
-    const [config, setConfig] = useState({});
+    const [node, setNode] = useState();
+    const [_events, setEvents] = useState();
+    const [network, setNetwork] = useState();
+    const [hash, setHash] = useState('');
+    const [bootnodes, setBootnodes] = useState([]);
+
+    const [combinedConfig, setCombinedConfig] = useState({
+        genesis_hash: hash,
+        bootnodes: bootnodes,
+    });
+
     const [go, setGo] = useState(false);
     const [modalOpen, setModalOpen] = useState({
         modal1: false,
@@ -56,8 +65,8 @@ const Form = () => {
         } else (
             setDisplay(false)
         )
-    })
-
+    }, []);
+    
     // NOTE • Initialisation
     const fetchConfig = async () => {
         try {
@@ -69,8 +78,6 @@ const Form = () => {
     
             // Perform validation if necessary
             const config = NodeConfig.default(json.network);
-
-            // console.log('Fetched config:', config); // Debugging
     
             return config;
         } catch (error) {
@@ -80,35 +87,35 @@ const Form = () => {
     };
 
 
+    const loadConfig = async () => {
+        try {
+            const tempConfig = await fetchConfig();
+            if (tempConfig) {
+                // console.log('Setting config to state:', tempConfig); // Debugging
+
+                setNetwork(tempConfig.network);
+                setHash(tempConfig.genesis_hash);
+                setBootnodes(tempConfig.bootnodes);
+                setCombinedConfig(tempConfig);
+            }
+        } catch (error) {
+            console.error('Failed to fetch config:', error);
+        }
+    };
+
+    const initWASM = async () => {
+        try {
+            await init();
+            loadConfig();
+        } catch (error) {
+            console.error('Failed to initialize WASM:', error);
+        }
+    };
+
+
     // NOTE • Load the config and initialize the WASM module when the page loads
     useEffect(() => {
-        const loadConfig = async () => {
-            try {
-                const tempConfig = await fetchConfig();
-                if (tempConfig) {
-                    // console.log('Setting config to state:', tempConfig); // Debugging
-                    setConfig(tempConfig);
-                }
-            } catch (error) {
-                console.error('Failed to fetch config:', error);
-            }
-        };
-
-        const initWASM = async () => {
-            try {
-                await init();
-                loadConfig();
-            } catch (error) {
-                console.error('Failed to initialize WASM:', error);
-            }
-        };
-
         initWASM();
-
-        // Cleanup function if necessary
-        return () => {
-            // Perform any cleanup operations if needed
-        };
     }, []);
 
     // NOTE • Run node status checks and data fetching
@@ -155,35 +162,32 @@ const Form = () => {
     }, [node]);
 
 
+    const handleNetwork = (e) => {
+        e.preventDefault();
+
+        const number = parseInt(e.target.value);
+        setNetwork(number);
+        NodeConfig.default(number);
+    }
+
     const handleGhash = (e) => {
-        setConfig({
-            ...config,
-            genesis_hash: e.target.value
-        });
+        e.preventDefault();
+
+        setHash(e.target.value);
     }
 
     const handleBnodes = (e) => {
-        setConfig({
-            ...config,
-            bootnodes: [e.target.value]
-        });
+        e.preventDefault();
+
+        setBootnodes(e.target.value);
     }
 
     const handleBegin = () => {
         setBegin(true);
-        setModalOpen(prev => {
-            return {
-                ...prev,
-                modal1: true,
-            }
-        });
-    }
-
-    const handleNetwork = (e) => {
-        setConfig({
-            ...config,
-            network: Number(e)
-        });
+        setModalOpen(prev => ({
+            ...prev,
+            modal1: true,
+        }));
     }
 
     const handleInput = (e) => {
@@ -195,13 +199,13 @@ const Form = () => {
 
     // NOTE • Start the node
     const startNode = async () => {
-        if (!config.genesis_hash || !config.bootnodes || config.bootnodes.length === 0) {
+        if (!hash || !bootnodes || bootnodes.length === 0) {
             alert('Genesis hash and at least one bootnode are required.');
             return;
         }
         try {
-            let anotherConfig = config;
-            setConfig({genesis_hash: config.genesis_hash, bootnodes: config.bootnodes});
+            let newConfig = combinedConfig;
+            setCombinedConfig({genesis_hash: hash, bootnodes: bootnodes});
 
             const workerUrl = new URL('/worker.js', window.location.origin);
             const newNode = await new NodeClient(workerUrl.toJSON());
@@ -230,21 +234,20 @@ const Form = () => {
                 logEvent(event);
             };
 
-            await newNode.start(anotherConfig);
+            await newNode.start(newConfig);
 
             setNode(newNode);
             setEvents(events);
 
             const lpid = await newNode.local_peer_id();
             
-            setStats((stats) => {
-                return {
-                    ...stats,
-                    peerId: lpid,
-                }
-            });
+            setStats(prev => ({
+                ...prev,
+                peerId: lpid,
+            }));
         } catch (error) {
             console.error("Error initializing Node:", error);
+            console.dir(error);
         }
     };
 
@@ -253,12 +256,10 @@ const Form = () => {
         e.preventDefault();
 
         setGo(true);
-        setModalOpen(prev => {
-            return {
-                ...prev,
-                modal2: true,
-            }
-        });
+        setModalOpen(prev => ({
+            ...prev,
+            modal2: true,
+        }));
         setNodeInitiate(true);
         setNodeStatus('Node Initializing');
     };
@@ -339,31 +340,31 @@ const Form = () => {
 
                     <h3>Network</h3>
                     <NetworkList>
-                        <NetworkItem $selected={config?.network === 0}>
+                        <NetworkItem $selected={network === 0}>
                             <label>
-                                <input type="radio" name="network" value="0" onChange={() => handleNetwork('0')} />
+                                <input type="radio" name="network" value="0" onChange={(e) => handleNetwork(e)} />
                                 <Icon type="check" /><span>Mainnet</span>
                             </label>
                         </NetworkItem>
-                        <NetworkItem $selected={config?.network === 1} $disabled>
+                        <NetworkItem $selected={network === 1} $disabled>
                             <label>
-                                <input type="radio" name="network" value="1" onChange={() => handleNetwork('1')} />
+                                <input type="radio" name="network" value="1" onChange={(e) => handleNetwork(e)} />
                                 <Icon type="check" /><span>Arabica</span>
                             </label>
                         </NetworkItem>
-                        <NetworkItem $selected={config?.network === 2} $disabled>
+                        <NetworkItem $selected={network === 2} $disabled>
                             <label>
-                                <input type="radio" name="network" value="2" onChange={() => handleNetwork('2')} />
+                                <input type="radio" name="network" value="2" onChange={(e) => handleNetwork(e)} />
                                 <Icon type="check" /><span>Mocha</span>
                             </label>
                         </NetworkItem>
                     </NetworkList>
 
                     <h3>Genesis Hash</h3>
-                    <Input value={config?.genesis_hash} onChange={handleGhash} placeholder="Genesis Hash..." />
+                    <Input value={hash && hash} onChange={(e) => handleGhash(e)} placeholder="Genesis Hash..." />
 
-                    <h3>Bootnodes</h3>
-                    <Input value={config?.bootnodes} onChange={handleBnodes} placeholder="Bootnodes..." />
+                    <h3>Bootnodes <small>(Comma separate your addresses)</small></h3>
+                    <Textarea value={bootnodes && bootnodes} onChange={(e) => handleBnodes(e)} placeholder="Bootnodes..." />
 
                     <div>
                         <Button label="Start" onClick={initiateNode} />

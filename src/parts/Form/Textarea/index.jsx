@@ -10,7 +10,7 @@ import { Jacket, Field } from './styles';
 
 // Component
 // ------------
-const Input = ({
+const Textarea = ({
     name,
     value,
     onChange,
@@ -21,9 +21,9 @@ const Input = ({
 }) => {
     return (
         <Jacket>
-            <Field $light={light} name={name} type={type} onClick={onClick} onChange={onChange} value={value ? value : ``} placeholder={placeholder} />
+            <Field $light={light} name={name} type={type} onClick={onClick} onChange={onChange} placeholder={placeholder} defaultValue={value ? value : ``} />
         </Jacket>
     );
 }
 
-export default Input;
+export default Textarea;
