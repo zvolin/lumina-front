@@ -108,10 +108,13 @@ export const Block = styled(Div)(props => css`
     `}
 
     div {
+        position: relative;
         display: flex;
         flex-direction: column;
         gap: 1.2rem;
         align-items: center;
+        width: 100%;
+        padding: 0 2.4rem;
 
         em {
             font-size: 1.8rem;
@@ -399,7 +402,6 @@ export const LogJacket = styled(Div)(props => css`
 export const LogScroller = styled(Div)(props => css`
     display: flex;
     flex-direction: column;
-    // flex: 1;
     gap: 1.2rem;
     height: 100%;
     overflow-y: scroll;

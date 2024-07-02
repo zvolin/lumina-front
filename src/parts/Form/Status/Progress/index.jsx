@@ -18,7 +18,7 @@ const ProgressBar = ({ ranges, max, window, syncedPercentage, isBig }) => {
     const handleTooltip = () => setTooltipActive(!tooltipActive);
 
     return (
-        <Jacket onMouseEnter={handleTooltip} onMouseLeave={handleTooltip}>
+        <Jacket $isBig={isBig} onMouseEnter={handleTooltip} onMouseLeave={handleTooltip}>
             <Tooltip $isActive={tooltipActive}>
                 {ranges && ranges.map((range, i) => (
                     <p key={i}>{range.start}-{range.end}</p>
