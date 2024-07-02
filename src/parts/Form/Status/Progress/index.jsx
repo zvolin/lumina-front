@@ -32,7 +32,7 @@ const ProgressBar = ({ ranges, max, window, isBig }) => {
                 ))}
             </Tooltip>
             <Bar $ranges={ranges} $min={max - window} $window={window} $isBig={isBig}>
-                <span></span>
+                {[...Array(ranges.length)].map((e, i) => <span></span>)}
             </Bar>
             <Num $isBig={isBig}>
                 {progress ? progress.toLocaleString(undefined, {maximumFractionDigits:2}) : '0'}%

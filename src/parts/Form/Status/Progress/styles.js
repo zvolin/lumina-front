@@ -24,15 +24,23 @@ export const Bar = styled.div(props => css`
     border-radius: .6rem;
     background: ${props.$isBig ? props.theme.colors.global.black05 : props.theme.colors.global.white};
 
-    ${props.$ranges.map((range) => css`
-        span {
+    ${props.$isBig && css`
+        min-height: 3.6rem !important;
+        max-height: 3.6rem !important;
+        min-width: 120%;
+        max-width: auto;
+        border-radius: 6rem;
+    `}
+
+    ${props.$ranges.map((range, index) => css`
+        span:nth-of-type(${index + 1}) {
             position: absolute;
             z-index: 1;
             top: 0;
             left: ${((range.start - props.$min) / props.$window) * 100}% !important;
             height: 100%;
             width: ${((range.end - range.start) / props.$window) * 100}% !important;
-            border-radius: .6rem;
+            border-radius: 6rem;
             background: linear-gradient(180deg, #CDB4DB 0%, #A2D2FF 100%);
             transition: width .3s ease; 
         }
