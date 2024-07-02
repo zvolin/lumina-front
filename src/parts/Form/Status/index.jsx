@@ -187,7 +187,7 @@ const StatusBoard = ({
                             <ButtonJacket>
                                 <Button icoL icon="back" label="Restart" onClick={handleReload} />
                                 <LinkGroup>
-                                    <Link icon="mint" label="CLAIM LIMITED NFT" link="http://www.google.com" disabled />
+                                    <Link icon="mint" label="CLAIM LIMITED NFT" link="https://modularium.art/drop/modularsummit" rel="noopener noreferrer" />
                                     <Link icon="github" link="https://github.com/eigerco/lumina" rel="noopener noreferrer" />
                                     <Link icon="eiger" link="https://www.eiger.co/" rel="noopener noreferrer" />
                                 </LinkGroup>
