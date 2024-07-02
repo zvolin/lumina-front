@@ -134,7 +134,7 @@ const StatusBoard = ({
                                                     <em>Sync window:</em>
                                                 </div>
                                                 <span>
-                                                    {Math.max(stats.networkHeadHeight, 0)}-{Math.max(stats.networkHeadHeight - stats.approxSyncingWindowSize, 0)}
+                                                    {Math.max(stats.networkHeadHeight - stats.approxSyncingWindowSize, 0)}-{Math.max(stats.networkHeadHeight, 0)}
                                                 </span>
                                             </div>
                                             <div className="break-small">
@@ -187,7 +187,7 @@ const StatusBoard = ({
                             <ButtonJacket>
                                 <Button icoL icon="back" label="Restart" onClick={handleReload} />
                                 <LinkGroup>
-                                    <Link icon="mint" label="Mint NFT" link="http://www.google.com" disabled />
+                                    <Link icon="mint" label="CLAIM LIMITED NFT" link="https://modularium.art/drop/modularsummit" rel="noopener noreferrer" />
                                     <Link icon="github" link="https://github.com/eigerco/lumina" rel="noopener noreferrer" />
                                     <Link icon="eiger" link="https://www.eiger.co/" rel="noopener noreferrer" />
                                 </LinkGroup>
