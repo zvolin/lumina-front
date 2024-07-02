@@ -10,16 +10,9 @@ import { Jacket, Bar, Num, Tooltip, } from './styles';
 
 // Component
 // ------------
-const ProgressBar = ({ ranges, max, window, isBig }) => {
+const ProgressBar = ({ ranges, max, window, syncedPercentage, isBig }) => {
     // NOTE • State
-    const [progress, setProgress] = useState(0);
     const [tooltipActive, setTooltipActive] = useState(false);
-
-    // NOTE • Effect
-    useEffect(() => {
-        const progress = ranges.reduce((acc, range) => acc + (range.end - range.start), 0);
-        setProgress((progress/window).toFixed(4) * 100);
-    }, [ranges]);
 
     // NOTE • Tooltip
     const handleTooltip = () => setTooltipActive(!tooltipActive);
@@ -35,7 +28,7 @@ const ProgressBar = ({ ranges, max, window, isBig }) => {
                 {[...Array(ranges.length)].map((e, i) => <span key={i}></span>)}
             </Bar>
             <Num $isBig={isBig}>
-                {progress ? progress.toLocaleString(undefined, {maximumFractionDigits:2}) : '0'}%
+                {syncedPercentage ? syncedPercentage.toLocaleString(undefined, {maximumFractionDigits:2}) : '0'}%
             </Num>
         </Jacket>
     );
