@@ -42,6 +42,7 @@ const Form = () => {
         peerId: '',
         storedRanges: [],
         approxSyncingWindowSize: (30 * 24 * 60 * 60)/12,
+        syncedPercentage: 0,
         connectedPeers: [],
         networkHeadHeight: '',
         networkHeadHash: '',
@@ -125,7 +126,7 @@ const Form = () => {
                     const approxHeadersToSync = (30 * 24 * 60 * 60)/12;
                     const syncingWindowTail = networkHead - approxHeadersToSync;
                     // Normalize stored ranges wrt their position in syncing window
-                    let storedRanges = info.stored_headers.map((range) => {
+                    const storedRanges = info.stored_headers.map((range) => {
                         const adjustedStart = Math.max(range.start, syncingWindowTail);
                         const adjustedEnd = Math.max(range.end, syncingWindowTail);
                         return { 
@@ -134,11 +135,14 @@ const Form = () => {
                         };
                     }).filter((range) => (range.end-range.start) > 10); // skip short < 10 header ranges
 
+                    const syncedPercentage = (storedRanges.reduce((acc, range) => acc + (range.end - range.start), 0) * 100)/approxHeadersToSync;
+
                     setStats((stats) => {
                         return {
                             ...stats,
                             storedRanges: storedRanges,
                             approxSyncingWindowSize: approxHeadersToSync,
+                            syncedPercentage: syncedPercentage,
                             connectedPeers: peers,
                             networkHeadHeight: networkHead,
                             networkHeadHash: head.commit.block_id.hash,

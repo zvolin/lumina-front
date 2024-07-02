@@ -47,6 +47,7 @@ const StatusBoard = ({
 
     // NOTE • States
     const [tab, setTab] = useState(1);
+    const [synced, setSynced] = useState(false);
 
     // NOTE • Handlers
     const handleTab = (tab) => () => setTab(tab);
@@ -59,6 +60,7 @@ const StatusBoard = ({
         if (logWindow.current) {
             logWindow.current.scrollTop = logWindow.current.scrollHeight;
         }
+        setSynced(stats.syncedPercentage >= 100);
     }, [eventData])
 
     return (
@@ -92,10 +94,12 @@ const StatusBoard = ({
                                     <Basic>
                                         <Block>
                                             <div>
-                                                <em>Backwards syncing</em>
+                                                <em>
+                                                {stats.syncedPercentage >= 100 ? `You are fully synced with the network` : `Backwards syncing, fetching missing ranges`}
+                                                </em>
                                             </div>
                                             <div>
-                                                <ProgressBar ranges={stats.storedRanges} max={stats.networkHeadHeight} window={stats.approxSyncingWindowSize} isBig />
+                                                <ProgressBar ranges={stats.storedRanges} max={stats.networkHeadHeight} window={stats.approxSyncingWindowSize} syncedPercentage={stats.syncedPercentage} isBig />
                                             </div>
                                         </Block>
 
@@ -127,7 +131,7 @@ const StatusBoard = ({
                                                 <div>
                                                     <em>Sync headers:</em>
                                                 </div>
-                                                <ProgressBar ranges={stats.storedRanges} max={stats.networkHeadHeight} window={stats.approxSyncingWindowSize} />
+                                                <ProgressBar ranges={stats.storedRanges} max={stats.networkHeadHeight} window={stats.approxSyncingWindowSize} syncedPercentage={stats.syncedPercentage}/>
                                             </div>
                                             <div className="break-small">
                                                 <div>
