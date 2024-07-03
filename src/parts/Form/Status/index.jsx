@@ -22,8 +22,6 @@ import {
     Tab,
     Basic,
     Block,
-    StatsItem,
-    FieldGroup,
     ButtonJacket,
     LinkGroup,
     CelLink,
@@ -38,16 +36,16 @@ import {
 const StatusBoard = ({
     status,
     stats,
-    handleInput,
     handleReload,
     eventData,
+    visualData,
 }) => {
     // NOTE • Breakpoints
     const bp = useBreakpoint();
 
     // NOTE • States
     const [tab, setTab] = useState(1);
-    const [synced, setSynced] = useState(false);
+    // const [synced, setSynced] = useState(false);
 
     // NOTE • Handlers
     const handleTab = (tab) => () => setTab(tab);
@@ -60,7 +58,7 @@ const StatusBoard = ({
         if (logWindow.current) {
             logWindow.current.scrollTop = logWindow.current.scrollHeight;
         }
-        setSynced(stats.syncedPercentage >= 100);
+        // setSynced(stats.syncedPercentage >= 100);
     }, [eventData])
 
     return (
@@ -83,7 +81,7 @@ const StatusBoard = ({
                         {!bp.large && (
                             <Grid $noPadding>
                                 <Col $small="1/3" $medium="1/7" $large="7/13">
-                                    <Visualisation data={stats} />
+                                    <Visualisation data={stats} events={visualData} />
                                 </Col>
                             </Grid>
                         )}
@@ -180,7 +178,7 @@ const StatusBoard = ({
 
                 {bp.large && (
                     <Col $small="1/3" $medium="1/7" $large="7/13" $isCenter>
-                        <Visualisation data={stats} />
+                        <Visualisation data={stats} events={visualData} />
                     </Col>
                 )}
             </Grid>

@@ -46,6 +46,7 @@ const Form = () => {
     const [statusInitiated, setStatusInitiated] = useState(false);
     const [nodeStatus, setNodeStatus] = useState('Downloading');
     const [eventData, setEventData] = useState([]);
+    const [visualData, setVisualData] = useState([]);
 
     const [stats, setStats] = useState({
         peerId: '',
@@ -233,9 +234,18 @@ const Form = () => {
                 });
             }
 
+            const logVisual = (event) => {
+                // Only include sampling_started events
+                if (event.data.get("event").type === "sampling_started") {
+                    setVisualData(event);
+                    return;
+                }
+            }
+
             const events = await newNode.events_channel();
             events.onmessage = (event) => {
                 logEvent(event);
+                logVisual(event);
             };
 
             await newNode.start(newConfig);
@@ -398,6 +408,7 @@ const Form = () => {
                                 handleInput={handleInput}
                                 handleReload={handleReload}
                                 eventData={eventData}
+                                visualData={visualData}
                             />
                         )}
                     </Container>
