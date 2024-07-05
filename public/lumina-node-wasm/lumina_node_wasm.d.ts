@@ -267,7 +267,7 @@ export class NodeClient {
 export class NodeConfig {
   free(): void;
 /**
-* Get the configuration with default bootnodes and genesis hash for provided network
+* Get the configuration with default bootnodes for provided network
 * @param {Network} network
 * @returns {NodeConfig}
 */
@@ -276,10 +276,6 @@ export class NodeConfig {
 * A list of bootstrap peers to connect to.
 */
   bootnodes: (string)[];
-/**
-* Hash of the genesis block in the network.
-*/
-  genesis_hash?: string;
 /**
 * A network to connect to.
 */
@@ -293,8 +289,6 @@ export interface InitOutput {
   readonly __wbg_nodeconfig_free: (a: number) => void;
   readonly __wbg_get_nodeconfig_network: (a: number) => number;
   readonly __wbg_set_nodeconfig_network: (a: number, b: number) => void;
-  readonly __wbg_get_nodeconfig_genesis_hash: (a: number, b: number) => void;
-  readonly __wbg_set_nodeconfig_genesis_hash: (a: number, b: number, c: number) => void;
   readonly __wbg_get_nodeconfig_bootnodes: (a: number, b: number) => void;
   readonly __wbg_set_nodeconfig_bootnodes: (a: number, b: number, c: number) => void;
   readonly __wbg_nodeclient_free: (a: number) => void;
@@ -346,11 +340,12 @@ export interface InitOutput {
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_export_2: WebAssembly.Table;
-  readonly _dyn_core__ops__function__Fn__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hc865c6a4da46fe2a: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h3ef3731480b6fdac: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__Fn__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__had2324931cc39599: (a: number, b: number, c: number) => void;
   readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hd729337076372289: (a: number, b: number) => void;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hd3ab4c603259d1bc: (a: number, b: number, c: number, d: number) => void;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h44687e23abc16b06: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h899c432af43cc74d: (a: number, b: number, c: number, d: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h1919850521597a45: (a: number, b: number, c: number) => void;
   readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hd15c037651943fee: (a: number, b: number, c: number) => void;
   readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h96cd4f3b47f3944f: (a: number, b: number) => void;
   readonly __wbindgen_free: (a: number, b: number, c: number) => void;
