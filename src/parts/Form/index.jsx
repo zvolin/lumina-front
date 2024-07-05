@@ -73,7 +73,7 @@ const Form = () => {
         const tempConfig = NodeConfig.default(Network.Mainnet)
         setNetwork(tempConfig.network);
         // todo: remove it completely
-        setHash('this field will be removed');
+        // setHash('this field will be removed');
         setBootnodes(tempConfig.bootnodes);
         setCombinedConfig(tempConfig);
     };
@@ -146,6 +146,7 @@ const Form = () => {
         const number = parseInt(e.target.value);
         const newConfig = NodeConfig.default(number);
         setNetwork(number);
+
         setBootnodes(newConfig.bootnodes);
         setCombinedConfig(newConfig)
     }
@@ -159,7 +160,10 @@ const Form = () => {
     const handleBnodes = (e) => {
         e.preventDefault();
 
-        setBootnodes(e.target.value);
+        // console.log(e.target.value.split('\n').join(','));
+        const value = e.target.value.split('\n').join(',');
+
+        setBootnodes(value);
     }
 
     const handleBegin = () => {
@@ -349,10 +353,10 @@ const Form = () => {
                         </NetworkItem>
                     </NetworkList>
 
-                    <h3>Genesis Hash</h3>
-                    <Input value={hash && hash} onChange={(e) => handleGhash(e)} placeholder="Genesis Hash..." />
+                    {/* <h3>Genesis Hash</h3>
+                    <Input value={hash && hash} onChange={(e) => handleGhash(e)} placeholder="Genesis Hash..." /> */}
 
-                    <h3>Bootnodes <small>(Comma separate your addresses)</small></h3>
+                    <h3>Bootnodes <small>(Each address on a new line)</small></h3>
                     <Textarea value={bootnodes && bootnodes} onChange={(e) => handleBnodes(e)} placeholder="Bootnodes..." />
 
                     <div>

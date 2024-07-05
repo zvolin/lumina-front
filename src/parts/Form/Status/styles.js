@@ -231,6 +231,13 @@ export const LinkGroup = styled(Div)(props => css`
     `}
 `);
 
+export const LinkGroupSub = styled(Div)(props => css`
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 1.2rem;
+`);
+
 export const CelLink = styled.a(props => css`
     position: relative;
     z-index: 2;

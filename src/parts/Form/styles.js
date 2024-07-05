@@ -35,6 +35,10 @@ export const ImageContainer = styled(Div)(props => css`
 
         ${bp.large` transform: translateX(-50%) scale(3) rotate(-15deg); `}
     `}
+
+    img {
+        width: 96vw;
+    }
 `);
 
 export const Container = styled(Div)(props => css`
@@ -268,7 +272,8 @@ export const NetworkItem = styled.li(props => css`
 
         label {
             svg {
-                width: auto;
+                width: 1.6rem;
+                height: 1.6rem;
                 transform: scale(1);
             }
         }

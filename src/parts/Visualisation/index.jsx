@@ -15,7 +15,7 @@ const Visualisation = ({ data, events }) => {
     const hds = data.networkHeadDataSquare;
     const hdsSize = hds.split('x')[0];
 
-    const shares = events ? events.data.get("event").shares : null;
+    const shares = events.data ? events.data.get("event").shares : null;
 
     // NOTE • Refs
     const containerRef = useRef(null);

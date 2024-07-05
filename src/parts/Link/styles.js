@@ -25,6 +25,18 @@ export const Jacket = styled.a(
             }
         }
 
+        div {
+            display: flex;
+            flex-direction: column;
+            gap: 0rem;
+
+            em {
+                ${emStyles}
+                font-size: 1.1rem;
+                color: ${props.theme.colors.global.black};
+            }
+        }
+
         span {
             transition: all .4s ${props.theme.easing.bezzy};
 
@@ -50,7 +62,10 @@ export const Jacket = styled.a(
 
         ${props.disabled && css`
             pointer-events: none;
-            opacity: .3;
+            
+            span {
+                opacity: .3;
+            }
         `}
     `
 );
