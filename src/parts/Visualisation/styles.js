@@ -23,15 +23,14 @@ export const Container = styled(Div)(
         position: relative;
         pointer-events: none;
 
-        display: grid;
-        grid-template-columns: repeat(32, 1fr);
-        grid-template-rows: repeat(32, 1fr);
-
-        border-top: 1px solid ${props.theme.colors.global.black10};
-        border-left: 1px solid ${props.theme.colors.global.black10};
+        display: flex;
+        flex-flow: column;
+        gap: 1px;
 
         width: calc(100vw - 6.2rem);
         height: calc(100vw - 6.2rem);
+        background: ${props.theme.colors.global.black10};
+        border: 1px solid ${props.theme.colors.global.black10};
 
         ${bp.large`
             width: 42.08vw;
@@ -42,26 +41,19 @@ export const Container = styled(Div)(
             aspect-ratio: 1/1;
         `}
 
-        .grid-item {
-            position: relative;
-            border-right: 1px solid ${props.theme.colors.global.black10};
-            border-bottom: 1px solid ${props.theme.colors.global.black10};
+        .row {
+            display: flex;
+            flex-flow: row;
+            flex: 1;
+            gap: 1px;
 
-            &:before {
-                content: '';
-                position: absolute;
-                inset: 0;
-                background: ${props.theme.colors.brand.bc3};
-                opacity: 0;
+            .grid-item {
+                flex: 1;
+                height: 100%;
+                background-color: ${props.theme.colors.global.white};
 
-                transition: opacity .3s ease-in-out;
-                transition-delay: 1s;
-                will-change: opacity;
-            }
-
-            &.selected {
-                &:before {
-                    opacity: 1;
+                &.active {
+                    background-color: ${props.theme.colors.brand.bc2};
                 }
             }
         }

@@ -10,73 +10,52 @@ import { Jacket, Container } from './styles';
 
 // Component
 // ------------
-const Visualisation = ({ data }) => {
-    // NOTE • States
-    const [currentHeight, setCurrentHeight] = useState(0);
-    const [newHeight, setNewHeight] = useState(0);
+const Visualisation = ({ data, events }) => {
+    // NOTE • Data
+    const hds = data.networkHeadDataSquare;
+    const hdsSize = hds.split('x')[0];
 
-    // NOTE • Generate Grid
+    const shares = events.data.get("event").shares;
+
+    // NOTE • Refs
     const containerRef = useRef(null);
 
-    // NOTE • Generate Grid
-    const generateSpans = () => {
-        const spans = [];
-        for (let i = 1; i <= 1024; i++) {
-            spans.push(<span key={i} className="grid-item"></span>);
+    // NOTE • States
+    const [activeCoords, setActiveCoords] = useState([]);
+
+    // NOTE • Functions
+    useEffect(() => {
+        if(shares) {
+            setActiveCoords(shares);
         }
-        return spans;
+    }, [events]);
+
+    const isActive = (x, y) => {
+        return activeCoords.some(coord => coord[0] === x && coord[1] === y);
     };
 
-    // NOTE • Highlight Random Squares
-    function highlightRandomSquares(num) {
-        const squares = document.querySelectorAll('.grid-item');
-        const indices = [];
-
-        // Remove selected class from all squares
-        squares.forEach(square => {
-            square.classList.remove('selected');
-        });
-
-        // Generate unique random indices
-        while (indices.length < num) {
-            const index = Math.floor(Math.random() * squares.length);
-            if (!indices.includes(index)) {
-                indices.push(index);
+    const renderGrid = (gridCount) => {
+        const rows = [];
+        for (let i = 0; i < gridCount; i++) {
+            const cols = [];
+            for (let j = 0; j < gridCount; j++) {
+                const key = `${i}-${j}`;
+                cols.push(
+                    <span key={key} className={`grid-item ${isActive(i, j) ? 'active' : ''}`}></span>
+                );
             }
+            rows.push(
+                <div key={i} className="row">
+                    {cols}
+                </div>
+            );
         }
-
-        // Highlight random squares
-        indices.forEach(index => {
-            squares[index].classList.add('selected');
-        });
-    }
-
-    // NOTE • Interval highlight when data changes
-    useEffect(() => {
-        function getNumber(num) {
-            const numberBeforeX = num && num.substring(0, num.indexOf('x'));
-
-            return parseInt(numberBeforeX, 10);
-        }
-
-        let number = getNumber(data.networkHeadDataSquare);
-
-        // Set new height
-        setNewHeight(number);
-
-        if(newHeight > currentHeight) {
-            setCurrentHeight(newHeight);
-        }
-
-        // Highlight random squares
-        if(newHeight > currentHeight) {
-            highlightRandomSquares(newHeight);
-        }
-    }, [data]);
+        return rows;
+    };
 
     return (
         <Jacket>
-            <Container ref={containerRef}>{generateSpans()}</Container>
+            <Container ref={containerRef}>{renderGrid(hdsSize)}</Container>
         </Jacket>
     );
 }
