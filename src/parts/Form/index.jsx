@@ -3,7 +3,7 @@
 // Imports
 // ------------
 import React, { useState, useEffect, useContext } from 'react';
-import init, { NodeClient, NodeConfig } from '@public/lumina-node-wasm';
+import init, { Network, NodeClient, NodeConfig } from '@public/lumina-node-wasm';
 import Input from './Input';
 import Textarea from './Textarea';
 import Button from '@parts/Button';
@@ -68,47 +68,20 @@ const Form = () => {
             setDisplay(false)
         )
     }, []);
-    
-    // NOTE • Initialisation
-    const fetchConfig = async () => {
-        try {
-            const response = await fetch('/cfg.json');
-            if (!response.ok) {
-                throw new Error('Failed to fetch configuration');
-            }
-            const json = await response.json();
-    
-            // Perform validation if necessary
-            const config = NodeConfig.default(json.network);
-    
-            return config;
-        } catch (error) {
-            console.error('Error fetching configuration:', error);
-            return null; // or handle the error in an appropriate way
-        }
-    };
 
-
-    const loadConfig = async () => {
-        try {
-            const tempConfig = await fetchConfig();
-            if (tempConfig) {
-                // console.log('Setting config to state:', tempConfig); // Debugging
-
-                setNetwork(tempConfig.network);
-                setHash(tempConfig.genesis_hash);
-                setBootnodes(tempConfig.bootnodes);
-                setCombinedConfig(tempConfig);
-            }
-        } catch (error) {
-            console.error('Failed to fetch config:', error);
-        }
+    const initConfig = () => {
+        const tempConfig = NodeConfig.default(Network.Mainnet)
+        setNetwork(tempConfig.network);
+        // todo: remove it completely
+        setHash('this field will be removed');
+        setBootnodes(tempConfig.bootnodes);
+        setCombinedConfig(tempConfig);
     };
 
     const initWASM = async () => {
         try {
             await init();
-            loadConfig();
+            initConfig();
         } catch (error) {
             console.error('Failed to initialize WASM:', error);
         }
@@ -171,8 +144,10 @@ const Form = () => {
         e.preventDefault();
 
         const number = parseInt(e.target.value);
+        const newConfig = NodeConfig.default(number);
         setNetwork(number);
-        NodeConfig.default(number);
+        setBootnodes(newConfig.bootnodes);
+        setCombinedConfig(newConfig)
     }
 
     const handleGhash = (e) => {
@@ -204,7 +179,7 @@ const Form = () => {
 
     // NOTE • Start the node
     const startNode = async () => {
-        if (!hash || !bootnodes || bootnodes.length === 0) {
+        if (!bootnodes || bootnodes.length === 0) {
             alert('Genesis hash and at least one bootnode are required.');
             return;
         }
@@ -360,13 +335,13 @@ const Form = () => {
                                 <Icon type="check" /><span>Mainnet</span>
                             </label>
                         </NetworkItem>
-                        <NetworkItem $selected={network === 1} $disabled>
+                        <NetworkItem $selected={network === 1}>
                             <label>
                                 <input type="radio" name="network" value="1" onChange={(e) => handleNetwork(e)} />
                                 <Icon type="check" /><span>Arabica</span>
                             </label>
                         </NetworkItem>
-                        <NetworkItem $selected={network === 2} $disabled>
+                        <NetworkItem $selected={network === 2}>
                             <label>
                                 <input type="radio" name="network" value="2" onChange={(e) => handleNetwork(e)} />
                                 <Icon type="check" /><span>Mocha</span>
