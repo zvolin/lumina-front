@@ -94,7 +94,7 @@ const StatusBoard = ({
                                         <Block>
                                             <div>
                                                 <em>
-                                                {stats.syncedPercentage >= 100 ? `You are fully synced with the network` : `Backwards syncing, fetching missing ranges`}
+                                                {stats.syncedPercentage >= 100 ? `You are fully synced with the network` : `Fetching past headers`}
                                                 </em>
                                             </div>
                                             <div>
