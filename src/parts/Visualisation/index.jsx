@@ -11,7 +11,10 @@ import { Jacket, Container } from './styles';
 // Component
 // ------------
 const Visualisation = ({ data, events }) => {
-    // console.table("samples", events.data.get("event").shares);
+    // NOTE • Data
+    const hds = data.networkHeadDataSquare;
+    const hdsSize = hds.split('x')[0];
+
     const shares = events.data.get("event").shares;
 
     // NOTE • Refs
@@ -22,24 +25,23 @@ const Visualisation = ({ data, events }) => {
 
     // NOTE • Functions
     useEffect(() => {
-        // Set the active coordinates state when the component mounts
-        setActiveCoords(shares);
-    }, []);
+        if(shares) {
+            setActiveCoords(shares);
+        }
+    }, [events]);
 
     const isActive = (x, y) => {
         return activeCoords.some(coord => coord[0] === x && coord[1] === y);
     };
 
-    const renderGrid = () => {
+    const renderGrid = (gridCount) => {
         const rows = [];
-        for (let i = 0; i < 32; i++) {
+        for (let i = 0; i < gridCount; i++) {
             const cols = [];
-            for (let j = 0; j < 32; j++) {
+            for (let j = 0; j < gridCount; j++) {
                 const key = `${i}-${j}`;
                 cols.push(
-                    <span key={key} className={`grid-item ${isActive(i, j) ? 'active' : ''}`}>
-                    {/* Optionally add content here */}
-                    </span>
+                    <span key={key} className={`grid-item ${isActive(i, j) ? 'active' : ''}`}></span>
                 );
             }
             rows.push(
@@ -53,7 +55,7 @@ const Visualisation = ({ data, events }) => {
 
     return (
         <Jacket>
-            <Container ref={containerRef}>{renderGrid()}</Container>
+            <Container ref={containerRef}>{renderGrid(hdsSize)}</Container>
         </Jacket>
     );
 }
