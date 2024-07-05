@@ -10,12 +10,12 @@ import { Jacket, Container } from './styles';
 
 // Component
 // ------------
-const Visualisation = ({ data, events }) => {
+const Visualisation = ({ data, samplingData }) => {
     // NOTE • Data
     const hds = data.networkHeadDataSquare;
     const hdsSize = hds.split('x')[0];
 
-    const shares = events ? events.data.get("event").shares : null;
+    const shares = samplingData ? samplingData.shares : null;
 
     // NOTE • Refs
     const containerRef = useRef(null);
@@ -28,7 +28,7 @@ const Visualisation = ({ data, events }) => {
         if(shares) {
             setActiveCoords(shares);
         }
-    }, [events]);
+    }, [samplingData]);
 
     const isActive = (x, y) => {
         return activeCoords.some(coord => coord[0] === x && coord[1] === y);

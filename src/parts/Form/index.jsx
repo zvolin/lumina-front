@@ -93,46 +93,20 @@ const Form = () => {
         initWASM();
     }, []);
 
-    // NOTE • Run node status checks and data fetching
+    // NOTE • Periodically poll node for data that doesn't come from events
     useEffect(() => {
         if(node) {
             const timer = setInterval(async () => {
-                const info = await node.syncer_info();
                 const peers = await node.connected_peers();
-                const head = await node.get_network_head_header();
 
-                if (head) {
-                    const networkHead = head.header.height;
-                    // Predicted amount of headers in syncing window (last 30 days / ~12s block time)
-                    const approxHeadersToSync = (30 * 24 * 60 * 60)/12;
-                    const syncingWindowTail = networkHead - approxHeadersToSync;
-                    // Normalize stored ranges wrt their position in syncing window
-                    const storedRanges = info.stored_headers.map((range) => {
-                        const adjustedStart = Math.max(range.start, syncingWindowTail);
-                        const adjustedEnd = Math.max(range.end, syncingWindowTail);
-                        return { 
-                            start: adjustedStart,
-                            end: adjustedEnd
-                        };
-                    }).filter((range) => (range.end-range.start) > 10); // skip short < 10 header ranges
-
-                    const syncedPercentage = (storedRanges.reduce((acc, range) => acc + (range.end - range.start), 0) * 100)/approxHeadersToSync;
-
-                    setStats((stats) => {
-                        return {
-                            ...stats,
-                            storedRanges: storedRanges,
-                            approxSyncingWindowSize: approxHeadersToSync,
-                            syncedPercentage: syncedPercentage,
-                            connectedPeers: peers,
-                            networkHeadHeight: networkHead,
-                            networkHeadHash: head.commit.block_id.hash,
-                            networkHeadDataSquare: `${head.dah.row_roots.length}x${head.dah.column_roots.length} shares`,
-                        }
-                    });
-        
-                    setNodeStatus('Data availability sampling in progress');
-                }
+                setStats((stats) => {
+                    return {
+                        ...stats,
+                        connectedPeers: peers,
+                    }
+                });
+    
+                setNodeStatus('Data availability sampling in progress');
             }, 2000);
     
             return () => clearInterval(timer);
@@ -184,12 +158,6 @@ const Form = () => {
             return;
         }
         try {
-            let newConfig = combinedConfig;
-            setCombinedConfig({genesis_hash: hash, bootnodes: bootnodes});
-
-            const workerUrl = new URL('/worker.js', window.location.origin);
-            const newNode = await new NodeClient(workerUrl.toJSON());
-
             const logEvent = (event) => {
                 // Skip noisy events
                 if (event.data.get("event").type == "share_sampling_result") {
@@ -211,22 +179,76 @@ const Form = () => {
 
             const logVisual = (event) => {
                 // Only include sampling_started events
-                if (event.data.get("event").type === "sampling_started") {
-                    setVisualData(event);
+                const heightToSample = event.data.get("event").height;
+                if (heightToSample == stats.networkHeadHeight) {
+                    setVisualData(event.data.get("event"));
                     return;
                 }
             }
 
-            const events = await newNode.events_channel();
-            events.onmessage = (event) => {
+            const onNewHead = async (height) => {
+                let header = await node.get_header_by_height(height);
+                const info = await node.syncer_info();
+
+                const networkHead = header.height;
+                const storedRanges = normalizeStoredRanges(networkHead, info.storedRanges);
+                const syncedPercentage = syncingPercentage(storedRanges);
+
+                setStats((stats) => {
+                    return {
+                        ...stats,
+                        storedRanges: storedRanges,
+                        approxSyncingWindowSize: approxHeadersToSync,
+                        syncedPercentage: syncedPercentage,
+                        networkHeadHeight: networkHead,
+                        networkHeadHash: header.commit.block_id.hash,
+                        networkHeadDataSquare: `${header.dah.row_roots.length}x${header.dah.column_roots.length} shares`,
+                    }
+                });
+            }
+            
+            const onNodeEvent = async (event) => {
+                if (!event.data) {
+                    return;
+                }
                 logEvent(event);
-                logVisual(event);
-            };
+
+                switch (event.data.get("event").type) {
+                    // Daser started sampling block
+                    case "sampling_started":
+                        logVisual(event);
+                        break;
+
+                    // new header added from header-sub
+                    case "added_header_from_header_sub":
+                        // headers from header-sub must be new head
+                        const height = event.data.get("event").height;
+                        await onNewHead(height);
+                        break;
+
+                    // syncer finished fetching next batch of headers
+                    case "fetching_headers_finished":
+                        // last header in batch *may* be a new head
+                        const to_height = event.data.get("event").to_height;
+                        if (to_height > stats.networkHeadHeight) {
+                            await onNewHead(to_height);
+                        };
+                        break;
+                }
+            }
+
+            let newConfig = combinedConfig;
+            setCombinedConfig({genesis_hash: hash, bootnodes: bootnodes});
+
+            const workerUrl = new URL('/worker.js', window.location.origin);
+            const newNode = await new NodeClient(workerUrl.toJSON());
+            setNode(newNode);
+
+            const events = await newNode.events_channel();
+            events.onmessage = onNodeEvent;
+            setEvents(events);
 
             await newNode.start(newConfig);
-
-            setNode(newNode);
-            setEvents(events);
 
             const lpid = await newNode.local_peer_id();
             
@@ -391,6 +413,31 @@ const Form = () => {
             </Jacket>
         </Blanket>
     );
+};
+
+// Predicted amount of headers in syncing window (last 30 days / ~12s block time)
+const approxHeadersToSync = (30 * 24 * 60 * 60)/12;
+
+// Takes network head and ranges of headers node synchronized and calculates ranges
+// position inside the syncing window
+const normalizeStoredRanges = (networkHead, storedRanges) => {
+    const syncingWindowTail = networkHead - approxHeadersToSync;
+    // Normalize stored ranges wrt their position in syncing window
+    const normalizedRanges = stored_headers.map((range) => {
+        const adjustedStart = Math.max(range.start, syncingWindowTail);
+        const adjustedEnd = Math.max(range.end, syncingWindowTail);
+        return { 
+            start: adjustedStart,
+            end: adjustedEnd
+        };
+    }).filter((range) => (range.end-range.start) > 10); // skip short < 10 header ranges
+
+    return normalizedRanges;
+};
+
+// calculate what percentage of syncing window the stored ranges occupy
+const syncingPercentage = (normalizedRanges) => {
+    return (normalizedRanges.reduce((acc, range) => acc + (range.end - range.start), 0) * 100) / approxHeadersToSync;
 };
 
 export default Form;
