@@ -36,7 +36,18 @@ export const Bar = styled.div(props => css`
         border-radius: 6rem;
     `}
 
-    ${props.$ranges.map((range, index) => css`
+    ${props.$isBig ? css`
+        span:first-of-type {
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            left: 0% !important;
+            height: 100%;
+            width: ${props.$syncedPercentage}% !important;
+            border-radius: 6rem;
+            background: linear-gradient(180deg, #CDB4DB 0%, #A2D2FF 100%);
+            transition: width .3s ease; 
+        }` : props.$ranges.map((range, index) => css`
         span:nth-of-type(${index + 1}) {
             position: absolute;
             z-index: 1;

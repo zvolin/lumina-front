@@ -24,7 +24,7 @@ const ProgressBar = ({ ranges, max, window, syncedPercentage, isBig }) => {
                     <p key={i}>{range.start}-{range.end}</p>
                 ))}
             </Tooltip>
-            <Bar $ranges={ranges} $min={max - window} $window={window} $isBig={isBig}>
+            <Bar $ranges={ranges} $min={max - window} $window={window} $isBig={isBig} $syncedPercentage={syncedPercentage}>
                 {[...Array(ranges.length)].map((e, i) => <span key={i}></span>)}
             </Bar>
             <Num $isBig={isBig}>
