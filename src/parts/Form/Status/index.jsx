@@ -81,7 +81,7 @@ const StatusBoard = ({
                         {!bp.large && (
                             <Grid $noPadding>
                                 <Col $small="1/3" $medium="1/7" $large="7/13">
-                                    <Visualisation data={stats} events={visualData} />
+                                    <Visualisation events={visualData} />
                                 </Col>
                             </Grid>
                         )}
