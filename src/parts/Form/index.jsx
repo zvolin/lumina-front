@@ -71,7 +71,7 @@ const Form = () => {
         const tempConfig = NodeConfig.default(Network.Mainnet)
         setNetwork(tempConfig.network);
         // todo: remove it completely
-        setHash('dummyvalue');
+        setHash('this field will be removed');
         setBootnodes(tempConfig.bootnodes);
         setCombinedConfig(tempConfig);
     };
