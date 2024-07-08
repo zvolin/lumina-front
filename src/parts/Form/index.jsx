@@ -117,10 +117,10 @@ const Form = () => {
                         connectedPeers: peers,
                     }
                 });
-    
+
                 setNodeStatus('Data availability sampling in progress');
             }, 2000);
-    
+
             return () => clearInterval(timer);
         }
     }, [node]);
@@ -234,7 +234,7 @@ const Form = () => {
                     }
                 });
             };
-            
+
             // called on all events coming from node
             const onNodeEvent = async (event) => {
                 if (!event.data) {
@@ -284,7 +284,7 @@ const Form = () => {
             await newNode.start(newConfig);
 
             const lpid = await newNode.local_peer_id();
-            
+
             setStats(prev => ({
                 ...prev,
                 peerId: lpid,
@@ -311,12 +311,12 @@ const Form = () => {
     useEffect(() => {
         if(nodeInitiate) {
             startNode();
-            
+
             const timer = setTimeout(() => {
                 setNodeInitiate(false);
                 setStatusInitiated(true);
             }, 10500);
-    
+
             return () => clearTimeout(timer);
         }
     }, [nodeInitiate]);
@@ -442,7 +442,7 @@ const Form = () => {
                             />
                         )}
                     </Container>
-                
+
             </Jacket>
         </Blanket>
     );
@@ -459,7 +459,7 @@ const normalizeStoredRanges = (networkHead, storedRanges) => {
     const normalizedRanges = storedRanges.map((range) => {
         const adjustedStart = Math.max(range.start, syncingWindowTail);
         const adjustedEnd = Math.max(range.end, syncingWindowTail);
-        return { 
+        return {
             start: adjustedStart,
             end: adjustedEnd
         };
