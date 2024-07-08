@@ -4,7 +4,7 @@
 // ------------
 import React, { useState, useEffect, useContext } from 'react';
 import init, { Network, NodeClient, NodeConfig } from '@public/lumina-node-wasm';
-import Input from './Input';
+// import Input from './Input';
 import Textarea from './Textarea';
 import Button from '@parts/Button';
 import Status from './Status';
@@ -149,19 +149,21 @@ const Form = () => {
 
         setBootnodes(newConfig.bootnodes);
         setCombinedConfig(newConfig)
+
+        // console.log(bootnodes)
     }
 
-    const handleGhash = (e) => {
-        e.preventDefault();
+    // const handleGhash = (e) => {
+    //     e.preventDefault();
 
-        setHash(e.target.value);
-    }
+    //     setHash(e.target.value);
+    // }
 
     const handleBnodes = (e) => {
         e.preventDefault();
 
-        // console.log(e.target.value.split('\n').join(','));
-        const value = e.target.value.split('\n').join(',');
+        // console.log(e.target.value.split('\n'));
+        const value = e.target.value.split('\n');
 
         setBootnodes(value);
     }
@@ -357,7 +359,7 @@ const Form = () => {
                     <Input value={hash && hash} onChange={(e) => handleGhash(e)} placeholder="Genesis Hash..." /> */}
 
                     <h3>Bootnodes <small>(Each address on a new line)</small></h3>
-                    <Textarea value={bootnodes && bootnodes} onChange={(e) => handleBnodes(e)} placeholder="Bootnodes..." />
+                    <Textarea value={bootnodes} onChange={(e) => handleBnodes(e)} placeholder="Bootnodes..." />
 
                     <div>
                         <Button label="Start" onClick={initiateNode} />
