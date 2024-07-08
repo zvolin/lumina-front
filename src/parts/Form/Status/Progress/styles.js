@@ -8,9 +8,10 @@ export const Jacket = styled.div(
     props => css`
         position: relative;
         display: flex;
+        flex-direction: row;
         align-items: center;
         gap: 1.2rem;
-        width: ${props.$isBig ? `100%` : `auto`};
+        width: ${props.$isBig ? `100%` : `80%`};
     `
 );
 
@@ -20,9 +21,9 @@ export const Bar = styled.div(props => css`
 
     min-width: 12rem;
     width: 100%;
-    max-width: 32rem;
-    min-height: .8rem !important;
-    max-height: .8rem !important;
+    // max-width: 32rem;
+    min-height: 1.2rem !important;
+    max-height: 1.2rem !important;
     overflow: hidden;
     border-radius: .6rem;
     background: ${props.$isBig ? props.theme.colors.global.black05 : props.theme.colors.global.white};

@@ -23,7 +23,7 @@ const Textarea = ({
 
     return (
         <Jacket>
-            <Field $light={light} name={name} type={type} onChange={onChange} placeholder={placeholder} defaultValue={value ? newValue : ``} value={value ? newValue : ``} />
+            <Field $light={light} name={name} type={type} onChange={onChange} placeholder={placeholder} value={value ? newValue : ``} />
         </Jacket>
     );
 }

@@ -71,7 +71,7 @@ const RootLayout = ({ children }) => {
 				<StyledComponentsRegistry>
 					<ApolloWrapper>
 						<ThemeProvider theme={theme} key="themeprovider">
-							<GridExposer />
+							{/* <GridExposer /> */}
 							<Contexts>
 								<SmoothScroll>
 									{children}
