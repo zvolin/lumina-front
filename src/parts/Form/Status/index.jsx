@@ -190,7 +190,7 @@ const StatusBoard = ({
                             <ButtonJacket>
                                 <Button icoL icon="back" label="Restart" onClick={handleReload} />
                                 <LinkGroup>
-                                    <Link icon="mint" label="CLAIM LIMITED NFT" preText="sync to 1%" link="https://modularium.art/drop/modularsummit" rel="noopener noreferrer" disabled={!stats.syncedPercentage < 1} />
+                                    <Link icon="mint" label="CLAIM LIMITED NFT" preText="sync to 1%" link="https://modularium.art/drop/modularsummit" rel="noopener noreferrer" disabled={stats.syncedPercentage < 1} />
                                     <LinkGroupSub>
                                         <Link icon="github" link="https://github.com/eigerco/lumina" rel="noopener noreferrer" />
                                         <Link icon="eiger" link="https://www.eiger.co/" rel="noopener noreferrer" />
