@@ -10,24 +10,6 @@ export function setup_logging(): void;
 */
 export function run_worker(queued_events: (MessageEvent)[]): Promise<void>;
 /**
-* Type of worker to run lumina in. Allows overriding automatically detected worker kind
-* (which should usually be appropriate).
-*/
-export enum NodeWorkerKind {
-/**
-* Run in [`SharedWorker`]
-*
-* [`SharedWorker`]: https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker
-*/
-  Shared = 0,
-/**
-* Run in [`Worker`]
-*
-* [`Worker`]: https://developer.mozilla.org/en-US/docs/Web/API/Worker
-*/
-  Dedicated = 1,
-}
-/**
 * Supported Celestia networks.
 */
 export enum Network {
@@ -47,6 +29,24 @@ export enum Network {
 * Private local network.
 */
   Private = 3,
+}
+/**
+* Type of worker to run lumina in. Allows overriding automatically detected worker kind
+* (which should usually be appropriate).
+*/
+export enum NodeWorkerKind {
+/**
+* Run in [`SharedWorker`]
+*
+* [`SharedWorker`]: https://developer.mozilla.org/en-US/docs/Web/API/SharedWorker
+*/
+  Shared = 0,
+/**
+* Run in [`Worker`]
+*
+* [`Worker`]: https://developer.mozilla.org/en-US/docs/Web/API/Worker
+*/
+  Dedicated = 1,
 }
 /**
 */
@@ -286,6 +286,8 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
+  readonly setup_logging: () => void;
+  readonly run_worker: (a: number, b: number) => number;
   readonly __wbg_nodeconfig_free: (a: number) => void;
   readonly __wbg_get_nodeconfig_network: (a: number) => number;
   readonly __wbg_set_nodeconfig_network: (a: number, b: number) => void;
@@ -317,7 +319,6 @@ export interface InitOutput {
   readonly nodeclient_close: (a: number) => number;
   readonly nodeclient_events_channel: (a: number) => number;
   readonly nodeconfig_default: (a: number) => number;
-  readonly setup_logging: () => void;
   readonly __wbg_networkinfosnapshot_free: (a: number) => void;
   readonly __wbg_set_networkinfosnapshot_num_peers: (a: number, b: number) => void;
   readonly __wbg_connectioncounterssnapshot_free: (a: number) => void;
@@ -336,15 +337,14 @@ export interface InitOutput {
   readonly __wbg_get_connectioncounterssnapshot_num_established: (a: number) => number;
   readonly __wbg_set_connectioncounterssnapshot_num_established: (a: number, b: number) => void;
   readonly __wbg_get_networkinfosnapshot_num_peers: (a: number) => number;
-  readonly run_worker: (a: number, b: number) => number;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_export_2: WebAssembly.Table;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h3ef3731480b6fdac: (a: number, b: number, c: number) => void;
-  readonly _dyn_core__ops__function__Fn__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__had2324931cc39599: (a: number, b: number, c: number) => void;
-  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hd729337076372289: (a: number, b: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hf2cff21c732a7e47: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__Fn__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h495aad9cd34beea5: (a: number, b: number, c: number) => void;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
   readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h899c432af43cc74d: (a: number, b: number, c: number, d: number) => void;
+  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hd729337076372289: (a: number, b: number) => void;
   readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h1919850521597a45: (a: number, b: number, c: number) => void;
   readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hd15c037651943fee: (a: number, b: number, c: number) => void;
   readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h96cd4f3b47f3944f: (a: number, b: number) => void;

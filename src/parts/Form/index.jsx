@@ -4,7 +4,7 @@
 // ------------
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import init, { Network, NodeClient, NodeConfig } from '@public/lumina-node-wasm';
-import Input from './Input';
+// import Input from './Input';
 import Textarea from './Textarea';
 import Button from '@parts/Button';
 import Status from './Status';
@@ -85,7 +85,7 @@ const Form = () => {
         const tempConfig = NodeConfig.default(Network.Mainnet)
         setNetwork(tempConfig.network);
         // todo: remove it completely
-        setHash('this field will be removed');
+        // setHash('this field will be removed');
         setBootnodes(tempConfig.bootnodes);
         setCombinedConfig(tempConfig);
     };
@@ -132,20 +132,26 @@ const Form = () => {
         const number = parseInt(e.target.value);
         const newConfig = NodeConfig.default(number);
         setNetwork(number);
+
         setBootnodes(newConfig.bootnodes);
         setCombinedConfig(newConfig)
+
+        // console.log(bootnodes)
     }
 
-    const handleGhash = (e) => {
-        e.preventDefault();
+    // const handleGhash = (e) => {
+    //     e.preventDefault();
 
-        setHash(e.target.value);
-    }
+    //     setHash(e.target.value);
+    // }
 
     const handleBnodes = (e) => {
         e.preventDefault();
 
-        setBootnodes(e.target.value);
+        // console.log(e.target.value.split('\n'));
+        const value = e.target.value.split('\n');
+
+        setBootnodes(value);
     }
 
     const handleBegin = () => {
@@ -398,11 +404,11 @@ const Form = () => {
                         </NetworkItem>
                     </NetworkList>
 
-                    <h3>Genesis Hash</h3>
-                    <Input value={hash && hash} onChange={(e) => handleGhash(e)} placeholder="Genesis Hash..." />
+                    {/* <h3>Genesis Hash</h3>
+                    <Input value={hash && hash} onChange={(e) => handleGhash(e)} placeholder="Genesis Hash..." /> */}
 
-                    <h3>Bootnodes <small>(Comma separate your addresses)</small></h3>
-                    <Textarea value={bootnodes && bootnodes} onChange={(e) => handleBnodes(e)} placeholder="Bootnodes..." />
+                    <h3>Bootnodes <small>(Each address on a new line)</small></h3>
+                    <Textarea value={bootnodes} onChange={(e) => handleBnodes(e)} placeholder="Bootnodes..." />
 
                     <div>
                         <Button label="Start" onClick={initiateNode} />

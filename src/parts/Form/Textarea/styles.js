@@ -11,6 +11,7 @@ export const Field = styled.textarea(props => css`
     min-width: 100%;
     max-width: 100%;
     height: auto;
+    min-height: 14rem;
     max-height: 20rem;
 
     padding: 1.2rem;
