@@ -10,12 +10,10 @@ import { Jacket, Container } from './styles';
 
 // Component
 // ------------
-const Visualisation = ({ data, events }) => {
+const Visualisation = ({ events }) => {
     // NOTE • Data
-    const hds = data.networkHeadDataSquare;
-    const hdsSize = hds.split('x')[0];
-
-    const shares = events.data ? events.data.get("event").shares : null;
+    const hdsSize = events ? events.square_width : 32;
+    const shares = events ? events.shares : null;
 
     // NOTE • Refs
     const containerRef = useRef(null);
