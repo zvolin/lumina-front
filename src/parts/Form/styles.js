@@ -114,7 +114,7 @@ export const Jacket = styled(Section)(
         align-items: flex-end;
         padding-top: 20vh;
 
-        ${props.theme.noscollbars}
+        ${props.theme.noscrollbars}
 
         ${bp.large` inset: 0 2.4rem; `}
 
