@@ -6,7 +6,6 @@ import React from 'react';
 import StyledComponentsRegistry from '@utils/registry';
 import Contexts from '@parts/Contexts/Contexts';
 import SmoothScroll from '@parts/SmoothScroll';
-import GridExposer from '@parts/GridExposer';
 import WebglBackground from '@parts/Webgl/Background';
 import localFont from 'next/font/local';
 import { ApolloWrapper } from '@utils/apollo-wrapper';
@@ -71,7 +70,6 @@ const RootLayout = ({ children }) => {
 				<StyledComponentsRegistry>
 					<ApolloWrapper>
 						<ThemeProvider theme={theme} key="themeprovider">
-							{/* <GridExposer /> */}
 							<Contexts>
 								<SmoothScroll>
 									{children}

@@ -33,7 +33,6 @@ const Background = ({ isPaused }) => {
 
             <Suspense fallback={null}>
                 <ShaderGradientCanvas
-                    // importedfiber={{ ...fiber, ...drei, ...reactSpring }}
                     style={{
                         position: 'absolute',
                         top: 0,

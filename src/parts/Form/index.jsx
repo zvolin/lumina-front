@@ -4,7 +4,6 @@
 // ------------
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import init, { Network, NodeClient, NodeConfig } from '@public/lumina-node-wasm';
-// import Input from './Input';
 import Textarea from './Textarea';
 import Button from '@parts/Button';
 import Status from './Status';
@@ -29,11 +28,9 @@ const Form = () => {
     const [node, setNode] = useState();
     const [_events, setEvents] = useState();
     const [network, setNetwork] = useState();
-    const [hash, setHash] = useState('');
     const [bootnodes, setBootnodes] = useState([]);
 
     const [combinedConfig, setCombinedConfig] = useState({
-        genesis_hash: hash,
         bootnodes: bootnodes,
     });
 
@@ -99,7 +96,6 @@ const Form = () => {
         }
     };
 
-
     // NOTE • Load the config and initialize the WASM module when the page loads
     useEffect(() => {
         initWASM();
@@ -125,7 +121,6 @@ const Form = () => {
         }
     }, [node]);
 
-
     const handleNetwork = (e) => {
         e.preventDefault();
 
@@ -135,15 +130,7 @@ const Form = () => {
 
         setBootnodes(newConfig.bootnodes);
         setCombinedConfig(newConfig)
-
-        // console.log(bootnodes)
     }
-
-    // const handleGhash = (e) => {
-    //     e.preventDefault();
-
-    //     setHash(e.target.value);
-    // }
 
     const handleBnodes = (e) => {
         e.preventDefault();
@@ -271,7 +258,7 @@ const Form = () => {
             }
 
             let newConfig = combinedConfig;
-            setCombinedConfig({genesis_hash: hash, bootnodes: bootnodes});
+            setCombinedConfig({ bootnodes: bootnodes });
 
             const workerUrl = new URL('/worker.js', window.location.origin);
             const newNode = await new NodeClient(workerUrl.toJSON());
@@ -320,6 +307,33 @@ const Form = () => {
             return () => clearTimeout(timer);
         }
     }, [nodeInitiate]);
+
+
+    // Predicted amount of headers in syncing window (last 30 days / ~12s block time)
+    const approxHeadersToSync = (30 * 24 * 60 * 60)/12;
+
+    // Takes network head and ranges of headers node synchronized and calculates ranges
+    // position inside the syncing window
+    const normalizeStoredRanges = (networkHead, storedRanges) => {
+        const syncingWindowTail = networkHead - approxHeadersToSync;
+        // Normalize stored ranges wrt their position in syncing window
+        const normalizedRanges = storedRanges.map((range) => {
+            const adjustedStart = Math.max(range.start, syncingWindowTail);
+            const adjustedEnd = Math.max(range.end, syncingWindowTail);
+            return { 
+                start: adjustedStart,
+                end: adjustedEnd
+            };
+        });
+
+        return normalizedRanges;
+    };
+
+    // calculate what percentage of syncing window the stored ranges occupy
+    const syncingPercentage = (normalizedRanges) => {
+        return (normalizedRanges.reduce((acc, range) => acc + (range.end - range.start), 0) * 100) / approxHeadersToSync;
+    };
+
 
     // NOTE • Reload the page
     const handleReload = () => {
@@ -404,9 +418,6 @@ const Form = () => {
                         </NetworkItem>
                     </NetworkList>
 
-                    {/* <h3>Genesis Hash</h3>
-                    <Input value={hash && hash} onChange={(e) => handleGhash(e)} placeholder="Genesis Hash..." /> */}
-
                     <h3>Bootnodes <small>(Each address on a new line)</small></h3>
                     <Textarea value={bootnodes} onChange={(e) => handleBnodes(e)} placeholder="Bootnodes..." />
 
@@ -446,31 +457,6 @@ const Form = () => {
             </Jacket>
         </Blanket>
     );
-};
-
-// Predicted amount of headers in syncing window (last 30 days / ~12s block time)
-const approxHeadersToSync = (30 * 24 * 60 * 60)/12;
-
-// Takes network head and ranges of headers node synchronized and calculates ranges
-// position inside the syncing window
-const normalizeStoredRanges = (networkHead, storedRanges) => {
-    const syncingWindowTail = networkHead - approxHeadersToSync;
-    // Normalize stored ranges wrt their position in syncing window
-    const normalizedRanges = storedRanges.map((range) => {
-        const adjustedStart = Math.max(range.start, syncingWindowTail);
-        const adjustedEnd = Math.max(range.end, syncingWindowTail);
-        return { 
-            start: adjustedStart,
-            end: adjustedEnd
-        };
-    });
-
-    return normalizedRanges;
-};
-
-// calculate what percentage of syncing window the stored ranges occupy
-const syncingPercentage = (normalizedRanges) => {
-    return (normalizedRanges.reduce((acc, range) => acc + (range.end - range.start), 0) * 100) / approxHeadersToSync;
 };
 
 export default Form;

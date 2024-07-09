@@ -21,7 +21,6 @@ export const Bar = styled.div(props => css`
 
     min-width: 12rem;
     width: 100%;
-    // max-width: 32rem;
     min-height: 1.2rem !important;
     max-height: 1.2rem !important;
     overflow: hidden;
@@ -48,7 +47,8 @@ export const Bar = styled.div(props => css`
             border-radius: 6rem;
             background: linear-gradient(180deg, #CDB4DB 0%, #A2D2FF 100%);
             transition: width .3s ease; 
-        }` : props.$ranges.map((range, index) => css`
+        }
+    ` : props.$ranges.map((range, index) => css`
         span:nth-of-type(${index + 1}) {
             position: absolute;
             z-index: 1;
@@ -60,8 +60,7 @@ export const Bar = styled.div(props => css`
             background: linear-gradient(180deg, #CDB4DB 0%, #A2D2FF 100%);
             transition: width .3s ease; 
         }
-        `
-    )};
+    `)};
 `);
 
 export const Num = styled.span(props => css`

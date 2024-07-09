@@ -1,7 +1,6 @@
 // Imports
 // ------------
 import React, { useRef, useState, useEffect } from 'react';
-import Input from '../Input';
 import Button from '@parts/Button';
 import Link from '@parts/Link';
 import Icon from '@icon';
@@ -46,7 +45,6 @@ const StatusBoard = ({
 
     // NOTE • States
     const [tab, setTab] = useState(1);
-    // const [synced, setSynced] = useState(false);
 
     // NOTE • Handlers
     const handleTab = (tab) => () => setTab(tab);
@@ -59,7 +57,6 @@ const StatusBoard = ({
         if (logWindow.current) {
             logWindow.current.scrollTop = logWindow.current.scrollHeight;
         }
-        // setSynced(stats.syncedPercentage >= 100);
     }, [eventData])
 
     return (
