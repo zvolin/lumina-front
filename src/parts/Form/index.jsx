@@ -410,14 +410,14 @@ const Form = () => {
                                             changeDelay: 25,
                                         }}
                                         onInit={(typewriter) => {
-                                            typewriter.typeString('Please use one of the supported browsers: Windows/MacOS/Linux/Android: Chrome, Firefox, Brave, Opera. iOS: X')
+                                            typewriter.typeString('Please use one of the supported browsers: Windows/MacOS/Linux/Android: Chrome, Firefox, Brave, Opera. iOS: Not yet supported')
                                             .changeDelay(25)
                                             .changeDeleteSpeed(25)
                                             .start();
                                         }}
                                     />
                                 </Title>
-                                <p>For the inconvenience, you can...</p>
+                                <p>In the meantime&hellip;</p>
                                 <Link isLight icon="mint" onClick={() => plausible('NFT Button Clicked')} label="CLAIM LIMITED NFT" link="https://modularium.art/drop/modularsummit" rel="noopener noreferrer" />
                             </>
                         )
