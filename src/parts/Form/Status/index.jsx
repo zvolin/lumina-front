@@ -134,7 +134,7 @@ const StatusBoard = ({
                                             </div>
                                             <div className="break-small">
                                                 <div>
-                                                    <em>Sync headers:</em>
+                                                    <em>Backwards syncing headers:</em>
                                                 </div>
                                                 <ProgressBar ranges={stats.storedRanges} max={stats.networkHeadHeight} window={stats.approxSyncingWindowSize} syncedPercentage={stats.syncedPercentage}/>
                                             </div>
