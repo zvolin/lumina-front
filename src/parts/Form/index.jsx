@@ -10,8 +10,10 @@ import Status from './Status';
 import Terminal from './Terminal';
 import Icon from '@icon';
 import Typewriter from 'typewriter-effect';
+import { v4 as uuidv4 } from 'uuid';
 import { GlobalContext } from '@parts/Contexts';
 import { browserName, browserVersion } from 'react-device-detect';
+import { usePlausible } from 'next-plausible';
 
 // Styles
 // ------------
@@ -22,6 +24,9 @@ import { Blanket, Jacket, ImageContainer, Container, Title, NetworkList, Network
 const Form = () => {
     // NOTE • Contexts
     const { begin, setBegin } = useContext(GlobalContext);
+
+    // NOTE • Track Plausible
+    const plausible = usePlausible();
 
     // NOTE • States
     const [display, setDisplay] = useState(false);
@@ -100,6 +105,9 @@ const Form = () => {
         }
     };
 
+    // NOTE • Generate a unique ID for the node
+    const nodeUid = uuidv4();
+
     // NOTE • Load the config and initialize the WASM module when the page loads
     useEffect(() => {
         initWASM();
@@ -121,6 +129,18 @@ const Form = () => {
                 setNodeStatus('Data availability sampling in progress');
             }, 2000);
     
+            return () => clearInterval(timer);
+        }
+    }, [node]);
+
+
+    // NOTE • Periodically track user activity
+    useEffect(() => {
+        if(node) {
+            const timer = setInterval(async () => {
+                plausible('Node started: ' + nodeUid);
+            }, 10000);
+
             return () => clearInterval(timer);
         }
     }, [node]);

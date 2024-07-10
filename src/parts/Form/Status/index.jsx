@@ -9,6 +9,7 @@ import ProgressBar from './Progress';
 import Logs from './Logs';
 import { Grid } from '@waffl';
 import { useBreakpoint } from '@parts/Helpers/useBreakpoint';
+import { usePlausible } from 'next-plausible';
 
 // Styles
 // ------------
@@ -43,11 +44,19 @@ const StatusBoard = ({
     // NOTE • Breakpoints
     const bp = useBreakpoint();
 
+    // NOTE • Track Plausible
+    const plausible = usePlausible();
+
     // NOTE • States
     const [tab, setTab] = useState(1);
 
     // NOTE • Handlers
-    const handleTab = (tab) => () => setTab(tab);
+    const handleTab = (tab) => {
+        setTab(tab);
+
+        let tabDecider = tab === 1 ? 'Basic' : 'Advanced';
+        plausible('Tab: ' + tabDecider);
+    }
 
     // NOTE • Refs
     const logWindow = useRef();
@@ -57,7 +66,7 @@ const StatusBoard = ({
         if (logWindow.current) {
             logWindow.current.scrollTop = logWindow.current.scrollHeight;
         }
-    }, [eventData, tab])
+    }, [eventData, tab]);
 
     return (
         <>
@@ -187,7 +196,7 @@ const StatusBoard = ({
                             <ButtonJacket>
                                 <Button icoL icon="back" label="Restart" onClick={handleReload} />
                                 <LinkGroup>
-                                    <Link icon="mint" label="CLAIM LIMITED NFT" preText="sync to 1%" link="https://modularium.art/drop/modularsummit" rel="noopener noreferrer" disabled={stats.syncedPercentage < 1} />
+                                    <Link icon="mint" onClick={() => plausible('NFT Button Clicked')} label="CLAIM LIMITED NFT" preText="sync to 1%" link="https://modularium.art/drop/modularsummit" rel="noopener noreferrer" disabled={stats.syncedPercentage < 1} />
                                     <LinkGroupSub>
                                         <Link icon="github" link="https://github.com/eigerco/lumina" rel="noopener noreferrer" />
                                         <Link icon="eiger" link="https://www.eiger.co/" rel="noopener noreferrer" />
