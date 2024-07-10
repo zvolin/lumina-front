@@ -378,7 +378,7 @@ const Form = () => {
                                             changeDelay: 25,
                                         }}
                                         onInit={(typewriter) => {
-                                            typewriter.typeString('Please use the latest version of Chrome or Firefox to start your Celestia light node')
+                                            typewriter.typeString('Please use one of the supported browsers: Windows/MacOS: Chrome, Firefox >v125. Linux: Chrome, Firefox. Android or iOS.')
                                             .changeDelay(25)
                                             .changeDeleteSpeed(25)
                                             .start();

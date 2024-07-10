@@ -57,7 +57,7 @@ const StatusBoard = ({
         if (logWindow.current) {
             logWindow.current.scrollTop = logWindow.current.scrollHeight;
         }
-    }, [eventData])
+    }, [eventData, tab])
 
     return (
         <>
