@@ -185,8 +185,9 @@ const Form = () => {
             // called when DASer starts dasing another block
             const logVisual = (event) => {
                 const heightToSample = event.height;
+                const currentHead = statsRef.current.networkHeadHeight;
                 // DASer samples new blocks and old blocks, only update visualizer for new ones
-                if (statsRef.current.networkHeadHeight && heightToSample >= statsRef.current.networkHeadHeight) {
+                if (currentHead && heightToSample >= currentHead) {
                     setVisualData(event);
                     return;
                 }
@@ -236,12 +237,13 @@ const Form = () => {
                     case "sampling_started":
                         logVisual(event_data);
                         break;
-
+                    
+                    // node finished initialization and got initial trusted head
+                    case "fetching_head_header_finished":
                     // new header added from header-sub
                     case "added_header_from_header_sub":
                         // headers from header-sub must be new head
-                        const height = event_data.height;
-                        await onNewHead(height);
+                        await onNewHead(event_data.height);
                         await onAddedHeaders();
                         break;
 

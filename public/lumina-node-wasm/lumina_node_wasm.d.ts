@@ -1,14 +1,14 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
-* Set up a logging layer that direct logs to the browser's console.
-*/
-export function setup_logging(): void;
-/**
 * @param {(MessageEvent)[]} queued_events
 * @returns {Promise<void>}
 */
 export function run_worker(queued_events: (MessageEvent)[]): Promise<void>;
+/**
+* Set up a logging layer that direct logs to the browser's console.
+*/
+export function setup_logging(): void;
 /**
 * Supported Celestia networks.
 */
@@ -286,7 +286,24 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly setup_logging: () => void;
+  readonly __wbg_networkinfosnapshot_free: (a: number) => void;
+  readonly __wbg_connectioncounterssnapshot_free: (a: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_connections: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_connections: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_pending: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_pending: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_pending_incoming: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_pending_incoming: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_pending_outgoing: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_pending_outgoing: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_established_incoming: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_established_incoming: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_established_outgoing: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_established_outgoing: (a: number, b: number) => void;
+  readonly __wbg_get_connectioncounterssnapshot_num_established: (a: number) => number;
+  readonly __wbg_set_connectioncounterssnapshot_num_established: (a: number, b: number) => void;
+  readonly __wbg_get_networkinfosnapshot_num_peers: (a: number) => number;
+  readonly __wbg_set_networkinfosnapshot_num_peers: (a: number, b: number) => void;
   readonly run_worker: (a: number, b: number) => number;
   readonly __wbg_nodeconfig_free: (a: number) => void;
   readonly __wbg_get_nodeconfig_network: (a: number) => number;
@@ -319,38 +336,21 @@ export interface InitOutput {
   readonly nodeclient_close: (a: number) => number;
   readonly nodeclient_events_channel: (a: number) => number;
   readonly nodeconfig_default: (a: number) => number;
-  readonly __wbg_networkinfosnapshot_free: (a: number) => void;
-  readonly __wbg_set_networkinfosnapshot_num_peers: (a: number, b: number) => void;
-  readonly __wbg_connectioncounterssnapshot_free: (a: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_connections: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_connections: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_pending: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_pending: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_pending_incoming: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_pending_incoming: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_pending_outgoing: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_pending_outgoing: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_established_incoming: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_established_incoming: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_established_outgoing: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_established_outgoing: (a: number, b: number) => void;
-  readonly __wbg_get_connectioncounterssnapshot_num_established: (a: number) => number;
-  readonly __wbg_set_connectioncounterssnapshot_num_established: (a: number, b: number) => void;
-  readonly __wbg_get_networkinfosnapshot_num_peers: (a: number) => number;
+  readonly setup_logging: () => void;
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_export_2: WebAssembly.Table;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hf2cff21c732a7e47: (a: number, b: number, c: number) => void;
-  readonly _dyn_core__ops__function__Fn__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h495aad9cd34beea5: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h2178be8264996f37: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__Fn__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h46efcc7c48266ebd: (a: number, b: number, c: number) => void;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h899c432af43cc74d: (a: number, b: number, c: number, d: number) => void;
-  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hd729337076372289: (a: number, b: number) => void;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h1919850521597a45: (a: number, b: number, c: number) => void;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hd15c037651943fee: (a: number, b: number, c: number) => void;
-  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h96cd4f3b47f3944f: (a: number, b: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hb3df7e56e0da50b0: (a: number, b: number, c: number, d: number) => void;
+  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h678cc92c4d62e134: (a: number, b: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hd2eb4c2f7e8af967: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h9d88e6419c162cd7: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut_____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__hdbdd6596abe87a02: (a: number, b: number) => void;
   readonly __wbindgen_free: (a: number, b: number, c: number) => void;
   readonly __wbindgen_exn_store: (a: number) => void;
-  readonly wasm_bindgen__convert__closures__invoke2_mut__h75e6a00b34c272b0: (a: number, b: number, c: number, d: number) => void;
+  readonly wasm_bindgen__convert__closures__invoke2_mut__h2b6c44a5b8e14602: (a: number, b: number, c: number, d: number) => void;
   readonly __wbindgen_start: () => void;
 }
 
