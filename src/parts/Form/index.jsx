@@ -138,7 +138,12 @@ const Form = () => {
     useEffect(() => {
         if(node) {
             const timer = setInterval(async () => {
-                plausible('Node started: ' + nodeUid);
+                plausible('Live starts:', {
+                    props: {
+                        method: 'HTTP',
+                        position: nodeUid,
+                    }
+                });
             }, 10000);
 
             return () => clearInterval(timer);
