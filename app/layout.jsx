@@ -12,6 +12,7 @@ import { ApolloWrapper } from '@utils/apollo-wrapper';
 import { ThemeProvider } from 'styled-components';
 import { theme } from '@theme';
 import { useHeightFix } from "@utils/useHeightFix";
+import PlausibleProvider from 'next-plausible';
 
 // Fonts
 // ------------
@@ -70,13 +71,15 @@ const RootLayout = ({ children }) => {
 				<StyledComponentsRegistry>
 					<ApolloWrapper>
 						<ThemeProvider theme={theme} key="themeprovider">
-							<Contexts>
-								<SmoothScroll>
-									{children}
-								</SmoothScroll>
+							<PlausibleProvider domain="lumina.rs">
+								<Contexts>
+									<SmoothScroll>
+										{children}
+									</SmoothScroll>
 
-								<WebglBackground />
-							</Contexts>
+									<WebglBackground />
+								</Contexts>
+							</PlausibleProvider>
 						</ThemeProvider>
 					</ApolloWrapper>
 				</StyledComponentsRegistry>
