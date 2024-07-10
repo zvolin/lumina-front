@@ -8,6 +8,7 @@ import Textarea from './Textarea';
 import Button from '@parts/Button';
 import Status from './Status';
 import Terminal from './Terminal';
+import Link from '@parts/Link';
 import Icon from '@icon';
 import Typewriter from 'typewriter-effect';
 import { v4 as uuidv4 } from 'uuid';
@@ -416,6 +417,8 @@ const Form = () => {
                                         }}
                                     />
                                 </Title>
+                                <p>For the inconvenience, you can...</p>
+                                <Link isLight icon="mint" onClick={() => plausible('NFT Button Clicked')} label="CLAIM LIMITED NFT" link="https://modularium.art/drop/modularsummit" rel="noopener noreferrer" />
                             </>
                         )
                     }

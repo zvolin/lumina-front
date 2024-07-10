@@ -21,7 +21,7 @@ export const Jacket = styled.a(
             }
 
             span:last-child {
-                color: ${props.theme.colors.global.black};
+                color: ${props.$isLight ? props.theme.colors.global.white : props.theme.colors.global.black};
             }
         }
 
@@ -33,7 +33,7 @@ export const Jacket = styled.a(
             em {
                 ${emStyles}
                 font-size: 1.1rem;
-                color: ${props.theme.colors.global.black};
+                color: ${props.$isLight ? props.theme.colors.global.white : props.theme.colors.global.black};
             }
         }
 
@@ -56,7 +56,7 @@ export const Jacket = styled.a(
 
             &:last-child {
                 ${emStyles}
-                color: ${props.theme.colors.global.black60};
+                color: ${props.$isLight ? props.theme.colors.global.white : props.theme.colors.global.black60};
             }
         }
 
