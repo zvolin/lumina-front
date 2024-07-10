@@ -224,7 +224,7 @@ export const NetworkItem = styled.li(props => css`
         justify-content: center;
         gap: .6rem;
 
-        padding: 1.2rem 2.4rem;
+        padding: 1.2rem .6rem;
         width: 100%;
 
         svg {
@@ -274,8 +274,8 @@ export const NetworkItem = styled.li(props => css`
 
         label {
             svg {
-                width: 1.6rem;
-                height: 1.6rem;
+                width: 1.6rem !important;
+                height: 1.6rem !important;
                 transform: scale(1);
             }
         }

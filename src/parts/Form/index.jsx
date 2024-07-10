@@ -71,6 +71,10 @@ const Form = () => {
     // NOTE • Browser detection
     useEffect(() => {
         if(browserName === 'Chrome'
+        || browserName === 'Brave'
+        || browserName === 'Vivaldi'
+        || browserName === 'Opera'
+        || browserName === 'Chromium'
         || browserName === 'Firefox' && browserVersion >= 125) {
             setDisplay(true)
         } else (
@@ -380,7 +384,7 @@ const Form = () => {
                                             changeDelay: 25,
                                         }}
                                         onInit={(typewriter) => {
-                                            typewriter.typeString('Please use one of the supported browsers: Windows/MacOS: Chrome, Firefox >v125. Linux: Chrome, Firefox. Android or iOS.')
+                                            typewriter.typeString('Please use one of the supported browsers: Windows/MacOS/Linux/Android: Chrome, Firefox, Brave, Opera. iOS: X')
                                             .changeDelay(25)
                                             .changeDeleteSpeed(25)
                                             .start();
