@@ -8,11 +8,11 @@ import Contexts from '@parts/Contexts/Contexts';
 import SmoothScroll from '@parts/SmoothScroll';
 import WebglBackground from '@parts/Webgl/Background';
 import localFont from 'next/font/local';
+import PlausibleProvider from 'next-plausible';
 import { ApolloWrapper } from '@utils/apollo-wrapper';
 import { ThemeProvider } from 'styled-components';
 import { theme } from '@theme';
 import { useHeightFix } from "@utils/useHeightFix";
-import PlausibleProvider from 'next-plausible';
 
 // Fonts
 // ------------
@@ -67,19 +67,20 @@ const RootLayout = ({ children }) => {
 
 	return (
 		<html lang="en">
+			<head>
+				<PlausibleProvider domain="lumina.rs" />
+			</head>
 			<body className={`${splineSans.variable} ${inter.variable}`}>
 				<StyledComponentsRegistry>
 					<ApolloWrapper>
 						<ThemeProvider theme={theme} key="themeprovider">
-							<PlausibleProvider domain="lumina.rs">
-								<Contexts>
-									<SmoothScroll>
-										{children}
-									</SmoothScroll>
+							<Contexts>
+								<SmoothScroll>
+									{children}
+								</SmoothScroll>
 
-									<WebglBackground />
-								</Contexts>
-							</PlausibleProvider>
+								<WebglBackground />
+							</Contexts>
 						</ThemeProvider>
 					</ApolloWrapper>
 				</StyledComponentsRegistry>

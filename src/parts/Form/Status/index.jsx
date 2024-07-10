@@ -78,8 +78,8 @@ const StatusBoard = ({
                                 <Header>
                                     <Title $dark>{status}</Title>
                                     <Switch>
-                                        <Tab $isActive={tab === 1} onClick={handleTab(1)} disabled={tab === 1}>Basic</Tab>
-                                        <Tab $isActive={tab === 2} onClick={handleTab(2)} disabled={tab === 2}>Advanced</Tab>
+                                        <Tab $isActive={tab === 1} onClick={() => handleTab(1)} disabled={tab === 1}>Basic</Tab>
+                                        <Tab $isActive={tab === 2} onClick={() => handleTab(2)} disabled={tab === 2}>Advanced</Tab>
                                     </Switch>
                                 </Header>
                             </Col>
