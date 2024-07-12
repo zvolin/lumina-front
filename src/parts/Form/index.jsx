@@ -76,16 +76,7 @@ const Form = () => {
 
     // NOTE • Browser detection
     useEffect(() => {
-        if(browserName === 'Chrome'
-        || browserName === 'Brave'
-        || browserName === 'Vivaldi'
-        || browserName === 'Opera'
-        || browserName === 'Chromium'
-        || browserName === 'Firefox' && browserVersion >= 125) {
             setDisplay(true)
-        } else (
-            setDisplay(false)
-        )
     }, []);
 
     const initConfig = () => {
